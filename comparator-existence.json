@@ -1,0 +1,10 @@
+{
+  "challenge_module": "ExistenceChallenge",
+  "solution_module": "ExistenceSolution",
+  "theorem_names": [
+    "PalomarHlawkaSchatten.dimension_independent_hlawka_constant_for_schatten_norms"
+  ],
+  "definition_names": [],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": false
+}

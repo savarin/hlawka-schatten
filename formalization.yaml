@@ -1,0 +1,104 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Dimension-independent Hlawka constants for Schatten norms"
+  description: >-
+    A formal proof that every finite Schatten p-norm with 1 < p admits a
+    dimension-independent Hlawka constant, and that neither endpoint
+    (trace norm at p=1, operator norm at p=infinity) admits one.
+  authors:
+    - "Ezzeri Esa"
+  responsible_maintainers:
+    - "Ezzeri Esa"
+  license: "Apache-2.0"
+
+classification:
+  arxiv: ["math.FA", "math.OA"]
+  msc2020: ["47A30", "47B10", "46B20"]
+
+sources:
+  - title: "Problems and conjectures in matrix and operator inequalities"
+    authors:
+      - "Koenraad M. R. Audenaert"
+      - "Fuad Kittaneh"
+    type: "paper"
+    id: "arXiv:1201.5232"
+    location: "Section 8.2, Problem 7"
+    relationship: "states-problem"
+    author_endorsement: "not-contacted"
+    note: >-
+      The source posed dimension-independent finiteness as an open problem;
+      this development proves it for 1 < p < infinity and proves both endpoint
+      obstructions by explicit families.
+
+status:
+  scope: >-
+    The formalization covers finite-dimensional rectangular complex operators.
+    For every p > 1 it proves the existence of a finite dimension-independent
+    Hlawka constant via scalar Bregman comparison. It also proves failure at
+    p=1 on complex 2 by 2 operators and at p=infinity on complex 3 by 3
+    matrices. It does not determine the sharp interior constant.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+  main_results:
+    - declaration: "PalomarHlawkaSchatten.dimension_independent_hlawka_constant_for_schatten_norms"
+      file: "ExistenceSolution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator-existence.json"
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["GPT 5.6 Sol (OpenAI)"]
+      framework: "Codex"
+      tool_setup: >-
+        Agentic proof construction with Lean elaboration, full Lake builds,
+        exact-arithmetic endpoint reductions, and independent proof-source audit.
+      cost:
+        wall_time: "approximately 6 hours across resumed sessions"
+        spend_usd: "subscription-based"
+        hardware: "local machine"
+      prompting_notes: >-
+        The agent was given the audited mathematical proof artifacts and nearby
+        operator-theory formalizations as references.
+  spend_usd: "subscription-based"
+  notes: >-
+    The proof was developed in small kernel-checked layers and audited at the
+    publication boundary for dimensional uniformity and endpoint fidelity.
+
+fidelity:
+  divergences: >-
+    The interior theorem is stated for linear maps between arbitrary finite
+    complex Hilbert spaces, which is stronger than fixing coordinate matrix
+    spaces. The proof library constructs explicit constants m_p, M_p from the
+    compactified scalar Bregman-to-Mazur ratio, but the Challenge boundary
+    quantifies existentially over m and M without naming the construction.
+    Infinity is represented by Mathlib's spectral L2 operator norm, since
+    infinity is not a real exponent in schattenPNorm.
+
+review:
+  status: "agent-reviewed"
+  reviewers:
+    - "Ezzeri Esa"
+    - "GPT 5.6 Sol (OpenAI)"
+  notes: >-
+    The mathematical proof source was independently audited before
+    formalization. The final Challenge was checked against the input statement,
+    and the proof sources were scanned for unresolved holes and user axioms.
+
+alignment:
+  namespace: "PalomarHlawkaSchatten"
+  statements:
+    - source: "Audenaert--Kittaneh, Section 8.2, Problem 7"
+      lean: "PalomarHlawkaSchatten.dimension_independent_hlawka_constant_for_schatten_norms"
+      module: "ExistenceSolution"
+      status: "proved"
+      note: >-
+        Proves dimension-independent interior finiteness and
+        fixed-dimensional obstructions at p=1 and p=infinity.
+
+acknowledgements: >-
+  Mathlib contributors; leanprover/comparator and NanoDa maintainers.
