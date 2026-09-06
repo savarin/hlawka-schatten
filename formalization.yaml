@@ -25,12 +25,27 @@ sources:
     type: "paper"
     id: "arXiv:1201.5232"
     location: "Section 8.2, Problem 7"
-    relationship: "states-problem"
+    relationship: "other"
     author_endorsement: "not-contacted"
     note: >-
-      The source posed dimension-independent finiteness as an open problem;
-      this development proves it for 1 < p < infinity and proves both endpoint
-      obstructions by explicit families.
+      Proves that a finite dimension-independent Hlawka constant exists for
+      Schatten p-norms with 1 < p < infinity, and that no such constant exists
+      at p = 1 or p = infinity. The source posed existence as an open problem
+      (Section 8.2, Problem 7); we are not aware of a prior published proof.
+  - title: "Sharp uniform convexity and smoothness inequalities for trace norms"
+    authors:
+      - "Keith Ball"
+      - "Eric A. Carlen"
+      - "Elliott H. Lieb"
+    type: "paper"
+    id: "doi:10.1007/BF01231769"
+    location: "Theorems 1 and 2"
+    relationship: "adapts"
+    author_endorsement: "not-contacted"
+    note: >-
+      The proof adapts the sharp two-sided uniform convexity and smoothness
+      inequalities for Schatten norms to obtain the Bregman-to-Mazur comparison
+      constants m_p and M_p that drive the Hlawka existence argument.
 
 status:
   scope: >-
