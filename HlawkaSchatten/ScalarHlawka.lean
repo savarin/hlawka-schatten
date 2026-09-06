@@ -9,8 +9,8 @@ import HlawkaSchatten.GapComparison
 # The scalar Hlawka inequality
 
 The absolute value on the real line satisfies Hlawka with constant one.
-This is the pointwise inequality used by the Gaussian representation proof
-for real Hilbert spaces.
+This scalar fact is not on the final proof path but records the pointwise
+inequality underlying the Hilbert-space Hlawka theorem.
 -/
 
 namespace HlawkaSchatten

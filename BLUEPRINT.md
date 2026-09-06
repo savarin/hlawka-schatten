@@ -73,7 +73,9 @@ deficit.
 - The radial Mazur map must preserve individual norms without sphere
   normalization — the sphere version introduces denominators that break
   the Hlawka application.
-- The exact 2D trace-norm identity is specific to dimension 2; the endpoint
-  argument does not generalize to higher dimensions.
-- The p = infinity endpoint needs three operators, not two — two diagonal
-  matrices always satisfy the Hlawka inequality for the operator norm.
+- The exact 2D trace-norm identity (||T||_1^2 = ||T||_2^2 + 2|det T|) is
+  specific to 2x2 matrices; in higher dimensions the p=1 obstruction
+  follows by embedding the 2x2 family via zero-padding.
+- The p = infinity witness uses 3x3 diagonal matrices because every
+  two-dimensional real normed space satisfies Hlawka; three diagonal
+  coordinates are the minimum needed for a counterexample.

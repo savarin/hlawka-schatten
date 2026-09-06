@@ -4,9 +4,9 @@ version: "v0.4"
 project:
   name: "Dimension-independent Hlawka constants for Schatten norms"
   description: >-
-    A formal proof that every finite Schatten p-norm with 1 < p admits a
-    dimension-independent Hlawka constant, and that neither endpoint
-    (trace norm at p=1, operator norm at p=infinity) admits one.
+    Existence of a dimension-independent Hlawka constant for every Schatten
+    p-norm with 1 < p < infinity, and proof that no such constant exists at
+    either endpoint (trace norm at p=1, operator norm at p=infinity).
   authors:
     - "Ezzeri Esa"
   responsible_maintainers:
@@ -18,6 +18,22 @@ classification:
   msc2020: ["47A30", "47B10", "46B20"]
 
 sources:
+  - title: "Existence of finite Hlawka constants for interior Schatten exponents"
+    authors:
+      - "Ezzeri Esa"
+    type: "original-proof"
+    id: "https://github.com/savarin/hlawka-schatten"
+    location: "Lean proof in this repository"
+    relationship: "other"
+    author_endorsement: "participated"
+    note: >-
+      This formalization first presents the proof recorded by the compared
+      Lean theorem. The existence question was posed as an open problem by
+      Audenaert and Kittaneh in 2012. The Lean proof was constructed with
+      GPT 5.6 Sol. A literature search of the 2024 Hornich-Hlawka survey,
+      source-paper citations, and recent Schatten-norm work through August
+      2026 found no prior proof. The proof has not been examined in depth by
+      human experts; novelty of its ideas has not been established.
   - title: "Problems and conjectures in matrix and operator inequalities"
     authors:
       - "Koenraad M. R. Audenaert"
@@ -28,10 +44,11 @@ sources:
     relationship: "other"
     author_endorsement: "not-contacted"
     note: >-
-      Proves that a finite dimension-independent Hlawka constant exists for
-      Schatten p-norms with 1 < p < infinity, and that no such constant exists
-      at p = 1 or p = infinity. The source posed existence as an open problem
-      (Section 8.2, Problem 7); we are not aware of a prior published proof.
+      The source poses the existence of a finite dimension-independent Hlawka
+      constant for Schatten p-norms as an open problem (Section 8.2, Problem 7).
+      This formalization supplies a proof for 1 < p < infinity and proves that
+      no such constant exists at p = 1 or p = infinity. We are not aware of a
+      prior published proof.
   - title: "Sharp uniform convexity and smoothness inequalities for trace norms"
     authors:
       - "Keith Ball"
@@ -40,12 +57,13 @@ sources:
     type: "paper"
     id: "doi:10.1007/BF01231769"
     location: "Theorems 1 and 2"
-    relationship: "adapts"
+    relationship: "background"
     author_endorsement: "not-contacted"
     note: >-
-      The proof adapts the sharp two-sided uniform convexity and smoothness
-      inequalities for Schatten norms to obtain the Bregman-to-Mazur comparison
-      constants m_p and M_p that drive the Hlawka existence argument.
+      The Ball-Carlen-Lieb framework for uniform convexity and smoothness of
+      Schatten norms motivated the proof approach. The formalization derives
+      the scalar Bregman-to-Mazur comparison bounds directly from the
+      convexity of the power potential rather than invoking their theorems.
 
 status:
   scope: >-

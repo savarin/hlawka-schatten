@@ -37,6 +37,7 @@ def mappedPairGapSum (size : E → ℝ) (map : E → H) (x y z : E) : ℝ :=
 
 include 𝕜
 
+omit [Add E] in
 /-- If a nonlinear map preserves the size of each individual input, its
 mapped deficits satisfy the Hilbert-space Hlawka inequality. -/
 theorem mappedTripleGap_le_mappedPairGapSum
@@ -48,6 +49,7 @@ theorem mappedTripleGap_le_mappedPairGapSum
   dsimp only [mappedTripleGap, mappedPairGapSum, mappedPairGap]
   linarith
 
+omit 𝕜 in
 /-- The final pointwise comparison step for a nonlinear Mazur model.
 The factors of two cancel exactly, leaving the ratio `M / m`. -/
 theorem tripleGap_le_ratio_mul_mappedPairGapSum
@@ -94,7 +96,7 @@ theorem hasHlawkaConstant_of_mappedGapComparison
       2 * m * mappedPairGap modelSize map x y ≤ pairGap size x y) :
     HasHlawkaConstant size (M / m) := by
   intro x y z
-  exact tripleGap_le_ratio_mul_mappedPairGapSum (𝕜 := 𝕜)
+  exact tripleGap_le_ratio_mul_mappedPairGapSum
     size modelSize map m M x y z
     hm hM (hTriple x y z) (hPair x y) (hPair x z) (hPair y z)
     (mappedTripleGap_le_mappedPairGapSum (𝕜 := 𝕜) modelSize map hnorm x y z)

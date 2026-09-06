@@ -1,4 +1,6 @@
-import HlawkaSchatten
+import HlawkaSchatten.Classification
+import HlawkaSchatten.GapComparison
+import HlawkaSchatten.SchattenNorm
 
 /-!
 Manifest-driven boundary for the landed Hlawka-Schatten surface.
