@@ -79,3 +79,49 @@ deficit.
 - The p = infinity witness uses 3x3 diagonal matrices because every
   two-dimensional real normed space satisfies Hlawka; three diagonal
   coordinates are the minimum needed for a counterexample.
+
+## Sharp diagonal construction for real p ≥ 256
+
+The separate `ConstructionDiagonal` boundary determines the sharp constant
+for complex diagonal Schatten norms. It holds in every finite dimension and
+is sharp in every dimension at least three. It specifies the constant as
+the maximum cyclic ratio over `[1/2, 2]` and proves attainment there. See
+[proof/diagonal-construction.md](proof/diagonal-construction.md) for the
+formula, module map, and exact estimates used in Lean.
+
+**Three-coordinate reduction.** Fix the three pair power sums and vary
+nonnegative coordinate weights. The positive part of the desired inequality
+is concave in those weights. A compact minimization argument produces a
+minimizer supported on at most three coordinates.
+
+**Relabeling and scalar confinement.** Permute the zero-sum quadruple to
+make the total norm the largest, then normalize the sum of singleton norms
+to one. The weighted scalar convexity inequality bounds the pair norm sum
+in terms of the total norm. The explicit cyclic witness `t = p^(-1/p)`
+forces a strict counterexample to have total norm below `53/150`, singleton
+norms close to `1/3`, and small pair deficits.
+
+**Joint coordinate geometry.** Each nearly saturated pair chooses a
+coordinate. Two pairs cannot choose the same coordinate: their shared
+vector fixes the sign, and the total norm would be too large. After
+reorienting coordinates and scaling by three, the entire triple lies in the
+entrywise radius-`19/100` box around `J - 2I`.
+
+**Convexity and averaging.** The singleton and total norm Hessians jointly
+control independent column rescalings. Their lower bound dominates the
+three pair Hessians throughout the box for every real `p ≥ 256`. The sharp
+deficit is therefore convex there. Averaging simultaneous permutations of
+columns and coordinates yields a cyclic triple whose bound follows from
+the definition of the constant. This excludes the original counterexample.
+
+**Complex and diagonal transfer.** Real circle projections reproduce each
+complex norm power up to the same positive factor. Finite convex
+combinations satisfy the real bound, and continuity passes it to their
+closed convex hull, which contains the circle integral. Finally, the
+existing spectral functional-calculus trace identity proves that a diagonal
+operator's singular-value power sum equals its coordinate power sum.
+
+**Sharpness and attainment.** The explicit three-coordinate cyclic vectors
+have the stated ratio and embed into every larger dimension. Their ratio
+has positive denominator and is continuous on `[1/2, 2]`, so it attains a
+maximum. No classification of all maximizers is asserted.

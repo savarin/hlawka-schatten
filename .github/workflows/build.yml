@@ -17,5 +17,7 @@ jobs:
         with:
           persist-credentials: false
       - uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596 # v1
-      - name: Check Palomar package boundary
-        run: python3 scripts/check_boundary.py
+      - name: Check existence boundary
+        run: python3 scripts/check_boundary.py comparator-existence.json
+      - name: Check diagonal construction boundary
+        run: python3 scripts/check_boundary.py comparator-construction-diagonal.json

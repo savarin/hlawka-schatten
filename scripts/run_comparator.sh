@@ -12,5 +12,10 @@ if [[ -n "${FAKE_LANDRUN:-}" ]]; then
   export COMPARATOR_LANDRUN="$FAKE_LANDRUN"
 fi
 
+if (( $# > 1 )); then
+  echo "Usage: $0 [comparator-config.json]" >&2
+  exit 2
+fi
+
 cd "$PALOMAR_REPO_ROOT"
-lake env "$COMPARATOR" comparator-existence.json
+lake env "$COMPARATOR" "${1:-comparator-existence.json}"

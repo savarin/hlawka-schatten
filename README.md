@@ -9,6 +9,12 @@ in Lean 4 against Mathlib. Prepared for submission to
 - `PalomarHlawkaSchatten.dimension_independent_hlawka_constant_for_schatten_norms`
   (Challenge declaration): existence of a finite dimension-independent
   Hlawka constant for interior exponents, and failure at both endpoints.
+- `PalomarHlawkaSchatten.ConstructionDiagonal.diagonal_hlawka_bound` and
+  `diagonal_hlawka_sharp`: for every real `p ≥ 256`, an explicit cyclic
+  maximum is admissible for complex diagonal Schatten norms in every finite
+  dimension and sharp in each dimension at least three.
+- `PalomarHlawkaSchatten.ConstructionDiagonal.cyclic_maximum_attained`:
+  a cyclic parameter in `[1/2, 2]` attains that maximum.
 
 ## Scope
 
@@ -24,7 +30,7 @@ was already noted there. This formalization supplies a proof of interior
 finiteness, proves a new obstruction at p = 1 via a rank-one projector
 family in dimension 2, and records the known p = ∞ obstruction with an
 explicit 3 × 3 diagonal witness. The sharp value of the interior constant
-remains open.
+for arbitrary operators remains open.
 
 The proof obtains an admissible constant M_p / m_p as the extrema of
 a compactified scalar Bregman-to-Mazur ratio. The scalar comparison is
@@ -35,20 +41,39 @@ to operators via spectral overlap weights, transfers to rectangular
 operators via Hermitian dilation, and closes through a radial Mazur map
 into Hilbert–Schmidt space where the classical Hlawka inequality applies.
 
+The diagonal construction is a separate proof. It reduces real coordinate
+triples to three dimensions, localizes a hypothetical strict counterexample
+near the cyclic sign matrix, and proves convexity of the sharp deficit on
+that region. Permutation averaging gives the cyclic bound. Circle averaging
+then transfers the result to complex coordinates, and the diagonal
+singular-value identity identifies their norm with the Schatten norm. The
+theorem includes unequal-norm triples; it assumes no equal-norm reduction.
+The construction does not settle exponents below 256 or sharpness for
+general matrices.
+
 The audience is researchers in operator inequalities, noncommutative
 L^p geometry, and the formalization community working on functional
 analysis in Lean/Mathlib. No Hlawka constant material exists in Mathlib
 at the pinned revision (v4.33.0). Cross-prover novelty has not been
 searched.
 
-See [BLUEPRINT.md](BLUEPRINT.md) for the mathematical proof route.
+See [BLUEPRINT.md](BLUEPRINT.md) for both proof routes and
+[proof/diagonal-construction.md](proof/diagonal-construction.md) for the
+explicit constant, Lean dependency map, and formalization choices.
 
 ## Trust boundary
 
-The 79-line Mathlib-only [ExistenceChallenge.lean](ExistenceChallenge.lean)
-exposes the Palomar boundary: one theorem, zero definition holes.
-[ExistenceSolution.lean](ExistenceSolution.lean) delegates to the
-sorry-free proof library under `HlawkaSchatten/`.
+Each result has a separate Mathlib-only Challenge and a Solution delegating
+to the sorry-free proof library under `HlawkaSchatten/`:
+
+| Challenge | Solution | Selected theorems | Definition holes |
+|---|---|---:|---:|
+| [ExistenceChallenge.lean](ExistenceChallenge.lean) | [ExistenceSolution.lean](ExistenceSolution.lean) | 1 | 0 |
+| [ConstructionDiagonalChallenge.lean](ConstructionDiagonalChallenge.lean) | [ConstructionDiagonalSolution.lean](ConstructionDiagonalSolution.lean) | 3 | 0 |
+
+The diagonal Challenge defines the norm directly through singular values,
+and specifies the constant by a complete formula and compact supremum.
+Only the selected Challenge theorems contain deliberate `sorry` holes.
 
 - Imports: Mathlib only
 - Permitted axioms: `propext`, `Classical.choice`, `Quot.sound`
@@ -69,6 +94,12 @@ ScalarBregman ─── ScalarRatio
                               TraceEndpoint  EndpointObstruction
 ```
 
+The diagonal library is assembled by
+[HlawkaSchatten/DiagonalConstruction.lean](HlawkaSchatten/DiagonalConstruction.lean).
+Its modules separate dimension reduction, scalar confinement, joint
+coordinate geometry, the Hessian comparison, orbit averaging, and transfer
+to complex diagonal operators.
+
 ## Build and verify
 
 Lean and Mathlib v4.33.0 are pinned.
@@ -77,19 +108,26 @@ Lean and Mathlib v4.33.0 are pinned.
 lake exe cache get
 lake build
 python3 scripts/check_boundary.py
+python3 scripts/check_boundary.py comparator-construction-diagonal.json
 ```
 
 Negative control (requires pinned Comparator and lean4export binaries):
 
 ```bash
 COMPARATOR=<path> LEAN4EXPORT=<path> bash scripts/negative_control.sh
+COMPARATOR=<path> LEAN4EXPORT=<path> bash scripts/negative_control.sh comparator-construction-diagonal.json
 ```
 
 Optional Comparator smoke test:
 
 ```bash
 COMPARATOR=<path> LEAN4EXPORT=<path> bash scripts/run_comparator.sh
+COMPARATOR=<path> LEAN4EXPORT=<path> bash scripts/run_comparator.sh comparator-construction-diagonal.json
 ```
+
+Both scripts default to `comparator-existence.json`. On macOS, setting
+`FAKE_LANDRUN` to Comparator's development shim permits an unsandboxed local
+smoke test; this does not reproduce the protected submission environment.
 
 Palomar runs its own pinned Comparator, Landrun sandbox, and NanoDa
 kernel independently; `enable_nanoda` is set to `false` in the local
@@ -97,16 +135,26 @@ config because the NanoDa binary is not distributed.
 
 ## Verification
 
-The Comparator accepts the Challenge/Solution pair. The negative control
-requires the unmodified baseline to pass, then mutates the Challenge
-(strengthening `m ≤ M` to `M < m`), confirms the mutated boundary still
-elaborates, and verifies that Comparator rejects specifically the named
-theorem. `check_boundary.py` validates the closed Comparator schema,
+Each negative control requires the unmodified baseline to pass, mutates one
+Challenge theorem, confirms that the mutated boundary still elaborates, and
+requires rejection of that specific theorem. The existence mutation replaces
+`m ≤ M` with `M < m`; the diagonal mutation strengthens the range from
+`p ≥ 256` to `p ≥ 255`. This tests statement matching, not whether the
+stronger diagonal theorem is mathematically false. The script restores both
+the original source and its compiled artifact on exit.
+
+`check_boundary.py` validates the closed Comparator schema,
 verifies Mathlib-only imports, checks the deliberate sorry count, confirms
 each selected declaration is present in the Challenge, and audits that all
 declarations use only the permitted axioms.
 
-Last validated 2026-09-06 against the pinned Comparator and lean4export.
+Validated locally on 2026-09-22: the full Lake build, both boundary/axiom
+audits, both Comparator baselines, and both negative controls passed.
+Comparator used the Lean 4.33-compatible exporter and the macOS development
+Landrun shim. Its default Lean kernel accepted the solutions; protected
+Landrun/NanoDa validation was not run locally.
+
+CI builds both proof libraries and checks both publication boundaries.
 Palomar replays every proof through its protected NanoDa kernel at
 submission, independently of local settings.
 

@@ -1,0 +1,12 @@
+{
+  "challenge_module": "ConstructionDiagonalChallenge",
+  "solution_module": "ConstructionDiagonalSolution",
+  "theorem_names": [
+    "PalomarHlawkaSchatten.ConstructionDiagonal.diagonal_hlawka_bound",
+    "PalomarHlawkaSchatten.ConstructionDiagonal.diagonal_hlawka_sharp",
+    "PalomarHlawkaSchatten.ConstructionDiagonal.cyclic_maximum_attained"
+  ],
+  "definition_names": [],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": false
+}

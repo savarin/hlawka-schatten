@@ -1,63 +1,98 @@
-#!/bin/bash
-# Negative control: confirm the comparator rejects a mutated theorem statement.
-#
-# Mutates the Challenge by strengthening m ≤ M to M < m, making the
-# boundary inconsistent. The Solution still proves the original (unmutated)
-# bound, so the mutated Challenge and the Solution should no longer match.
-# Requires a passing baseline first.
+#!/usr/bin/env bash
+# Require a passing baseline, then reject a specific strengthened statement.
+# The original source and its compiled artifact are restored on every exit.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+
+if (( $# > 1 )); then
+  echo "Usage: $0 [comparator-config.json]" >&2
+  exit 2
+fi
 
 : "${COMPARATOR:?Set COMPARATOR to the comparator binary path}"
 : "${LEAN4EXPORT:?Set LEAN4EXPORT to a v4.33.0-compatible lean4export binary}"
 
-if [[ -n "${FAKE_LANDRUN:-}" ]]; then
-  export COMPARATOR_LANDRUN="$FAKE_LANDRUN"
-fi
+PALOMAR_CONFIG="${1:-comparator-existence.json}"
+read -r PALOMAR_MODULE PALOMAR_THEOREM < <(
+  python3 - "$PALOMAR_CONFIG" <<'CONFIG_PY'
+import json
+import sys
+from pathlib import Path
+config = json.loads(Path(sys.argv[1]).read_text())
+print(config["challenge_module"], config["theorem_names"][0])
+CONFIG_PY
+)
+case "$PALOMAR_MODULE" in
+  ExistenceChallenge|ConstructionDiagonalChallenge) ;;
+  *) echo "Unsupported negative-control module: $PALOMAR_MODULE" >&2; exit 2 ;;
+esac
+PALOMAR_CHALLENGE="$PALOMAR_MODULE.lean"
+PALOMAR_CONTROL_DIR=$(mktemp -d "${TMPDIR:-/tmp}/hlawka-neg-ctrl-XXXXXX")
+cp "$PALOMAR_CHALLENGE" "$PALOMAR_CONTROL_DIR/original.lean"
 
-CONFIG="comparator-existence.json"
-CHALLENGE="ExistenceChallenge.lean"
-THEOREM="PalomarHlawkaSchatten.dimension_independent_hlawka_constant_for_schatten_norms"
+restore_boundary() {
+  local result=$?
+  trap - EXIT
+  cp "$PALOMAR_CONTROL_DIR/original.lean" "$PALOMAR_CHALLENGE"
+  echo "Restoring original Challenge and rebuilding ..."
+  if ! lake build "$PALOMAR_MODULE" > "$PALOMAR_CONTROL_DIR/restore.log" 2>&1; then
+    cat "$PALOMAR_CONTROL_DIR/restore.log"
+    result=1
+  fi
+  rm -rf "$PALOMAR_CONTROL_DIR"
+  exit "$result"
+}
+trap restore_boundary EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
-echo "=== Negative control ==="
-
-# Step 1: Verify baseline passes
-echo "[1/3] Verifying baseline ..."
-BASELINE=$(COMPARATOR_LEAN4EXPORT="$LEAN4EXPORT" lake env "$COMPARATOR" "$CONFIG" 2>&1 || true)
-if ! echo "$BASELINE" | grep -qi "Your solution is okay"; then
-  echo "FAIL: baseline comparator run does not pass — negative control is unreliable"
-  echo "$BASELINE" | tail -5
+echo "[1/3] Verifying baseline: $PALOMAR_CONFIG"
+if ! bash scripts/run_comparator.sh "$PALOMAR_CONFIG" > "$PALOMAR_CONTROL_DIR/baseline.log" 2>&1; then
+  cat "$PALOMAR_CONTROL_DIR/baseline.log"
+  echo "FAIL: baseline comparator run failed"
   exit 1
 fi
-echo "  Baseline passes"
-
-# Step 2: Build a mutated Challenge
-echo "[2/3] Building mutated Challenge ..."
-WORKDIR=$(mktemp -d "${TMPDIR:-/tmp}/hlawka-neg-ctrl-XXXXXX")
-
-cp "$CHALLENGE" "$WORKDIR/Challenge.lean.orig"
-trap 'cp "$WORKDIR/Challenge.lean.orig" "$CHALLENGE"; rm -rf "$WORKDIR"' EXIT
-
-sed 's/0 < m ∧ m ≤ M ∧/0 < m ∧ M < m ∧/' "$CHALLENGE" > "$WORKDIR/Challenge.lean"
-cp "$WORKDIR/Challenge.lean" "$CHALLENGE"
-
-echo "  Mutated: strengthened m ≤ M to M < m"
-if ! lake build ExistenceChallenge 2>&1 | tail -3; then
-  echo "  (mutated build failed — trap restores $CHALLENGE)"
+if ! grep -qi "Your solution is okay" "$PALOMAR_CONTROL_DIR/baseline.log"; then
+  cat "$PALOMAR_CONTROL_DIR/baseline.log"
+  echo "FAIL: baseline did not accept the solution"
   exit 1
 fi
+echo "      Baseline accepted"
 
-# Step 3: Run comparator on mutated Challenge
-echo "[3/3] Running comparator on mutated Challenge ..."
-OUTPUT=$(COMPARATOR_LEAN4EXPORT="$LEAN4EXPORT" lake env "$COMPARATOR" "$CONFIG" 2>&1 || true)
-echo "$OUTPUT" | tail -5
+echo "[2/3] Strengthening the selected Challenge theorem ..."
+python3 - "$PALOMAR_CHALLENGE" "$PALOMAR_MODULE" <<'MUTATE_PY'
+import sys
+from pathlib import Path
+path = Path(sys.argv[1])
+text = path.read_text()
+if sys.argv[2] == "ExistenceChallenge":
+    before = "0 < m ∧ m ≤ M ∧"
+    after = "0 < m ∧ M < m ∧"
+else:
+    before = "∀ p : ℝ, 256 ≤ p → ∀ n : ℕ,\n      HasHlawkaConstant"
+    after = "∀ p : ℝ, 255 ≤ p → ∀ n : ℕ,\n      HasHlawkaConstant"
+if text.count(before) != 1:
+    raise SystemExit("Expected exactly one mutation target")
+path.write_text(text.replace(before, after))
+MUTATE_PY
+lake build "$PALOMAR_MODULE" > "$PALOMAR_CONTROL_DIR/mutated-build.log" 2>&1 || {
+  cat "$PALOMAR_CONTROL_DIR/mutated-build.log"
+  exit 1
+}
 
-echo "  Restoring original and rebuilding ..."
-
-if echo "$OUTPUT" | grep -q "^FAIL $THEOREM"; then
-  echo "PASS: comparator correctly rejected the mutated Challenge (statement mismatch)"
-  exit 0
+echo "[3/3] Checking rejection of $PALOMAR_THEOREM ..."
+PALOMAR_MUTATED_STATUS=0
+bash scripts/run_comparator.sh "$PALOMAR_CONFIG" > "$PALOMAR_CONTROL_DIR/mutated.log" 2>&1 || PALOMAR_MUTATED_STATUS=$?
+tail -n 8 "$PALOMAR_CONTROL_DIR/mutated.log"
+if (( PALOMAR_MUTATED_STATUS == 0 )); then
+  echo "FAIL: comparator accepted the strengthened statement"
+  exit 1
+fi
+if grep -Fq "Challenge and solution theorem statement do not match: '$PALOMAR_THEOREM'" \
+    "$PALOMAR_CONTROL_DIR/mutated.log" ||
+    grep -Fxq "FAIL $PALOMAR_THEOREM" "$PALOMAR_CONTROL_DIR/mutated.log"; then
+  echo "PASS: comparator rejected the strengthened statement"
 else
-  echo "FAIL: comparator did not reject $THEOREM as expected"
+  echo "FAIL: no statement-mismatch rejection for the selected theorem"
   exit 1
 fi

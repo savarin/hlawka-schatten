@@ -1,7 +1,10 @@
 name = "hlawka-schatten"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["HlawkaSchatten", "ExistenceChallenge", "ExistenceSolution"]
+defaultTargets = [
+  "HlawkaSchatten", "ExistenceChallenge", "ExistenceSolution",
+  "ConstructionDiagonalChallenge", "ConstructionDiagonalSolution"
+]
 
 [leanOptions]
 weak.linter.mathlibStandardSet = true
@@ -22,3 +25,9 @@ name = "ExistenceChallenge"
 
 [[lean_lib]]
 name = "ExistenceSolution"
+
+[[lean_lib]]
+name = "ConstructionDiagonalChallenge"
+
+[[lean_lib]]
+name = "ConstructionDiagonalSolution"

@@ -15,3 +15,4 @@ import HlawkaSchatten.Variational
 import HlawkaSchatten.Final
 import HlawkaSchatten.TraceEndpoint
 import HlawkaSchatten.Classification
+import HlawkaSchatten.DiagonalConstruction

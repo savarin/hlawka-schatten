@@ -7,6 +7,8 @@ project:
     Existence of a dimension-independent Hlawka constant for every Schatten
     p-norm with 1 < p < infinity, and proof that no such constant exists at
     either endpoint (trace norm at p=1, operator norm at p=infinity).
+    For complex diagonal matrices and every real p >= 256, an explicit
+    cyclic maximum is the sharp constant in every dimension at least three.
   authors:
     - "Ezzeri Esa"
   responsible_maintainers:
@@ -34,6 +36,20 @@ sources:
       source-paper citations, and recent Schatten-norm work through August
       2026 found no prior proof. The proof has not been examined in depth by
       human experts; novelty of its ideas has not been established.
+  - title: "The sharp cyclic Hlawka constant for diagonal Schatten norms"
+    authors:
+      - "Ezzeri Esa"
+    type: "original-proof"
+    id: "https://github.com/savarin/hlawka-schatten"
+    location: "proof/diagonal-construction.md and ConstructionDiagonalSolution.lean"
+    relationship: "other"
+    author_endorsement: "participated"
+    note: >-
+      Formalizes the scalar/diagonal tail argument developed on 2026-09-21/22.
+      The bound holds for every real p >= 256 and every finite dimension,
+      with sharpness in each dimension at least three and attainment by
+      an explicit cyclic family. The Lean proof was constructed with Codex.
+      This does not determine the sharp constant for arbitrary matrices.
   - title: "Problems and conjectures in matrix and operator inequalities"
     authors:
       - "Koenraad M. R. Audenaert"
@@ -71,7 +87,11 @@ status:
     For every p > 1 it proves the existence of a finite dimension-independent
     Hlawka constant via scalar Bregman comparison. It also proves failure at
     p=1 on complex 2 by 2 operators and at p=infinity on complex 3 by 3
-    matrices. It does not determine the sharp interior constant.
+    matrices. A separate construction determines the sharp constant for
+    complex diagonal Schatten norms for every real p >= 256, in every
+    dimension at least three; its upper bound holds in all finite dimensions.
+    Sharpness for arbitrary operators and the diagonal range below 256 are
+    not determined by the construction.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -81,6 +101,21 @@ status:
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       comparator_config: "comparator-existence.json"
+    - declaration: "PalomarHlawkaSchatten.ConstructionDiagonal.diagonal_hlawka_bound"
+      file: "ConstructionDiagonalSolution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator-construction-diagonal.json"
+    - declaration: "PalomarHlawkaSchatten.ConstructionDiagonal.diagonal_hlawka_sharp"
+      file: "ConstructionDiagonalSolution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator-construction-diagonal.json"
+    - declaration: "PalomarHlawkaSchatten.ConstructionDiagonal.cyclic_maximum_attained"
+      file: "ConstructionDiagonalSolution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator-construction-diagonal.json"
 
 automation:
   methods:
@@ -97,6 +132,16 @@ automation:
       prompting_notes: >-
         The agent was given the audited mathematical proof artifacts and nearby
         operator-theory formalizations as references.
+    - method: "agent"
+      models: ["GPT 6 Astra (OpenAI)"]
+      framework: "Codex"
+      tool_setup: >-
+        Diagonal construction in kernel-checked Lean layers, full Lake builds,
+        publication-boundary axiom audits, and Comparator statement checks.
+      prompting_notes: >-
+        The agent was given the scalar/diagonal tail proof and its dependency,
+        cutoff, and failure-analysis notes, and asked to follow the existing
+        repository's Challenge/Solution and Comparator conventions.
   spend_usd: "subscription-based"
   notes: >-
     The proof was developed in small kernel-checked layers and audited at the
@@ -111,16 +156,29 @@ fidelity:
     quantifies existentially over m and M without naming the construction.
     Infinity is represented by Mathlib's spectral L2 operator norm, since
     infinity is not a real exponent in schattenPNorm.
+    The diagonal boundary specifies the cyclic constant by a compact
+    supremum on [1/2, 2] and proves attainment, admissibility, and sharpness.
+    It defines the norm through actual singular values. Intermediate
+    changes from the written tail proof include an ordered-chord convexity
+    argument, a direct sparse minimization proof, the rational separator
+    939/2000, a radial residual constant of 300 instead of 110, looser
+    Hessian coefficients, and a closed-convex-hull circle transfer.
+    These changes retain the stated real exponent cutoff of 256.
 
 review:
   status: "agent-reviewed"
   reviewers:
     - "Ezzeri Esa"
     - "GPT 5.6 Sol (OpenAI)"
+    - "GPT 6 Astra (OpenAI)"
   notes: >-
-    The mathematical proof source was independently audited before
-    formalization. The final Challenge was checked against the input statement,
-    and the proof sources were scanned for unresolved holes and user axioms.
+    The existence proof source was independently audited before formalization.
+    Its final Challenge was checked against the input statement, and the proof
+    sources were scanned for unresolved holes and user axioms. The diagonal
+    extension was reviewed by its implementing Codex agent against the written
+    tail proof, with kernel checks and boundary axiom audits. This does not
+    claim a separate independent review of the new Lean proof or an in-depth
+    human expert review.
 
 alignment:
   namespace: "PalomarHlawkaSchatten"
@@ -132,6 +190,23 @@ alignment:
       note: >-
         Proves dimension-independent interior finiteness and
         fixed-dimensional obstructions at p=1 and p=infinity.
+    - source: "proof/diagonal-construction.md, Statement and explicit constant"
+      lean: "PalomarHlawkaSchatten.ConstructionDiagonal.diagonal_hlawka_bound"
+      module: "ConstructionDiagonalSolution"
+      status: "proved"
+      note: >-
+        The explicit cyclic maximum bounds all finite complex diagonal
+        Schatten spaces for every real p >= 256, including unequal norms.
+    - source: "proof/diagonal-construction.md, Statement and explicit constant"
+      lean: "PalomarHlawkaSchatten.ConstructionDiagonal.diagonal_hlawka_sharp"
+      module: "ConstructionDiagonalSolution"
+      status: "proved"
+      note: "Every admissible constant in each dimension at least three is at least the cyclic maximum."
+    - source: "proof/diagonal-construction.md, Statement and explicit constant"
+      lean: "PalomarHlawkaSchatten.ConstructionDiagonal.cyclic_maximum_attained"
+      module: "ConstructionDiagonalSolution"
+      status: "proved"
+      note: "A cyclic parameter in [1/2, 2] attains the maximum."
 
 acknowledgements: >-
   Mathlib contributors; leanprover/comparator and NanoDa maintainers.
