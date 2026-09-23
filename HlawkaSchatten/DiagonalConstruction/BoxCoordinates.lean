@@ -80,7 +80,7 @@ theorem entryBox_pair_ne_zero {X : Triple} (hX : X ∈ entryBox) (j : Fin 3) :
   have h := entryBox_pair_large hX j
   norm_num [he] at h
 
-/-- The sum of squared pair norms is at most four times the Frobenius norm. -/
+/-- The sum of squared pair norms is at most four times the squared Frobenius norm. -/
 theorem euclideanSq_pairs_le (X : Triple) :
     (∑ j, euclideanSq (pairTriple X j)) ≤ 4 * frobeniusSq X := by
   have he : (∑ j, euclideanSq (pairTriple X j)) = frobeniusSq X + euclideanSq (totalTriple X) := by

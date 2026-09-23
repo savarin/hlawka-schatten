@@ -10,7 +10,7 @@ if (( $# > 1 )); then
 fi
 
 : "${COMPARATOR:?Set COMPARATOR to the comparator binary path}"
-: "${LEAN4EXPORT:?Set LEAN4EXPORT to a v4.33.0-compatible lean4export binary}"
+: "${LEAN4EXPORT:?Set LEAN4EXPORT to a lean4export built for the toolchain in lean-toolchain.}"
 
 PALOMAR_CONFIG="${1:-comparator-existence.json}"
 read -r PALOMAR_MODULE PALOMAR_THEOREM < <(

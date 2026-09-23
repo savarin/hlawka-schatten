@@ -102,8 +102,8 @@ noncomputable def schattenPowerDirection {p : ℝ} (hp : 0 < p)
     schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p :=
   ⟨schattenNormalized p T, singularValuePowerSum_normalized hp hT⟩
 
-/-- Equation (7), with the unit-sphere normalization removed, for a finite
-family of nonzero rectangular operators. -/
+/-- The two-sided comparison with the unit-sphere normalization removed,
+for a finite family of nonzero rectangular operators. -/
 theorem finiteFamilyGap_two_sided
     {ι : Type*} [Fintype ι] [Nonempty ι]
     {p m M : ℝ} (hp : 1 < p) (hm : 0 ≤ m)

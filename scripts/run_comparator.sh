@@ -5,7 +5,7 @@ readonly PALOMAR_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly PALOMAR_REPO_ROOT="$(cd "$PALOMAR_SCRIPT_DIR/.." && pwd)"
 
 : "${COMPARATOR:?Set COMPARATOR to the Comparator executable.}"
-: "${LEAN4EXPORT:?Set LEAN4EXPORT to the Lean 4.33-compatible exporter.}"
+: "${LEAN4EXPORT:?Set LEAN4EXPORT to a lean4export built for the toolchain in lean-toolchain.}"
 
 export COMPARATOR_LEAN4EXPORT="$LEAN4EXPORT"
 if [[ -n "${FAKE_LANDRUN:-}" ]]; then

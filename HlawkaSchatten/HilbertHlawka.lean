@@ -9,8 +9,8 @@ import HlawkaSchatten.GapComparison
 /-!
 # Hlawka's inequality in inner-product spaces
 
-This proof uses the quadrilateral square identity. It avoids the Gaussian
-integration route from the paper while proving the same Hilbert-space layer.
+This proof uses the quadrilateral square identity rather than Gaussian
+integration.
 -/
 
 namespace HlawkaSchatten

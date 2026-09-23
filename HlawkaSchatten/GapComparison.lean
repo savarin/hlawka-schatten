@@ -36,13 +36,14 @@ def HasHlawkaConstant (size : E → ℝ) (C : ℝ) : Prop :=
   ∀ x y z, tripleGap size x y z ≤ C * pairGapSum size x y z
 
 /--
-The final comparison step in the Bregman--Mazur route to a Hlawka bound.
+Abstract gap transfer: if the triple gap for `size` is bounded above by
+that of a `model` functional, and every pair gap is bounded below by the
+corresponding model gap, then a Hlawka inequality for `model` transfers
+to `size` with constant `M / m`.
 
-In the Schatten application, `size` is the Schatten `p`-norm, `model` is
-the Hilbert--Schmidt norm after the Mazur map, and the comparison constants
-are `2 * m` and `2 * M`. The hypotheses before `hModel` are supplied by the
-spectral-lift, rectangular-dilation, and variational layers. The conclusion
-is the desired factor `M / m`, with no loss from the factors of two.
+In the Schatten proof, the Mazur-mapped gap theorem
+(`mappedTripleGap_le_ratio_mul_mappedPairGapSum`) supplies these bounds;
+this utility handles the purely ordered-algebraic step.
 -/
 theorem tripleGap_le_ratio_mul_pairGapSum
     (size model : E → ℝ) (m M : ℝ) (x y z : E)

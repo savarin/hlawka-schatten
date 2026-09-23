@@ -13,9 +13,9 @@ import HlawkaSchatten.Basic
 /-!
 # Scalar power Bregman data
 
-These are the scalar objects used in the first layer of the audited
-Bregman--Mazur proof. The normalization of `powerPotential` is important:
-its derivative is the signed `(p - 1)`-power with no extra factor of `p`.
+The scalar power potential `|t|^p / p` and its Bregman divergence, Mazur
+image and gradient. The normalization is important: the derivative of
+`powerPotential` is the signed `(p - 1)`-power with no extra factor of `p`.
 -/
 
 namespace HlawkaSchatten

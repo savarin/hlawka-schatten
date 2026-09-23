@@ -6,18 +6,20 @@ Authors: Ezzeri Esa
 import Mathlib.Analysis.InnerProductSpace.SingularValues
 import Mathlib.Analysis.CStarAlgebra.Matrix
 
-/-! # Dimension-independent Hlawka constants for Schatten norms (Challenge)
+/-!
+# Dimension-independent Hlawka constants for Schatten norms (Challenge)
 
-This boundary file states the existence of a dimension-independent Hlawka
-constant for Schatten p-norms when 1 < p, and the failure of such a constant
-at both endpoints (trace norm p = 1, operator norm p = infinity).
+For every real exponent `p > 1`, a finite dimension-independent Hlawka
+constant exists for the Schatten `p`-norm on linear maps between
+finite-dimensional complex inner product spaces. No such constant exists
+at the trace norm (`p = 1`, dimension 2) or the operator norm
+(`p = ∞`, dimension 3).
 
-The singular values of a linear map between finite-dimensional inner product
-spaces are listed in descending order with multiplicity, zero-padded. The
-Schatten p-norm is the p-th root of the sum of p-th powers of these values.
-At p = infinity, the Schatten p-norm is the largest singular value, which
-coincides with the operator norm; this endpoint is represented by Mathlib's
-spectral L2 operator norm via `Matrix.instNormedAddCommGroupMatrix`.
+The Schatten `p`-norm is the `p`-th root of the sum of `p`-th powers of
+the singular values, listed in descending order with multiplicity and
+zero-padded. At `p = ∞` the Schatten norm is the largest singular value,
+represented by Mathlib's spectral L2 operator norm via
+`Matrix.instNormedAddCommGroupMatrix`.
 -/
 
 namespace PalomarHlawkaSchatten

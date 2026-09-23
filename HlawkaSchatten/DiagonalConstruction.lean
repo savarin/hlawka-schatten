@@ -6,3 +6,7 @@ Authors: Ezzeri Esa
 import HlawkaSchatten.DiagonalConstruction.ComplexTransfer
 import HlawkaSchatten.DiagonalConstruction.DiagonalNorm
 import HlawkaSchatten.DiagonalConstruction.CyclicWitness
+
+/-! # Sharp diagonal Hlawka constant
+
+Root module assembling the diagonal construction library. -/

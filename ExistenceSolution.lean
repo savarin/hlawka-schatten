@@ -11,6 +11,7 @@ namespace PalomarHlawkaSchatten
 
 open scoped Matrix.Norms.L2Operator
 
+/-- Sum of the p-th powers of the singular values. -/
 noncomputable def singularValuePowerSum
     {𝕜 E F : Type*} [RCLike 𝕜]
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
@@ -18,6 +19,7 @@ noncomputable def singularValuePowerSum
     (p : ℝ) (T : E →ₗ[𝕜] F) : ℝ :=
   ∑ i ∈ T.singularValues.support, (T.singularValues i) ^ p
 
+/-- The Schatten p-norm: the p-th root of `singularValuePowerSum`. -/
 noncomputable def schattenPNorm
     {𝕜 E F : Type*} [RCLike 𝕜]
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
@@ -25,15 +27,20 @@ noncomputable def schattenPNorm
     (p : ℝ) (T : E →ₗ[𝕜] F) : ℝ :=
   (singularValuePowerSum p T) ^ (1 / p)
 
+/-- The pair deficit: `N(x) + N(y) - N(x + y)`. -/
 def pairGap {E : Type*} [Add E] (size : E → ℝ) (x y : E) : ℝ :=
   size x + size y - size (x + y)
 
+/-- The triple deficit: `N(x) + N(y) + N(z) - N(x + y + z)`. -/
 def tripleGap {E : Type*} [Add E] (size : E → ℝ) (x y z : E) : ℝ :=
   size x + size y + size z - size (x + y + z)
 
+/-- Sum of the three pair deficits. -/
 def pairGapSum {E : Type*} [Add E] (size : E → ℝ) (x y z : E) : ℝ :=
   pairGap size x y + pairGap size x z + pairGap size y z
 
+/-- `C` is a Hlawka constant for `size` if the triple deficit never exceeds
+`C` times the sum of pair deficits. -/
 def HasHlawkaConstant {E : Type*} [Add E] (size : E → ℝ) (C : ℝ) : Prop :=
   ∀ x y z, tripleGap size x y z ≤ C * pairGapSum size x y z
 

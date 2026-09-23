@@ -28,7 +28,7 @@ noncomputable def scalarRatio (p t : ℝ) : ℝ :=
 noncomputable def regularizedScalarRatio (p t : ℝ) : ℝ :=
   if t = 1 then 2 * (p - 1) / p ^ 2 else scalarRatio p t
 
-/-- Explicit formula (1) from the audited proof source. -/
+/-- The scalar ratio equals `(|t|^p - p t + p - 1) / (p (t^{p/2} - 1)²)`. -/
 theorem scalarRatio_eq_explicit {p : ℝ} (hp : p ≠ 0) (t : ℝ) :
     scalarRatio p t =
       (|t| ^ p - p * t + p - 1) /
@@ -78,14 +78,14 @@ private theorem scalarRatio_eq_invertedPositiveRatio {p t : ℝ}
     congr 1
     ring
   have hsq' : (t ^ (p * (1 / 2))) ^ 2 = t ^ p := by
-    convert hsq using 1; ring
+    convert hsq using 1; ring_nf
   have hprod : t * t ^ (-1 + p) = t ^ p := by
     calc
       t * t ^ (-1 + p) = t ^ (1 : ℝ) * t ^ (-1 + p) := by rw [Real.rpow_one]
       _ = t ^ ((1 : ℝ) + (-1 + p)) := (Real.rpow_add ht _ _).symm
       _ = t ^ p := by ring_nf
   have hprod' : t * t ^ (p - 1) = t ^ p := by
-    convert hprod using 1; ring
+    convert hprod using 1; ring_nf
   field_simp [hp.ne', ht.ne', htp.ne', hthalf.ne']
   rw [hsq]
   congr 1
@@ -227,9 +227,9 @@ private theorem hasDerivAt_positiveRatioNumeratorDeriv (p : ℝ) {t : ℝ} (ht :
     HasDerivAt (positiveRatioNumeratorDeriv p) (positiveRatioNumeratorDeriv2 p t) t := by
   have hpow : HasDerivAt (fun x : ℝ ↦ x ^ (p - 1))
       ((p - 1) * t ^ (p - 2)) t := by
-    convert Real.hasDerivAt_rpow_const (p := p - 1) (Or.inl ht) using 1; ring
+    convert Real.hasDerivAt_rpow_const (p := p - 1) (Or.inl ht) using 1; ring_nf
   unfold positiveRatioNumeratorDeriv positiveRatioNumeratorDeriv2
-  convert! hpow.const_mul p |>.sub_const p using 1; ring
+  convert! hpow.const_mul p |>.sub_const p using 1; ring_nf
 
 private theorem hasDerivAt_positiveRatioDenominatorDeriv (p : ℝ) {t : ℝ} (ht : t ≠ 0) :
     HasDerivAt (positiveRatioDenominatorDeriv p)
@@ -243,7 +243,7 @@ private theorem hasDerivAt_positiveRatioDenominatorDeriv (p : ℝ) {t : ℝ} (ht
     funext x
     ring
   rw [hfun]
-  convert! (h₁.mul h₂).const_mul (p ^ 2) using 1; ring
+  convert! (h₁.mul h₂).const_mul (p ^ 2) using 1; ring_nf
 
 private theorem positiveRatioDenominatorDeriv_ne_zero {p t : ℝ}
     (hp : 0 < p) (ht : 0 < t) (ht1 : t ≠ 1) :

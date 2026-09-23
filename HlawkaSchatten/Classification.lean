@@ -13,6 +13,8 @@ namespace HlawkaSchatten
 
 open scoped Matrix.Norms.L2Operator
 
+/-- For every Schatten exponent `p > 1`, a finite dimension-independent
+Hlawka constant exists; none exists at `p = 1` or `p = ∞`. -/
 theorem dimension_independent_hlawka_constant_for_schatten_norms :
     (∀ p : ℝ, 1 < p →
       ∃ m M : ℝ, 0 < m ∧ m ≤ M ∧

@@ -34,13 +34,14 @@ theorem hlawkaDeficit_swap_right (p K : ℝ) (x y z : ι → ℝ) :
     hlawkaDeficit p K x z y = hlawkaDeficit p K x y z := by
   simp only [hlawkaDeficit, add_comm, add_left_comm, add_assoc]
 
-/-- The total norm is invariant under flipping a sign. -/
+/-- Flipping to `(-(x+y+z), y, z)` exchanges the total norm with a singleton norm. -/
 theorem lpNorm_flip_total (p : ℝ) (x y z : ι → ℝ) :
     lpNorm p (-(x + y + z) + y + z) = lpNorm p x := by
   have h : -(x + y + z) + y + z = -x := by abel
   rw [h, lpNorm_neg]
 
-/-- The deficit of `(-(x+y+z), y, z)` differs from that of `(x, y, z)` by `(2K - 2)(N(x+y+z) - N(x))`. -/
+/-- The deficit of `(-(x+y+z), y, z)` differs from that of `(x, y, z)` by
+`(2K - 2)(N(x+y+z) - N(x))`. -/
 theorem hlawkaDeficit_flip (p K : ℝ) (x y z : ι → ℝ) :
     hlawkaDeficit p K (-(x + y + z)) y z = hlawkaDeficit p K x y z +
       (2 * K - 2) * (lpNorm p (x + y + z) - lpNorm p x) := by

@@ -52,7 +52,7 @@ private theorem tripleDeficit_conjugate_six (p K : ℝ) (X : Triple) (k : Fin 6)
   fin_cases k <;> simp [permutations, tripleDeficit, hlawkaDeficit, Equiv.swap_apply_def,
     add_comm, add_left_comm, add_assoc]
 
-/-- The orbit average over the six column permutations. -/
+/-- The orbit average over the six simultaneous row-and-column permutations. -/
 noncomputable def orbitAverage (X : Triple) : Triple :=
   ∑ k : Fin 6, (1 / 6 : ℝ) • conjugate (permutations k) X
 

@@ -10,9 +10,10 @@ import HlawkaSchatten.GapComparison
 /-!
 # The three-coordinate infinity-norm obstruction
 
-This is the scalar diagonal core of the operator-norm endpoint example from
-the proof source. Every pair deficit vanishes, while the three-body deficit
-is positive, so no finite multiplicative constant can satisfy Hlawka.
+The triple diag(−1, 1, 1), diag(1, −1, 1), diag(1, 1, −1) has all three
+pair deficits equal to zero but positive triple deficit, so no finite
+multiplicative constant can satisfy Hlawka at the operator norm. This is
+the t = 1 member of the cyclic family in `DiagonalConstruction.Cyclic`.
 -/
 
 namespace HlawkaSchatten

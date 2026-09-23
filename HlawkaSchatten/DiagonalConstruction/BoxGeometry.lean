@@ -8,8 +8,10 @@ import HlawkaSchatten.DiagonalConstruction.Localization
 /-!
 # Quadratic geometry of the cyclic box
 
-The joint radial estimate uses the convenient bound `300`. This weaker
-intermediate constant leaves the exponent cutoff unchanged.
+The joint radial estimate bounds the squared Frobenius residual by `300`
+times the sum of squared singleton-norm residuals. This constant controls
+the trade-off between singleton and total-norm Hessians; its looseness is
+absorbed by the curvature margin, which has order 10¹¹ at p = 256.
 -/
 
 namespace HlawkaSchatten.DiagonalConstruction

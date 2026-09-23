@@ -5,7 +5,7 @@ Authors: Ezzeri Esa
 -/
 import HlawkaSchatten.DiagonalConstruction
 
-/-! # The sharp cyclic constant for diagonal Schatten norms (Solution) -/
+/-! # The sharp cyclic Hlawka constant for diagonal Schatten norms (Solution) -/
 
 namespace PalomarHlawkaSchatten.ConstructionDiagonal
 

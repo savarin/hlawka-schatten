@@ -380,8 +380,8 @@ noncomputable def spectralBregmanTrace [FiniteDimensional ℂ E]
       (spectralDiagonal f (powerGradient p ∘ b))).trace ℂ E).re +
     (spectralDiagonal f (fun j ↦ powerGradient p (b j) * b j) |>.trace ℂ E).re
 
-/-- Exact equation (4), first line: the Hermitian trace Bregman divergence is
-the overlap-weighted sum of scalar Bregman divergences. -/
+/-- The Hermitian trace Bregman divergence is the overlap-weighted sum of
+scalar Bregman divergences. -/
 theorem spectralBregmanTrace_eq_sum [FiniteDimensional ℂ E]
     (p : ℝ) (e : OrthonormalBasis ι ℂ E) (a : ι → ℝ)
     (f : OrthonormalBasis κ ℂ E) (b : κ → ℝ) :
@@ -423,8 +423,8 @@ noncomputable def spectralMazurDistanceSq [FiniteDimensional ℂ E]
       (spectralDiagonal f (scalarMazur p ∘ b))).trace ℂ E).re +
     (spectralDiagonal f (fun j ↦ scalarMazur p (b j) ^ 2) |>.trace ℂ E).re
 
-/-- Exact equation (4), second line: the Hilbert--Schmidt Mazur square is
-the overlap-weighted sum of squared scalar Mazur differences. -/
+/-- The Hilbert--Schmidt Mazur square is the overlap-weighted sum of
+squared scalar Mazur differences. -/
 theorem spectralMazurDistanceSq_eq_sum [FiniteDimensional ℂ E]
     (p : ℝ) (e : OrthonormalBasis ι ℂ E) (a : ι → ℝ)
     (f : OrthonormalBasis κ ℂ E) (b : κ → ℝ) :

@@ -4,11 +4,13 @@ version: "v0.4"
 project:
   name: "Dimension-independent Hlawka constants for Schatten norms"
   description: >-
-    Existence of a dimension-independent Hlawka constant for every Schatten
-    p-norm with 1 < p < infinity, and proof that no such constant exists at
-    either endpoint (trace norm at p=1, operator norm at p=infinity).
-    For complex diagonal matrices and every real p >= 256, an explicit
-    cyclic maximum is the sharp constant in every dimension at least three.
+    For every Schatten p-norm with 1 < p < infinity, a finite Hlawka
+    constant exists that does not depend on dimension, and at both
+    endpoints (trace norm, p = 1; operator norm, p = infinity) no constant
+    exists. For complex diagonal matrices and every real p >= 256, the
+    sharp constant is an explicit maximum over a one-parameter cyclic
+    family: it holds in every dimension and cannot be lowered in any
+    dimension at least three.
   authors:
     - "Ezzeri Esa"
   responsible_maintainers:
@@ -83,15 +85,16 @@ sources:
 
 status:
   scope: >-
-    The formalization covers finite-dimensional rectangular complex operators.
-    For every p > 1 it proves the existence of a finite dimension-independent
-    Hlawka constant via scalar Bregman comparison. It also proves failure at
-    p=1 on complex 2 by 2 operators and at p=infinity on complex 3 by 3
-    matrices. The construction also determines the sharp constant for
-    complex diagonal Schatten norms for every real p >= 256, in every
-    dimension at least three; its upper bound holds in all finite dimensions.
-    Sharpness for arbitrary operators and the diagonal range below 256 are
-    not determined by the construction.
+    The formalization proves two results about Hlawka constants for
+    Schatten p-norms of finite-dimensional complex operators. Existence:
+    for every real p > 1 a finite constant works for linear maps between
+    all finite-dimensional complex inner product spaces, and no constant
+    exists at p = 1 (complex 2 by 2 operators) or p = infinity (complex
+    3 by 3 matrices). Construction: for complex diagonal matrices and every
+    real p >= 256, an explicit cyclic maximum is a Hlawka constant in every
+    finite dimension and the smallest one in each dimension at least three.
+    The sharp constant for general operators and the diagonal constant
+    below p = 256 are not determined.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -125,10 +128,6 @@ automation:
       tool_setup: >-
         Agentic proof construction with Lean elaboration, full Lake builds,
         exact-arithmetic endpoint reductions, and independent proof-source audit.
-      cost:
-        wall_time: "approximately 6 hours across resumed sessions"
-        spend_usd: "subscription-based"
-        hardware: "local machine"
       prompting_notes: >-
         The agent was given the audited mathematical proof artifacts and nearby
         operator-theory formalizations as references.
@@ -142,32 +141,35 @@ automation:
         The agent was given the scalar/diagonal tail proof and its dependency,
         cutoff, and failure-analysis notes, and asked to follow the existing
         repository's Challenge/Solution and Comparator conventions.
-  spend_usd: "subscription-based"
   notes: >-
-    The mathematical argument was developed over two weeks of directed proof
-    search. The human author identified the proof strategy, diagnosed repeated
-    dead ends where agents stalled, and refined the approach through failure
-    analysis at each stage. AI agents executed computational searches, produced
-    candidate lemmas, and formalized the final argument in Lean. The proof was
-    developed in small kernel-checked layers and audited at the publication
-    boundary for dimensional uniformity and endpoint fidelity.
+    Existence: the Lean proof was developed in small kernel-checked layers
+    and audited at the publication boundary for dimensional uniformity and
+    endpoint fidelity. Construction: the argument was developed over two
+    weeks of directed proof search. The human author identified the proof
+    strategy, diagnosed repeated dead ends where agents stalled, and
+    refined the approach through failure analysis at each stage. AI agents
+    executed computational searches, produced candidate lemmas, and
+    formalized the final argument in Lean.
 
 fidelity:
   divergences: >-
     The interior theorem is stated for linear maps between arbitrary finite
-    complex Hilbert spaces, which is stronger than fixing coordinate matrix
-    spaces. The proof library constructs explicit constants m_p, M_p from the
+    complex Hilbert spaces, a coordinate-free formulation equivalent to
+    fixing coordinate matrix spaces via choice of orthonormal bases. The proof library constructs explicit constants m_p, M_p from the
     compactified scalar Bregman-to-Mazur ratio, but the Challenge boundary
     quantifies existentially over m and M without naming the construction.
     Infinity is represented by Mathlib's spectral L2 operator norm, since
     infinity is not a real exponent in schattenPNorm.
     The diagonal boundary specifies the cyclic constant by a compact
-    supremum on [1/2, 2] and proves attainment, admissibility, and sharpness.
-    It defines the norm through actual singular values. The Lean proof
-    uses an ordered-chord convexity argument, a direct sparse minimization
-    proof, the rational separator 939/2000, a radial residual constant
-    of 300, and looser Hessian coefficients than the informal development.
-    These choices retain the stated real exponent cutoff of 256.
+    supremum on [1/2, 2] and proves attainment, admissibility, and
+    sharpness. It defines the norm through actual singular values. The
+    Lean proof departs from the written proof it formalizes (not included
+    in this repository) only in intermediate choices: an ordered-chord
+    proof of the weighted three-point convexity inequality, a direct
+    sparse-minimizer argument, the rational separator 939/2000, the radial
+    residual constant 300, and looser Hessian coefficients. The exponent
+    cutoff 256 is unchanged; it is set by the localization estimate, not
+    by the curvature margin.
 
 review:
   status: "agent-reviewed"
@@ -178,33 +180,35 @@ review:
   notes: >-
     The existence proof source was independently audited before formalization.
     The diagonal proof was reviewed against the BLUEPRINT.
-    Both Challenges were checked against their proof sources,
-    and the build, boundary audits, Comparator, and negative controls were
-    re-run.
+    Both Challenges were checked against their proof sources.
+    Locally validated: full Lake build, both boundary/axiom audits,
+    both Comparator baselines (upstream 8d84e67, macOS development
+    Landrun shim, default Lean kernel), and both negative controls.
+    Protected Landrun/NanoDa validation deferred to Palomar submission.
 
 alignment:
   namespace: "PalomarHlawkaSchatten"
   statements:
-    - source: "Audenaert--Kittaneh, Section 8.2, Problem 7"
+    - source: "Audenaert–Kittaneh, Section 8.2, Problem 7"
       lean: "PalomarHlawkaSchatten.dimension_independent_hlawka_constant_for_schatten_norms"
       module: "ExistenceSolution"
       status: "proved"
       note: >-
         Proves dimension-independent interior finiteness and
         fixed-dimensional obstructions at p=1 and p=infinity.
-    - source: "BLUEPRINT.md, Statement and explicit constant"
+    - source: "BLUEPRINT.md, Target"
       lean: "PalomarHlawkaSchatten.ConstructionDiagonal.diagonal_hlawka_bound"
       module: "ConstructionDiagonalSolution"
       status: "proved"
       note: >-
         The explicit cyclic maximum bounds all finite complex diagonal
         Schatten spaces for every real p >= 256, including unequal norms.
-    - source: "BLUEPRINT.md, Statement and explicit constant"
+    - source: "BLUEPRINT.md, Target"
       lean: "PalomarHlawkaSchatten.ConstructionDiagonal.diagonal_hlawka_sharp"
       module: "ConstructionDiagonalSolution"
       status: "proved"
       note: "Every admissible constant in each dimension at least three is at least the cyclic maximum."
-    - source: "BLUEPRINT.md, Statement and explicit constant"
+    - source: "BLUEPRINT.md, Target"
       lean: "PalomarHlawkaSchatten.ConstructionDiagonal.cyclic_maximum_attained"
       module: "ConstructionDiagonalSolution"
       status: "proved"

@@ -141,10 +141,9 @@ theorem weightedHilbertObjective_isGlobalMinimumValue
         field_simp
       rw [hinner]
 
-/-- Equation (7)'s minimization step in its exact abstract form.  A Mazur
-sphere equivalence, attained variational representations, and a pointwise
-Bregman--distance comparison imply the factors `2*m` and `2*M` between the
-two gap values. -/
+/-- A Mazur sphere equivalence, attained variational representations and a
+pointwise Bregman--distance comparison imply the factors `2*m` and `2*M`
+between the two gap values. -/
 theorem variationalGap_two_sided_of_mazurEquiv
     {P Q : Type*} (mazur : P ≃ Q) (beta : P → ℝ) (distanceSq : Q → ℝ)
     (deltaP delta₂ m M : ℝ) (hm : 0 ≤ m)
@@ -230,10 +229,9 @@ theorem rectangularBregmanObjective_eq_sum_sub_pairing
   simp_rw [mul_sub, mul_one]
   rw [Finset.sum_sub_distrib]
 
-/-- The rectangular Bregman objective attains the Schatten variational gap.
-This is the duality formula needed in equation (6), proved directly from
-Bregman nonnegativity and positive homogeneity rather than a separate
-von Neumann trace-inequality API. -/
+/-- The rectangular Bregman objective attains the Schatten variational gap,
+proved directly from Bregman nonnegativity and positive homogeneity rather
+than a separate von Neumann trace-inequality API. -/
 theorem rectangularBregmanObjective_isGlobalMinimumValue
     [Nonempty ι] {p : ℝ} (hp : 1 < p) (a : ι → ℝ)
     (u : ι → schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p) :
@@ -456,10 +454,10 @@ theorem rectangularMazurDistanceObjective_isGlobalMinimumValue
     ← schattenPNorm_two_eq_norm_hilbertSchmidtCoordinates e] at hc
   exact hc
 
-/-- Once Schatten duality supplies the Bregman variational representation,
-the already-proved spectral comparison and Hilbert minimum give equation (7)
-for the actual rectangular objectives.  Thus `hbeta` is the sole remaining
-analytic input at this interface. -/
+/-- Two-sided variational gap bound for rectangular operators.  The hypothesis
+`hbeta` supplies the Bregman variational minimum; the spectral comparison and
+Hilbert minimum (already proved) then give the two-sided bound in terms of
+the Mazur barycenter distance. -/
 theorem rectangularVariationalGap_two_sided_of_bregmanRepresentation
     (e : OrthonormalBasis κ ℂ E) [Nonempty ι]
     {p m M : ℝ} (hp : 0 < p) (hm : 0 ≤ m)
@@ -486,9 +484,8 @@ theorem rectangularVariationalGap_two_sided_of_bregmanRepresentation
   intro v
   simpa using rectangularBregmanObjective_two_sided p m M a ha u v hbound
 
-/-- Equation (7) for a finite family of rectangular Schatten-`p` unit
-operators.  Both variational representations, the Mazur sphere equivalence,
-and the spectral comparison have now been instantiated. -/
+/-- The two-sided comparison of Schatten and Hilbert gaps for a finite
+family of rectangular Schatten-`p` unit operators. -/
 theorem rectangularVariationalGap_two_sided
     (e : OrthonormalBasis κ ℂ E) [Nonempty ι]
     {p m M : ℝ} (hp : 1 < p) (hm : 0 ≤ m)
@@ -508,8 +505,8 @@ theorem rectangularVariationalGap_two_sided
     ((∑ i, a i) - schattenPNorm p (rectangularWeightedSum a u))
     (rectangularBregmanObjective_isGlobalMinimumValue (E := E) (F := F) hp a u) hbound
 
-/-- A single positive finite pair of constants gives equation (7) for every
-finite pair of rectangular complex Hilbert spaces. -/
+/-- A single positive finite pair of constants gives the two-sided
+comparison for every finite pair of rectangular complex Hilbert spaces. -/
 theorem exists_uniform_rectangularVariationalGap_two_sided
     [Nonempty ι] {p : ℝ} (hp : 1 < p)
     (a : ι → ℝ) (ha : ∀ i, 0 ≤ a i) :
