@@ -14,36 +14,47 @@ intermediate constant leaves the exponent cutoff unchanged.
 
 namespace HlawkaSchatten.DiagonalConstruction
 
+/-- The squared Euclidean norm of a 3-vector. -/
 def euclideanSq (v : Fin 3 → ℝ) : ℝ := ∑ i, (v i) ^ 2
 
+/-- The squared Frobenius norm of a triple. -/
 def frobeniusSq (X : Triple) : ℝ := ∑ j, euclideanSq (X j)
 
+/-- Applying a coefficient vector to a triple: `Σ a_j X_j`. -/
 def applyTriple (X : Triple) (a : Fin 3 → ℝ) : Fin 3 → ℝ := fun i ↦ ∑ j, a j * X j i
 
+/-- The column-sum vector `X_0 + X_1 + X_2`. -/
 def totalTriple (X : Triple) : Fin 3 → ℝ := ∑ j, X j
 
+/-- The squared Euclidean norm is nonneg. -/
 theorem euclideanSq_nonneg (v : Fin 3 → ℝ) : 0 ≤ euclideanSq v :=
   Finset.sum_nonneg fun i _ ↦ sq_nonneg (v i)
 
+/-- The squared Frobenius norm is nonneg. -/
 theorem frobeniusSq_nonneg (X : Triple) : 0 ≤ frobeniusSq X :=
   Finset.sum_nonneg fun j _ ↦ euclideanSq_nonneg (X j)
 
+/-- Triangle inequality for squared Euclidean norms. -/
 theorem euclideanSq_add_le (u v : Fin 3 → ℝ) :
     euclideanSq (u + v) ≤ 2 * euclideanSq u + 2 * euclideanSq v := by
   simp only [euclideanSq, Finset.mul_sum, ← Finset.sum_add_distrib, Pi.add_apply]
   exact Finset.sum_le_sum fun i _ ↦ by nlinarith [sq_nonneg (u i - v i)]
 
+/-- The squared norm is invariant under negation. -/
 theorem euclideanSq_neg (v : Fin 3 → ℝ) : euclideanSq (-v) = euclideanSq v := by
   simp [euclideanSq]
 
+/-- Bound on `‖u - v‖²` in terms of `‖u‖²` and `‖v‖²`. -/
 theorem euclideanSq_sub_le (u v : Fin 3 → ℝ) :
     euclideanSq (u - v) ≤ 2 * euclideanSq u + 2 * euclideanSq v := by
   simpa only [sub_eq_add_neg, euclideanSq_neg] using euclideanSq_add_le u (-v)
 
+/-- The squared norm scales quadratically. -/
 theorem euclideanSq_smul (a : ℝ) (v : Fin 3 → ℝ) :
     euclideanSq (a • v) = a ^ 2 * euclideanSq v := by
   simp only [euclideanSq, Pi.smul_apply, smul_eq_mul, mul_pow, Finset.mul_sum]
 
+/-- The total vector's squared norm is at most `3 · ‖X‖_F²`. -/
 theorem euclideanSq_total_le (X : Triple) : euclideanSq (totalTriple X) ≤ 3 * frobeniusSq X := by
   have hi (i : Fin 3) : ((∑ j, X j i) ^ 2) ≤ 3 * ∑ j, (X j i) ^ 2 := by
     simpa using Finset.sum_mul_sq_le_sq_mul_sq Finset.univ (fun _ : Fin 3 ↦ (1 : ℝ)) (fun j ↦ X j i)
@@ -53,6 +64,7 @@ theorem euclideanSq_total_le (X : Triple) : euclideanSq (totalTriple X) ≤ 3 * 
       simp only [frobeniusSq, euclideanSq, ← Finset.mul_sum]
       rw [Finset.sum_comm]
 
+/-- Lower bound on the squared norm of a signed combination at the center. -/
 theorem euclideanSq_center_lower (a : Fin 3 → ℝ) :
     euclideanSq a ≤ euclideanSq (applyTriple cyclicCenter a) := by
   have hc := Finset.sum_mul_sq_le_sq_mul_sq Finset.univ (fun _ : Fin 3 ↦ (1 : ℝ)) a
@@ -72,6 +84,7 @@ theorem euclideanSq_center_lower (a : Fin 3 → ℝ) :
   change (∑ i, a i) ^ 2 ≤ 3 * euclideanSq a at hc
   linarith
 
+/-- Upper bound on the perturbation squared norm inside the box. -/
 theorem euclideanSq_perturbation_upper {X : Triple} (hX : X ∈ entryBox) (a : Fin 3 → ℝ) :
     euclideanSq (applyTriple (X - cyclicCenter) a) ≤ (57 / 100 : ℝ) ^ 2 * euclideanSq a := by
   have hrow (i : Fin 3) : (∑ j, (X j i - cyclicCenter j i) ^ 2) ≤ 3 * (19 / 100 : ℝ) ^ 2 := by
@@ -111,6 +124,7 @@ theorem euclideanSq_apply_lower {X : Triple} (hX : X ∈ entryBox) (a : Fin 3 �
   rw [heq]
   nlinarith
 
+/-- Upper bound on `‖X_j‖²` inside the box. -/
 theorem euclideanSq_column_upper {X : Triple} (hX : X ∈ entryBox) (j : Fin 3) :
     euclideanSq (X j) ≤ 3 * (119 / 100 : ℝ) ^ 2 := by
   have hi (i : Fin 3) : |X j i| ≤ 119 / 100 := by

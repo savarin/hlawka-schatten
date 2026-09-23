@@ -9,6 +9,7 @@ import HlawkaSchatten.DiagonalConstruction.HessianBounds
 
 namespace HlawkaSchatten.DiagonalConstruction
 
+/-- The ratio `d_p / b_p` equals `(157/27) (2983/3483)^(p-2)`. -/
 theorem hessianCoefficient_ratio (p : ℝ) :
     upperHessianCoefficient p = lowerHessianCoefficient p * (157 / 27) *
       (2983 / 3483 : ℝ) ^ (p - 2) := by
@@ -30,6 +31,7 @@ theorem hessianCoefficient_ratio (p : ℝ) :
   field_simp
   ring
 
+/-- The upper coefficient is strictly less than `8 b_p (6/7)^(p-2)`. -/
 theorem upperHessianCoefficient_lt {p : ℝ} (hp : 2 < p) :
     upperHessianCoefficient p < 8 * lowerHessianCoefficient p * (6 / 7 : ℝ) ^ (p - 2) := by
   have hb := lowerHessianCoefficient_pos (show 1 < p by linarith)
@@ -41,6 +43,7 @@ theorem upperHessianCoefficient_lt {p : ℝ} (hp : 2 < p) :
   rw [hessianCoefficient_ratio]
   nlinarith [mul_pos hb hr]
 
+/-- The geometric decay `9600 p (6/7)^(p-2) < 1` for `p ≥ 256`. -/
 theorem exponential_curvature_margin {p : ℝ} (hp : 256 ≤ p) :
     9600 * p * (6 / 7 : ℝ) ^ (p - 2) < 1 := by
   have hp0 : 0 < p := by linarith
@@ -69,7 +72,7 @@ theorem exponential_curvature_margin {p : ℝ} (hp : 256 ≤ p) :
   rw [hinv, ← div_eq_mul_inv, div_lt_one (by positivity)]
   exact hlarge
 
-/-- This comparison includes the geometric constant `300` and pair-sum factor `4`. -/
+/-- The curvature margin `1200 p d_p < b_p` for `p ≥ 256`. -/
 theorem hessian_curvature_margin {p : ℝ} (hp : 256 ≤ p) :
     1200 * p * upperHessianCoefficient p < lowerHessianCoefficient p := by
   have hb := lowerHessianCoefficient_pos (show 1 < p by linarith)

@@ -9,22 +9,31 @@ complex inner product spaces of any dimension,
   N(X) + N(Y) + N(Z) - N(X+Y+Z) <= C_p [N(X)+N(Y)-N(X+Y) + N(X)+N(Z)-N(X+Z) + N(Y)+N(Z)-N(Y+Z)]
 
 where N is the Schatten p-norm. Prove that no such constant exists at the
-trace norm (p = 1, 2 x 2 operators) or the operator norm (p = infinity,
-3 x 3 matrices).
+trace norm (p = 1, 2 × 2 operators) or the operator norm (p = ∞,
+3 × 3 matrices). For every real p ≥ 256, determine the sharp constant
+for complex diagonal Schatten norms: the maximum of the cyclic ratio
+
+    R_p(t) = (3 A_p(t) - 3^(1/p) |2-t|) / (6 A_p(t) - 3 B_p(t))
+
+over t ∈ [1/2, 2], where A_p(t) = (t^p + 2)^(1/p) and
+B_p(t) = (2 |1-t|^p + 2^p)^(1/p). This constant K_p is admissible in
+every finite dimension and sharp in each dimension at least three.
 
 ## Proof route
 
-**Scalar comparison.** The scalar power potential t -> |t|^p has Bregman
-divergence beta_p(a,b). Dividing by the squared distance of the scalar
-Mazur images psi_p(a) = sgn(a)|a|^{p/2} gives a quotient that extends
-continuously and positively to the compactified real line. By compactness,
-there exist 0 < m_p <= M_p with
+### Interior existence and endpoints
 
-  m_p |psi_p(a) - psi_p(b)|^2 <= beta_p(a,b) <= M_p |psi_p(a) - psi_p(b)|^2.
+**Scalar comparison.** The scalar power potential t → |t|^p has Bregman
+divergence β_p(a,b). Dividing by the squared distance of the scalar
+Mazur images ψ_p(a) = sgn(a)|a|^{p/2} gives a quotient that extends
+continuously and positively to the compactified real line. By compactness,
+there exist 0 < m_p ≤ M_p with
+
+  m_p |ψ_p(a) - ψ_p(b)|² ≤ β_p(a,b) ≤ M_p |ψ_p(a) - ψ_p(b)|².
 
 **Spectral lift.** For two Hermitian operators with eigenbases {e_i}, {f_j},
 the Bregman and squared-Mazur quantities decompose as double sums weighted
-by |<e_i, f_j>|^2. These weights are nonneg with rows and columns summing
+by |⟨e_i, f_j⟩|². These weights are nonnegative with rows and columns summing
 to one, so the scalar two-sided estimate lifts without changing m_p, M_p.
 
 **Hermitian dilation.** Every rectangular operator T embeds as the
@@ -44,26 +53,77 @@ deficit by the mapped pair deficits. Combining the triple upper estimate
 with the three pair lower estimates yields the constant M_p/m_p.
 
 **Trace norm endpoint (p = 1).** A family of rank-one projectors
-parameterized by s has triple deficit 4s^2 and pair-deficit sum at most
-8s^4; choosing s after a proposed constant gives a contradiction. The
-calculation uses the exact 2D identity ||T||_1^2 = ||T||_2^2 + 2 normDet(T).
+parameterized by s has triple deficit 4s² and pair-deficit sum at most
+8s⁴; choosing s after a proposed constant gives a contradiction. The
+calculation uses the exact 2D identity ‖T‖₁² = ‖T‖₂² + 2 normDet(T).
 
-**Operator norm endpoint (p = infinity).** Three signed diagonal 3 x 3
+**Operator norm endpoint (p = ∞).** Three signed diagonal 3 × 3
 matrices have all three pair deficits equal to zero but positive triple
 deficit.
+
+### Sharp diagonal constant (p ≥ 256)
+
+**Three-coordinate reduction.** Fix the three pair power sums and vary
+nonnegative coordinate weights. The positive part of the desired inequality
+is concave in those weights; a compact minimization produces a minimizer
+supported on at most three coordinates.
+
+**Scalar confinement.** The four vectors x, y, z, -(x+y+z) form a
+zero-sum quadruple whose permutations preserve pair norms. Normalizing
+and relabeling so the total norm is largest, the weighted scalar convexity
+inequality with cyclic witness t = p^{-1/p} and the separation
+
+    f_p(q₀) < (939/2000) p < K_p ≤ p,     q₀ = 53/150
+
+confine a strict counterexample to total norm below q₀, with small pair
+deficits.
+
+**Coordinate localization.** Each nearly saturated pair chooses a
+coordinate; two pairs cannot share one without violating the total-norm
+bound. After reorienting, the triple lies in a radius-19/100 entrywise
+box around J − 2I (the t = 1 member of the cyclic family).
+
+**Curvature and averaging.** The Hessian coefficients b_p and d_p satisfy
+1200 p d_p < b_p for p ≥ 256, making the sharp deficit convex throughout
+the box. Permutation averaging yields a cyclic triple whose bound follows
+from the definition of the constant.
+
+**Complex and diagonal transfer.** Circle projections reproduce complex
+norm powers up to a positive factor; the closed convex hull passes the
+real bound to the circle integral. The diagonal singular-value identity
+identifies the coordinate power sum with the Schatten norm.
+
+**Sharpness and attainment.** The cyclic vectors embed into every
+dimension at least three. Their ratio is continuous on [1/2, 2] and
+attains a maximum.
 
 ## Key lemmas
 
 - Compactness of the scalar Bregman-to-Mazur ratio on the extended real
   line gives the constants m_p, M_p.
-- The spectral overlap matrix has nonneg entries summing to one along rows
-  and columns — the convexity engine for the lift.
+- The spectral overlap matrix has nonnegative entries summing to one along
+  rows and columns — the convexity engine for the lift.
 - Hermitian dilation is norm-preserving and interacts cleanly with odd/even
   functional calculus.
-- The Hilbert Hlawka inequality (triple deficit <= sum of pair deficits in
+- The Hilbert Hlawka inequality (triple deficit ≤ sum of pair deficits in
   inner product spaces) is the final comparison tool.
 - The 2D trace-norm identity links the Schatten 1-norm to the Frobenius
   norm plus normalized determinant.
+- The sparse minimizer of the concave objective has support at most three,
+  proved by a second maximization over squared weights.
+- The scalar separation f_p(q₀) < (939/2000) p and the rough bound
+  K_p ≤ p confine a strict counterexample.
+- The cyclic witness t = p^{-1/p} gives a lower bound forcing total norm
+  below 53/150.
+- Distinct pair-maximizing coordinates: two saturated pairs cannot share a
+  coordinate without violating the total-norm bound.
+- The curvature margin 1200 p d_p < b_p makes the complete deficit
+  Hessian nonnegative on the box for every real p ≥ 256.
+- The circle-projection hull transfer: finite convex combinations satisfy
+  the real bound, and continuity passes it to the closed convex hull
+  containing the circle integral.
+- The diagonal singular-value identity: a diagonal operator's
+  singular-value power sum equals its coordinate power sum.
 
 ## Pitfalls
 
@@ -73,55 +133,64 @@ deficit.
 - The radial Mazur map must preserve individual norms without sphere
   normalization — the sphere version introduces denominators that break
   the Hlawka application.
-- The exact 2D trace-norm identity (||T||_1^2 = ||T||_2^2 + 2|det T|) is
-  specific to 2x2 matrices; in higher dimensions the p=1 obstruction
-  follows by embedding the 2x2 family via zero-padding.
-- The p = infinity witness uses 3x3 diagonal matrices because every
+- The exact 2D trace-norm identity (‖T‖₁² = ‖T‖₂² + 2|det T|) is
+  specific to 2×2 matrices; in higher dimensions the p = 1 obstruction
+  follows by embedding the 2×2 family via zero-padding.
+- The p = ∞ witness uses 3×3 diagonal matrices because every
   two-dimensional real normed space satisfies Hlawka; three diagonal
   coordinates are the minimum needed for a counterexample.
+- Averaging is valid only after localization into the convex box — an
+  equal-norm assumption alone does not justify it.
+- The total-norm Hessian is essential: singleton Hessians alone miss
+  relative radial motions of the three columns.
+- |1-t| must stay an absolute value because Mathlib's real rpow of a
+  negative base gives |x|^y · cos(πy), not the intended power.
+- The cutoff is set by localization, which has 0.004375 of slack at
+  p = 256, not by curvature, which has margin of order 10¹¹.
 
-## Sharp diagonal construction for real p ≥ 256
+## Code mapping
 
-The separate `ConstructionDiagonal` boundary determines the sharp constant
-for complex diagonal Schatten norms. It holds in every finite dimension and
-is sharp in every dimension at least three. It specifies the constant as
-the maximum cyclic ratio over `[1/2, 2]` and proves attainment there. See
-[proof/diagonal-construction.md](proof/diagonal-construction.md) for the
-formula, module map, and exact estimates used in Lean.
+### Existence proof library
 
-**Three-coordinate reduction.** Fix the three pair power sums and vary
-nonnegative coordinate weights. The positive part of the desired inequality
-is concave in those weights. A compact minimization argument produces a
-minimizer supported on at most three coordinates.
+```
+ScalarBregman ─── ScalarRatio
+                      │
+               SchattenNorm ─── HilbertSchmidt
+                      │               │
+              SpectralLift ──── Variational
+                      │               │
+           HermitianSpectral    MazurGapComparison
+                      │               │
+           HermitianDilation ─── Final ─── Classification
+                                             │
+                              TraceEndpoint  EndpointObstruction
+```
 
-**Relabeling and scalar confinement.** Permute the zero-sum quadruple to
-make the total norm the largest, then normalize the sum of singleton norms
-to one. The weighted scalar convexity inequality bounds the pair norm sum
-in terms of the total norm. The explicit cyclic witness `t = p^(-1/p)`
-forces a strict counterexample to have total norm below `53/150`, singleton
-norms close to `1/3`, and small pair deficits.
+### Diagonal construction library
 
-**Joint coordinate geometry.** Each nearly saturated pair chooses a
-coordinate. Two pairs cannot choose the same coordinate: their shared
-vector fixes the sign, and the total norm would be too large. After
-reorienting coordinates and scaling by three, the entire triple lies in the
-entrywise radius-`19/100` box around `J - 2I`.
+All modules are under `HlawkaSchatten/DiagonalConstruction/`.
 
-**Convexity and averaging.** The singleton and total norm Hessians jointly
-control independent column rescalings. Their lower bound dominates the
-three pair Hessians throughout the box for every real `p ≥ 256`. The sharp
-deficit is therefore convex there. Averaging simultaneous permutations of
-columns and coordinates yields a cyclic triple whose bound follows from
-the definition of the constant. This excludes the original counterexample.
+```
+                  Basic ─── Cyclic ─── CyclicWitness
+                    │                       │
+WeightedConvex ─── ScalarBounds ─── ScalarEnvelope
+                                         │
+              WeightedCoordinates ─── TailEstimates
+                    │                       │
+             Sparsification      Normalization ─── Confinement
+                    │                                   │
+          DimensionReduction ─── Coordinates ─── Localization
+                    │                                   │
+          OrbitAveraging    NormHessian ─── BoxGeometry ─── HessianBounds
+                    │                                           │
+                    │                              CurvatureEstimate
+                    │                                           │
+                    │       BoxCoordinates ─── BoxHessian ─── BoxConvexity
+                    │                                           │
+          CircleProjection ──────────────── ComplexTransfer ─────┘
+                                                 │
+                                            DiagonalNorm
+```
 
-**Complex and diagonal transfer.** Real circle projections reproduce each
-complex norm power up to the same positive factor. Finite convex
-combinations satisfy the real bound, and continuity passes it to their
-closed convex hull, which contains the circle integral. Finally, the
-existing spectral functional-calculus trace identity proves that a diagonal
-operator's singular-value power sum equals its coordinate power sum.
-
-**Sharpness and attainment.** The explicit three-coordinate cyclic vectors
-have the stated ratio and embed into every larger dimension. Their ratio
-has positive denominator and is continuous on `[1/2, 2]`, so it attains a
-maximum. No classification of all maximizers is asserted.
+The existence library is assembled by `HlawkaSchatten.lean`; the diagonal
+library by `HlawkaSchatten/DiagonalConstruction.lean`.

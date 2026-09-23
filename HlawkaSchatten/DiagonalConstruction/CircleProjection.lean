@@ -18,6 +18,7 @@ open MeasureTheory
 private noncomputable instance : MeasurableSpace Circle := borel Circle
 private instance : BorelSpace Circle := ⟨rfl⟩
 
+/-- The Haar probability measure on the unit circle. -/
 noncomputable abbrev circleMeasure : Measure Circle :=
   Measure.haarMeasure (⊤ : TopologicalSpace.PositiveCompacts Circle)
 
@@ -25,13 +26,16 @@ instance circleMeasure_isProbability : IsProbabilityMeasure circleMeasure :=
   ⟨by simpa only [TopologicalSpace.PositiveCompacts.coe_top] using
     (Measure.haarMeasure_self (K₀ := (⊤ : TopologicalSpace.PositiveCompacts Circle)))⟩
 
+/-- The `p`-th moment `∫ |Re(u)|^p` over the unit circle. -/
 noncomputable def circleMoment (p : ℝ) : ℝ := ∫ u : Circle, |(u : ℂ).re| ^ p ∂circleMeasure
 
+/-- Continuity of `|Re(u·z)|^p` on the circle. -/
 theorem continuous_circle_projection_power {p : ℝ} (hp : 0 < p) (z : ℂ) :
     Continuous (fun u : Circle ↦ |((u : ℂ) * z).re| ^ p) := by
   exact ((Complex.continuous_re.comp (continuous_subtype_val.mul continuous_const)).abs).rpow_const
     (fun _ ↦ Or.inr hp.le)
 
+/-- The circle moment is strictly positive for `p > 0`. -/
 theorem circleMoment_pos {p : ℝ} (hp : 0 < p) : 0 < circleMoment p := by
   have hc : Continuous (fun u : Circle ↦ |(u : ℂ).re| ^ p) := by
     simpa only [mul_one] using continuous_circle_projection_power hp 1
@@ -39,6 +43,7 @@ theorem circleMoment_pos {p : ℝ} (hp : 0 < p) : 0 < circleMoment p := by
     (hc.integrable_of_hasCompactSupport (HasCompactSupport.of_compactSpace _))
     (fun u ↦ Real.rpow_nonneg (abs_nonneg _) _) (x := (1 : Circle)) (by simp)
 
+/-- The circle integral of `|Re(u·z)|^p` equals `circleMoment · |z|^p`. -/
 theorem integral_circle_projection_power {p : ℝ} (hp : 0 < p) (z : ℂ) :
     (∫ u : Circle, |((u : ℂ) * z).re| ^ p ∂circleMeasure) = circleMoment p * ‖z‖ ^ p := by
   by_cases hz : z = 0
@@ -66,13 +71,16 @@ theorem integral_circle_projection_power {p : ℝ} (hp : 0 < p) (z : ℂ) :
 
 variable {ι : Type*} [Fintype ι]
 
+/-- The sum `Σ |Re(u · z_i)|^p` of circle-projected powers. -/
 noncomputable def projectionPower (p : ℝ) (z : ι → ℂ) (u : Circle) : ℝ :=
   ∑ i, |((u : ℂ) * z i).re| ^ p
 
+/-- Continuity of the projection power on the circle. -/
 theorem continuous_projectionPower {p : ℝ} (hp : 0 < p) (z : ι → ℂ) :
     Continuous (projectionPower p z) :=
   continuous_finsetSum _ fun i _ ↦ continuous_circle_projection_power hp (z i)
 
+/-- The circle integral of projection powers equals `circleMoment · powerSum`. -/
 theorem integral_projectionPower {p : ℝ} (hp : 0 < p) (z : ι → ℂ) :
     (∫ u : Circle, projectionPower p z u ∂circleMeasure) = circleMoment p * ∑ i, ‖z i‖ ^ p := by
   unfold projectionPower
@@ -83,15 +91,18 @@ theorem integral_projectionPower {p : ℝ} (hp : 0 < p) (z : ι → ℂ) :
 
 variable {κ : Type*} [Fintype κ]
 
+/-- A finite weighted circle projection of a complex vector. -/
 noncomputable def finiteProjection (p : ℝ) (w : κ → ℝ) (u : κ → Circle) (z : ι → ℂ) : κ × ι → ℝ :=
   fun k ↦ w k.1 ^ (1 / p) * (((u k.1 : Circle) : ℂ) * z k.2).re
 
 omit [Fintype ι] [Fintype κ] in
+/-- The finite projection distributes over addition. -/
 theorem finiteProjection_add (p : ℝ) (w : κ → ℝ) (u : κ → Circle) (z v : ι → ℂ) :
     finiteProjection p w u (z + v) = finiteProjection p w u z + finiteProjection p w u v := by
   ext k
   simp [finiteProjection, mul_add, Complex.add_re]
 
+/-- The `p`-norm of the finite projection involves the projection power. -/
 theorem lpNorm_finiteProjection {p : ℝ} (hp : 0 < p) (w : κ → ℝ) (u : κ → Circle)
     (hw : ∀ k, 0 ≤ w k) (z : ι → ℂ) :
     lpNorm p (finiteProjection p w u z) = (∑ k, w k * projectionPower p z (u k)) ^ (1 / p) := by

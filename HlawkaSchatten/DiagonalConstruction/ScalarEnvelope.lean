@@ -10,11 +10,13 @@ import HlawkaSchatten.DiagonalConstruction.CyclicWitness
 
 namespace HlawkaSchatten.DiagonalConstruction
 
+/-- The rough upper bound `K_p ≤ p`. -/
 theorem cyclicConstant_le_exponent {p : ℝ} (hp : 1 < p) : cyclicConstant p ≤ p := by
   obtain ⟨t, ht, heq⟩ := cyclic_maximum_attained hp
   rw [← heq]
   exact cyclicRatio_le_of_real_constant hp (lp_hlawka_le_exponent hp) (by linarith [ht.1])
 
+/-- The envelope root equals a scaled two-dimensional `p`-norm. -/
 theorem scalarEnvelopeRoot_eq_lpNorm {p q : ℝ} (hq : 0 ≤ q) :
     scalarEnvelopeRoot p q = (1 / 2 : ℝ) ^ (1 / p) * lpNorm p ![1, q] := by
   simp only [scalarEnvelopeRoot, lpNorm, Fin.sum_univ_two, Matrix.cons_val_zero,
@@ -22,6 +24,7 @@ theorem scalarEnvelopeRoot_eq_lpNorm {p q : ℝ} (hq : 0 ≤ q) :
   rw [show (1 + q ^ p) / 2 = (1 / 2 : ℝ) * (1 + q ^ p) by ring,
     Real.mul_rpow (by norm_num) (by positivity)]
 
+/-- The envelope root is convex on `[0, ∞)`. -/
 theorem convexOn_scalarEnvelopeRoot {p : ℝ} (hp : 1 ≤ p) :
     ConvexOn ℝ (Set.Ici 0) (scalarEnvelopeRoot p) := by
   refine ⟨convex_Ici _, ?_⟩
@@ -38,10 +41,12 @@ theorem convexOn_scalarEnvelopeRoot {p : ℝ} (hp : 1 ≤ p) :
   have hm := mul_le_mul_of_nonneg_left h (Real.rpow_nonneg (by norm_num : (0 : ℝ) ≤ 1 / 2) (1 / p))
   simpa only [smul_eq_mul, mul_add, mul_left_comm] using hm
 
+/-- The envelope root at `q = 1` equals 1. -/
 @[simp]
 theorem scalarEnvelopeRoot_one (p : ℝ) : scalarEnvelopeRoot p 1 = 1 := by
   norm_num [scalarEnvelopeRoot]
 
+/-- The envelope root is strictly below 1 when `q < 1`. -/
 theorem scalarEnvelopeRoot_lt_one {p q : ℝ} (hp : 0 < p) (hq : 0 ≤ q) (hq1 : q < 1) :
     scalarEnvelopeRoot p q < 1 := by
   have hpow : q ^ p < 1 := by
@@ -51,12 +56,13 @@ theorem scalarEnvelopeRoot_lt_one {p q : ℝ} (hp : 0 < p) (hq : 0 ≤ q) (hq1 :
     (one_div_pos.mpr hp)
   simpa only [Real.one_rpow, scalarEnvelopeRoot] using hroot
 
+/-- The denominator of the scalar envelope is strictly positive when `q < 1`. -/
 theorem scalarEnvelope_denominator_pos {p q : ℝ} (hp : 0 < p) (hq : 0 ≤ q) (hq1 : q < 1) :
     0 < 2 * (1 - scalarEnvelopeRoot p q) := by
   have h := scalarEnvelopeRoot_lt_one hp hq hq1
   linarith
 
-/-- Convexity of the root makes its secant quotient nonincreasing. -/
+/-- The scalar envelope is nonincreasing on `[0, 1)`. -/
 theorem antitoneOn_scalarEnvelope {p : ℝ} (hp : 1 ≤ p) :
     AntitoneOn (scalarEnvelope p) (Set.Ico 0 1) := by
   intro r hr q hq hrq

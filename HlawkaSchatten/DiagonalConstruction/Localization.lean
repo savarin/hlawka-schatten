@@ -12,10 +12,13 @@ namespace HlawkaSchatten.DiagonalConstruction
 /-- Columns first, then coordinates within each column. -/
 abbrev Triple := Fin 3 → Fin 3 → ℝ
 
+/-- The center of the cyclic box: `(-1,1,1), (1,-1,1), (1,1,-1)`. -/
 def cyclicCenter : Triple := fun j i ↦ if i = j then -1 else 1
 
+/-- The set of triples within `19/100` of the cyclic center. -/
 def entryBox : Set Triple := {X | ∀ j i, |X j i - cyclicCenter j i| ≤ 19 / 100}
 
+/-- The Hlawka deficit `(2K-1)·S + T - K·P` evaluated on a triple in the box. -/
 noncomputable def tripleDeficit (p K : ℝ) (X : Triple) : ℝ :=
   hlawkaDeficit p K (X 0) (X 1) (X 2)
 

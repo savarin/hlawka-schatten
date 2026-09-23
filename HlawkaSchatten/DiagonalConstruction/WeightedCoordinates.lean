@@ -13,18 +13,22 @@ namespace HlawkaSchatten.DiagonalConstruction
 
 variable {ι : Type*} [Fintype ι]
 
+/-- The weighted coordinate `p`-norm with weight vector `w`. -/
 noncomputable def weightedNorm (p : ℝ) (x w : ι → ℝ) : ℝ :=
   (∑ i, w i * |x i| ^ p) ^ (1 / p)
 
+/-- The rescaled coordinate `w_i^(1/p) * v_i` used in sparsification. -/
 noncomputable def reweight (p : ℝ) (w x : ι → ℝ) : ι → ℝ :=
   fun i ↦ w i ^ (1 / p) * x i
 
 omit [Fintype ι] in
+/-- Reweighting distributes over addition. -/
 theorem reweight_add (p : ℝ) (w x y : ι → ℝ) :
     reweight p w (x + y) = reweight p w x + reweight p w y := by
   ext i
   exact mul_add _ _ _
 
+/-- The `p`-norm of the reweighted vector equals the weighted norm. -/
 theorem lpNorm_reweight {p : ℝ} (hp : 0 < p) (w x : ι → ℝ)
     (hw : ∀ i, 0 ≤ w i) : lpNorm p (reweight p w x) = weightedNorm p x w := by
   unfold lpNorm weightedNorm
@@ -36,10 +40,12 @@ theorem lpNorm_reweight {p : ℝ} (hp : 0 < p) (w x : ι → ℝ)
   rw [Real.mul_rpow (Real.rpow_nonneg (hw i) _) (abs_nonneg _),
     ← Real.rpow_mul (hw i), one_div_mul_cancel hp.ne', Real.rpow_one]
 
+/-- The weighted norm with unit weights equals the standard `p`-norm. -/
 theorem weightedNorm_one (p : ℝ) (x : ι → ℝ) :
     weightedNorm p x (fun _ ↦ 1) = lpNorm p x := by
   simp [weightedNorm, lpNorm, Real.norm_eq_abs]
 
+/-- The weighted norm is continuous in the weight vector. -/
 theorem continuous_weightedNorm {p : ℝ} (hp : 0 < p) (x : ι → ℝ) :
     Continuous (weightedNorm p x) := by
   exact (continuous_finsetSum _ fun i _ ↦
@@ -47,10 +53,12 @@ theorem continuous_weightedNorm {p : ℝ} (hp : 0 < p) (x : ι → ℝ) :
       (fun _ ↦ Or.inr (one_div_nonneg.mpr hp.le))
 
 omit [Fintype ι] in
+/-- The set of nonneg weight vectors is convex. -/
 theorem convex_nonnegative_weights : Convex ℝ {w : ι → ℝ | ∀ i, 0 ≤ w i} := by
   intro w hw v hv a b ha hb _ i
   exact add_nonneg (mul_nonneg ha (hw i)) (mul_nonneg hb (hv i))
 
+/-- The weighted norm is concave in the weight vector on the nonneg cone. -/
 theorem concaveOn_weightedNorm {p : ℝ} (hp : 1 < p) (x : ι → ℝ) :
     ConcaveOn ℝ {w : ι → ℝ | ∀ i, 0 ≤ w i} (weightedNorm p x) := by
   refine ⟨convex_nonnegative_weights, ?_⟩

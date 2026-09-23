@@ -18,12 +18,14 @@ estimate used to confine a hypothetical counterexample.
 
 namespace HlawkaSchatten.DiagonalConstruction
 
+/-- Pulling a positive weight out of `|x/a|^p`. -/
 theorem weighted_abs_rpow_div {a : ℝ} (ha : 0 < a) (p x : ℝ) :
     a * |x / a| ^ p = |x| ^ p / a ^ (p - 1) := by
   rw [abs_div, abs_of_pos ha, Real.div_rpow (abs_nonneg x) ha.le,
     Real.rpow_sub ha, Real.rpow_one]
   field_simp
 
+/-- `a^p / a^(p-1) = a` for `p > 1`. -/
 theorem rpow_div_pred {p a : ℝ} (hp : 1 < p) (ha : 0 ≤ a) :
     a ^ p / a ^ (p - 1) = a := by
   by_cases h : a = 0
@@ -33,6 +35,7 @@ theorem rpow_div_pred {p a : ℝ} (hp : 1 < p) (ha : 0 ≤ a) :
     rw [Real.rpow_sub ha0, Real.rpow_one]
     field_simp
 
+/-- The weighted scalar power inequality for three positive weights. -/
 theorem weighted_scalar_power {p a b c : ℝ} (hp : 1 < p)
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (x y z : ℝ) :
     |x + y| ^ p / (a + b) ^ (p - 1) +
@@ -51,6 +54,7 @@ theorem weighted_scalar_power {p a b c : ℝ} (hp : 1 < p)
 
 variable {ι : Type*} [Fintype ι]
 
+/-- The weighted `p`-power inequality for nonzero coordinate triples. -/
 theorem weighted_lp_power_of_ne {p : ℝ} (hp : 1 < p) (x y z : ι → ℝ)
     (hx : x ≠ 0) (hy : y ≠ 0) (hz : z ≠ 0) :
     lpNorm p (x + y) ^ p / (lpNorm p x + lpNorm p y) ^ (p - 1) +
@@ -75,6 +79,7 @@ theorem weighted_lp_power_of_ne {p : ℝ} (hp : 1 < p) (x y z : ι → ℝ)
   simpa only [← lpNorm_rpow hp0, rpow_div_pred hp (lpNorm_nonneg p x),
     rpow_div_pred hp (lpNorm_nonneg p y), rpow_div_pred hp (lpNorm_nonneg p z)] using h
 
+/-- The weighted `p`-power inequality for arbitrary coordinate triples. -/
 theorem weighted_lp_power {p : ℝ} (hp : 1 < p) (x y z : ι → ℝ) :
     lpNorm p (x + y) ^ p / (lpNorm p x + lpNorm p y) ^ (p - 1) +
       lpNorm p (x + z) ^ p / (lpNorm p x + lpNorm p z) ^ (p - 1) +
@@ -100,6 +105,7 @@ theorem weighted_lp_power {p : ℝ} (hp : 1 < p) (x y z : ι → ℝ) :
     rfl
   exact weighted_lp_power_of_ne hp x y z hx hy hz
 
+/-- `b^p / a^(p-1) ≤ b` when `b ≤ a`. -/
 theorem normalized_power_le {p a b : ℝ} (hp : 1 < p)
     (ha : 0 ≤ a) (hb : 0 ≤ b) (hba : b ≤ a) :
     b ^ p / a ^ (p - 1) ≤ b := by
@@ -117,6 +123,7 @@ theorem normalized_power_le {p a b : ℝ} (hp : 1 < p)
   rw [he]
   exact mul_le_mul_of_nonneg_left hpow hb
 
+/-- The deficit `a - b^p/a^(p-1)` is at most `p(a - b)`. -/
 theorem normalized_power_deficit_le {p a b : ℝ} (hp : 1 < p)
     (ha : 0 ≤ a) (hb : 0 ≤ b) (hba : b ≤ a) :
     a - b ^ p / a ^ (p - 1) ≤ p * (a - b) := by
@@ -157,6 +164,7 @@ theorem lp_hlawka_le_exponent {p : ℝ} (hp : 1 < p) (x y z : ι → ℝ) :
   dsimp only [tripleGap, pairGapSum, pairGap]
   nlinarith
 
+/-- Jensen's inequality for the weighted mean of `p`-th powers. -/
 theorem weighted_mean_power_le {p : ℝ} (hp : 1 < p) (a b : ι → ℝ)
     (ha : ∀ i, 0 < a i) (hb : ∀ i, 0 ≤ b i) (hs : ∑ i, a i = 2) :
     ((∑ i, b i) / 2) ^ p ≤ (∑ i, b i ^ p / a i ^ (p - 1)) / 2 := by
@@ -176,8 +184,10 @@ theorem weighted_mean_power_le {p : ℝ} (hp : 1 < p) (a b : ι → ℝ)
     abs_of_nonneg (div_nonneg (Finset.sum_nonneg fun i _ ↦ hb i) (by norm_num))
   simpa only [hmean, hpower, ← Finset.sum_div, habs] using h
 
+/-- The root `((1 + q^p) / 2)^(1/p)` bounding the pair-sum average. -/
 noncomputable def scalarEnvelopeRoot (p q : ℝ) : ℝ := ((1 + q ^ p) / 2) ^ (1 / p)
 
+/-- The total-norm-dependent envelope `(1 - q) / (2(1 - root))`. -/
 noncomputable def scalarEnvelope (p q : ℝ) : ℝ :=
   (1 - q) / (2 * (1 - scalarEnvelopeRoot p q))
 

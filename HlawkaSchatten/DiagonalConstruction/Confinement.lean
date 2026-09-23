@@ -12,6 +12,7 @@ namespace HlawkaSchatten.DiagonalConstruction
 
 variable {ι : Type*} [Fintype ι]
 
+/-- A strict failure triple is nonzero. -/
 theorem failure_ne_zero {p K : ℝ} (hp : 1 ≤ p) (hK : 1 ≤ K)
     (x y z : ι → ℝ) (hf : hlawkaDeficit p K x y z < 0) :
     x ≠ 0 ∧ y ≠ 0 ∧ z ≠ 0 := by
@@ -27,6 +28,7 @@ theorem failure_ne_zero {p K : ℝ} (hp : 1 ≤ p) (hK : 1 ≤ K)
   · rwa [hlawkaDeficit_swap_left]
   · rwa [hlawkaDeficit_swap_left, hlawkaDeficit_swap_right]
 
+/-- The normalized total norm is below 1. -/
 theorem normalized_failure_total_lt_one {p K : ℝ} (hp : 1 ≤ p) (hK : 0 ≤ K)
     (x y z : ι → ℝ) (hS : lpNorm p x + lpNorm p y + lpNorm p z = 1)
     (hf : hlawkaDeficit p K x y z < 0) : lpNorm p (x + y + z) < 1 := by
@@ -34,6 +36,7 @@ theorem normalized_failure_total_lt_one {p K : ℝ} (hp : 1 ≤ p) (hK : 0 ≤ K
   have hprod := mul_nonneg hK (pairGapSum_nonneg hp x y z)
   linarith
 
+/-- The deficit ratio is below the scalar envelope. -/
 theorem normalized_failure_ratio_lt_envelope {p K : ℝ} (hp : 1 < p) (hK : 1 ≤ K)
     (x y z : ι → ℝ) (hS : lpNorm p x + lpNorm p y + lpNorm p z = 1)
     (hf : hlawkaDeficit p K x y z < 0) :
@@ -55,6 +58,7 @@ theorem normalized_failure_ratio_lt_envelope {p K : ℝ} (hp : 1 < p) (hK : 1 �
     linarith
   exact hR.trans_le (div_le_div_of_nonneg_left (by linarith) hden hgap)
 
+/-- The normalized total norm is below `q₀ = 53/150` for `p ≥ 256`. -/
 theorem normalized_failure_total_lt_q0 {p : ℝ} (hp : 256 ≤ p)
     (x y z : ι → ℝ) (hS : lpNorm p x + lpNorm p y + lpNorm p z = 1)
     (hf : hlawkaDeficit p (cyclicConstant p) x y z < 0) :

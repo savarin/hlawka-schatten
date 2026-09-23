@@ -22,22 +22,27 @@ variable {ι E : Type*} [Fintype ι] [NormedAddCommGroup E]
 noncomputable def lpNorm (p : ℝ) (x : ι → E) : ℝ :=
   (∑ i, ‖x i‖ ^ p) ^ (1 / p)
 
+/-- The coordinate `p`-norm is nonnegative. -/
 theorem lpNorm_nonneg (p : ℝ) (x : ι → E) : 0 ≤ lpNorm p x :=
   Real.rpow_nonneg (Finset.sum_nonneg fun _ _ ↦ Real.rpow_nonneg (norm_nonneg _) _) _
 
+/-- The coordinate `p`-norm agrees with the `PiLp` norm. -/
 theorem lpNorm_eq_piLp {p : ℝ} (hp : 0 < p) (x : ι → E) :
     lpNorm p x = ‖WithLp.toLp (ENNReal.ofReal p) x‖ := by
   rw [PiLp.norm_eq_sum (by simpa only [ENNReal.toReal_ofReal hp.le] using hp)]
   simp [lpNorm, ENNReal.toReal_ofReal hp.le]
 
+/-- The `p`-norm of zero is zero. -/
 @[simp]
 theorem lpNorm_zero {p : ℝ} (hp : 0 < p) : lpNorm p (0 : ι → E) = 0 := by
   simp [lpNorm, hp.ne']
 
+/-- The `p`-norm is invariant under negation. -/
 @[simp]
 theorem lpNorm_neg (p : ℝ) (x : ι → E) : lpNorm p (-x) = lpNorm p x := by
   simp [lpNorm]
 
+/-- Minkowski's inequality for the coordinate `p`-norm. -/
 theorem lpNorm_add {p : ℝ} (hp : 1 ≤ p) (x y : ι → E) :
     lpNorm p (x + y) ≤ lpNorm p x + lpNorm p y := by
   have hp0 : 0 < p := lt_of_lt_of_le zero_lt_one hp
@@ -45,6 +50,7 @@ theorem lpNorm_add {p : ℝ} (hp : 1 ≤ p) (x y : ι → E) :
   simpa only [lpNorm_eq_piLp hp0, ← WithLp.toLp_add] using
     norm_add_le (WithLp.toLp (ENNReal.ofReal p) x) (WithLp.toLp (ENNReal.ofReal p) y)
 
+/-- Each coordinate norm is at most the `p`-norm. -/
 theorem norm_apply_le_lpNorm {p : ℝ} (hp : 1 ≤ p) (x : ι → E) (i : ι) :
     ‖x i‖ ≤ lpNorm p x := by
   have hp0 : 0 < p := lt_of_lt_of_le zero_lt_one hp
@@ -52,12 +58,14 @@ theorem norm_apply_le_lpNorm {p : ℝ} (hp : 1 ≤ p) (x : ι → E) (i : ι) :
   rw [lpNorm_eq_piLp hp0]
   exact PiLp.norm_apply_le (WithLp.toLp (ENNReal.ofReal p) x) i
 
+/-- Raising the `p`-norm to the `p`-th power recovers the sum of `p`-th powers. -/
 theorem lpNorm_rpow {p : ℝ} (hp : 0 < p) (x : ι → E) :
     lpNorm p x ^ p = ∑ i, ‖x i‖ ^ p := by
   unfold lpNorm
   rw [← Real.rpow_mul (Finset.sum_nonneg fun i _ ↦ Real.rpow_nonneg (norm_nonneg _) _)]
   rw [one_div_mul_cancel hp.ne', Real.rpow_one]
 
+/-- The `p`-norm vanishes iff the vector is zero. -/
 theorem lpNorm_eq_zero_iff {p : ℝ} (hp : 0 < p) (x : ι → E) :
     lpNorm p x = 0 ↔ x = 0 := by
   constructor
@@ -72,10 +80,12 @@ theorem lpNorm_eq_zero_iff {p : ℝ} (hp : 0 < p) (x : ι → E) :
   · rintro rfl
     exact lpNorm_zero hp
 
+/-- A nonzero vector has strictly positive `p`-norm. -/
 theorem lpNorm_pos {p : ℝ} (hp : 0 < p) {x : ι → E} (hx : x ≠ 0) :
     0 < lpNorm p x :=
   lt_of_le_of_ne (lpNorm_nonneg p x) (Ne.symm ((lpNorm_eq_zero_iff hp x).not.mpr hx))
 
+/-- The `p`-norm of a constant vector. -/
 theorem lpNorm_const {p : ℝ} (hp : 0 < p) (x : E) :
     lpNorm p (fun _ : ι ↦ x) = (Fintype.card ι : ℝ) ^ (1 / p) * ‖x‖ := by
   unfold lpNorm
@@ -83,6 +93,7 @@ theorem lpNorm_const {p : ℝ} (hp : 0 < p) (x : E) :
   rw [Real.mul_rpow (Nat.cast_nonneg _) (Real.rpow_nonneg (norm_nonneg _) _),
     ← Real.rpow_mul (norm_nonneg x), mul_one_div_cancel hp.ne', Real.rpow_one]
 
+/-- The `p`-norm scales homogeneously. -/
 theorem lpNorm_smul [NormedSpace ℝ E] {p : ℝ} (hp : 0 < p)
     (c : ℝ) (x : ι → E) : lpNorm p (c • x) = |c| * lpNorm p x := by
   unfold lpNorm
@@ -92,6 +103,7 @@ theorem lpNorm_smul [NormedSpace ℝ E] {p : ℝ} (hp : 0 < p)
     (Finset.sum_nonneg fun i _ ↦ Real.rpow_nonneg (norm_nonneg (x i)) _),
     ← Real.rpow_mul (abs_nonneg c), mul_one_div_cancel hp.ne', Real.rpow_one]
 
+/-- The coordinate `p`-norm is convex for `p ≥ 1`. -/
 theorem convexOn_lpNorm [NormedSpace ℝ E] {p : ℝ} (hp : 1 ≤ p) :
     ConvexOn ℝ Set.univ (lpNorm p : (ι → E) → ℝ) := by
   refine ⟨convex_univ, ?_⟩
@@ -100,12 +112,14 @@ theorem convexOn_lpNorm [NormedSpace ℝ E] {p : ℝ} (hp : 1 ≤ p) :
   simpa only [lpNorm_smul hp0, abs_of_nonneg ha, abs_of_nonneg hb, smul_eq_mul]
     using lpNorm_add hp (a • x) (b • y)
 
+/-- The coordinate `p`-norm is continuous. -/
 theorem continuous_lpNorm {p : ℝ} (hp : 0 < p) :
     Continuous (lpNorm p : (ι → E) → ℝ) := by
   exact (continuous_finsetSum _ fun i _ ↦
     (continuous_apply i).norm.rpow_const (fun _ ↦ Or.inr hp.le)).rpow_const
       (fun _ ↦ Or.inr (one_div_nonneg.mpr hp.le))
 
+/-- The `p`-norm is at most `n^(1/p) * M` when each coordinate norm is at most `M`. -/
 theorem lpNorm_le_card_root_mul {p M : ℝ} (hp : 0 < p) (hM : 0 ≤ M)
     (x : ι → E) (hx : ∀ i, ‖x i‖ ≤ M) :
     lpNorm p x ≤ (Fintype.card ι : ℝ) ^ (1 / p) * M := by
@@ -121,15 +135,18 @@ theorem lpNorm_le_card_root_mul {p M : ℝ} (hp : 0 < p) (hM : 0 ≤ M)
     ← Real.rpow_mul hM, mul_one_div_cancel hp.ne', Real.rpow_one] at h
   exact h
 
+/-- The `p`-norm of real coordinates equals the `p`-norm of their complex embeddings. -/
 theorem lpNorm_ofReal (p : ℝ) (x : ι → ℝ) :
     lpNorm p (fun i ↦ (x i : ℂ)) = lpNorm p x := by
   simp [lpNorm]
 
+/-- Appending zero coordinates does not change the `p`-norm. -/
 theorem lpNorm_fin_append_zero {p : ℝ} (hp : 0 < p) {n : ℕ}
     (x : Fin n → E) (m : ℕ) :
     lpNorm p (Fin.append x (0 : Fin m → E)) = lpNorm p x := by
   simp [lpNorm, Fin.sum_univ_add, hp.ne']
 
+/-- A Hlawka constant in dimension `n` is also admissible in every lower dimension. -/
 theorem hasHlawkaConstant_fin_of_le {p C : ℝ} (hp : 0 < p)
     {m n : ℕ} (hn : m ≤ n)
     (hC : HasHlawkaConstant (lpNorm p : (Fin n → E) → ℝ) C) :
@@ -145,18 +162,21 @@ theorem hasHlawkaConstant_fin_of_le {p C : ℝ} (hp : 0 < p)
     refine Fin.addCases (fun j ↦ ?_) (fun j ↦ ?_) i <;> simp
   simpa only [tripleGap, pairGapSum, pairGap, hadd, lpNorm_fin_append_zero hp] using h
 
+/-- A Hlawka constant in dimension `n ≥ 3` is admissible in dimension 3. -/
 theorem hasHlawkaConstant_fin_three_of_ge {p C : ℝ} (hp : 0 < p)
     {n : ℕ} (hn : 3 ≤ n)
     (hC : HasHlawkaConstant (lpNorm p : (Fin n → E) → ℝ) C) :
     HasHlawkaConstant (lpNorm p : (Fin 3 → E) → ℝ) C :=
   hasHlawkaConstant_fin_of_le hp hn hC
 
+/-- The `p`-norm is invariant under coordinate permutation. -/
 theorem lpNorm_comp_equiv {κ : Type*} [Fintype κ]
     (p : ℝ) (x : κ → E) (e : ι ≃ κ) : lpNorm p (x ∘ e) = lpNorm p x := by
   unfold lpNorm
   congr 1
   exact e.sum_comp (fun i ↦ ‖x i‖ ^ p)
 
+/-- The `p`-norm restricted to a subtype equals the full norm when unsupported entries vanish. -/
 theorem lpNorm_subtype {p : ℝ} (hp : 0 < p) (x : ι → E)
     (P : ι → Prop) [DecidablePred P] (hx : ∀ i, ¬P i → x i = 0) :
     lpNorm p (fun i : Subtype P ↦ x i.1) = lpNorm p x := by
@@ -166,6 +186,7 @@ theorem lpNorm_subtype {p : ℝ} (hp : 0 < p) (x : ι → E)
     exact Finset.sum_eq_zero fun i _ ↦ by simp [hx i.1 i.2, hp.ne']
   rw [← Fintype.sum_subtype_add_sum_subtype P (fun i ↦ ‖x i‖ ^ p), hzero, add_zero]
 
+/-- A Hlawka constant in dimension 3 lifts to any index type of cardinality at most 3. -/
 theorem hasHlawkaConstant_of_card_le_three {p C : ℝ} (hp : 0 < p)
     (hcard : Fintype.card ι ≤ 3)
     (hC : HasHlawkaConstant (lpNorm p : (Fin 3 → E) → ℝ) C) :
@@ -177,9 +198,11 @@ theorem hasHlawkaConstant_of_card_le_three {p C : ℝ} (hp : 0 < p)
   have hadd (u v : ι → E) : u ∘ e + v ∘ e = (u + v) ∘ e := rfl
   simpa only [tripleGap, pairGapSum, pairGap, hadd, lpNorm_comp_equiv] using h
 
+/-- The pair deficit is nonneg for `p ≥ 1` by Minkowski. -/
 theorem pairGap_nonneg {p : ℝ} (hp : 1 ≤ p) (x y : ι → E) :
     0 ≤ pairGap (lpNorm p) x y := sub_nonneg.mpr (lpNorm_add hp x y)
 
+/-- The sum of pair deficits is nonneg for `p ≥ 1`. -/
 theorem pairGapSum_nonneg {p : ℝ} (hp : 1 ≤ p) (x y z : ι → E) :
     0 ≤ pairGapSum (lpNorm p) x y z :=
   add_nonneg (add_nonneg (pairGap_nonneg hp x y) (pairGap_nonneg hp x z))

@@ -20,10 +20,12 @@ namespace HlawkaSchatten.DiagonalConstruction
 
 open MeasureTheory
 
+/-- The power deficit functional on seven norm powers. -/
 noncomputable def powerDeficit (p K : ℝ) (a : Fin 7 → ℝ) : ℝ :=
   (2 * K - 1) * ((a 0) ^ (1 / p) + (a 1) ^ (1 / p) + (a 2) ^ (1 / p)) +
     (a 6) ^ (1 / p) - K * ((a 3) ^ (1 / p) + (a 4) ^ (1 / p) + (a 5) ^ (1 / p))
 
+/-- Continuity of the power deficit. -/
 theorem continuous_powerDeficit {p : ℝ} (hp : 0 < p) (K : ℝ) : Continuous (powerDeficit p K) := by
   have hc (i : Fin 7) : Continuous (fun a : Fin 7 → ℝ ↦ (a i) ^ (1 / p)) :=
     (continuous_apply i).rpow_const (fun _ ↦ Or.inr (one_div_nonneg.mpr hp.le))
@@ -32,15 +34,19 @@ theorem continuous_powerDeficit {p : ℝ} (hp : 0 < p) (K : ℝ) : Continuous (p
 
 variable {ι : Type*} [Fintype ι]
 
+/-- The seven vectors `x, y, z, x+y, x+z, y+z, x+y+z`. -/
 def sevenVectors (x y z : ι → ℂ) : Fin 7 → ι → ℂ := ![x, y, z, x + y, x + z, y + z, x + y + z]
 
+/-- The seven projected power sums at a circle angle. -/
 noncomputable def sevenProjections (p : ℝ) (x y z : ι → ℂ) (u : Circle) : Fin 7 → ℝ :=
   fun k ↦ projectionPower p (sevenVectors x y z k) u
 
+/-- Continuity of the seven projected power sums. -/
 theorem continuous_sevenProjections {p : ℝ} (hp : 0 < p) (x y z : ι → ℂ) :
     Continuous (sevenProjections p x y z) :=
   continuous_pi fun k ↦ continuous_projectionPower hp (sevenVectors x y z k)
 
+/-- The power deficit is nonneg on the convex hull of circle projections. -/
 theorem powerDeficit_nonneg_on_projection_hull {p : ℝ} (hp : 256 ≤ p) (x y z : ι → ℂ) :
     convexHull ℝ (Set.range (sevenProjections p x y z)) ⊆
       {a | 0 ≤ powerDeficit p (cyclicConstant p) a} := by

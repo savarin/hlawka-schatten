@@ -12,11 +12,13 @@ import Mathlib.Tactic.Module
 
 namespace HlawkaSchatten.DiagonalConstruction
 
+/-- The derivative of the deficit functional along a perturbation. -/
 noncomputable def deficitSlope (p K : ℝ) (X Z : Triple) : ℝ :=
   (2 * K - 1) * (∑ j, normSlope p (X j) (Z j)) +
     normSlope p (totalTriple X) (totalTriple Z) -
       K * (∑ j, normSlope p (pairTriple X j) (pairTriple Z j))
 
+/-- The deficit expressed in terms of power sums. -/
 theorem tripleDeficit_eq_sums (p K : ℝ) (X : Triple) :
     tripleDeficit p K X = (2 * K - 1) * (∑ j, lpNorm p (X j)) +
       lpNorm p (totalTriple X) - K * (∑ j, lpNorm p (pairTriple X j)) := by
@@ -25,15 +27,18 @@ theorem tripleDeficit_eq_sums (p K : ℝ) (X : Triple) :
     Matrix.tail_cons]
   ring
 
+/-- The total of a linearly perturbed triple. -/
 theorem totalTriple_add_smul (X Z : Triple) (t : ℝ) :
     totalTriple (X + t • Z) = totalTriple X + t • totalTriple Z := by
   simp [totalTriple, Finset.sum_add_distrib, Finset.smul_sum]
 
+/-- The pairs of a linearly perturbed triple. -/
 theorem pairTriple_add_smul (X Z : Triple) (t : ℝ) :
     pairTriple (X + t • Z) = pairTriple X + t • pairTriple Z := by
   ext j i
   fin_cases j <;> simp [pairTriple] <;> ring
 
+/-- Differentiability of the deficit along a line. -/
 theorem hasDerivAt_tripleDeficit_line {p : ℝ} (hp : 1 < p) (K : ℝ) (X Z : Triple) (t : ℝ)
     (ht : X + t • Z ∈ entryBox) :
     HasDerivAt (fun s : ℝ ↦ tripleDeficit p K (X + s • Z))
@@ -52,6 +57,7 @@ theorem hasDerivAt_tripleDeficit_line {p : ℝ} (hp : 1 < p) (K : ℝ) (X Z : Tr
       Pi.add_apply, Pi.smul_apply]
   rfl
 
+/-- Differentiability of the deficit slope along a line. -/
 theorem hasDerivAt_deficitSlope_line {p : ℝ} (hp : 4 < p) (K : ℝ) (X Z : Triple) (t : ℝ)
     (ht : X + t • Z ∈ entryBox) :
     HasDerivAt (fun s : ℝ ↦ deficitSlope p K (X + s • Z) Z)
@@ -70,6 +76,7 @@ theorem hasDerivAt_deficitSlope_line {p : ℝ} (hp : 4 < p) (K : ℝ) (X Z : Tri
       Pi.add_apply, Pi.smul_apply]
   rfl
 
+/-- Continuity of the deficit functional. -/
 theorem continuous_tripleDeficit {p : ℝ} (hp : 0 < p) (K : ℝ) :
     Continuous (tripleDeficit p K) := by
   have hc (j : Fin 3) : Continuous (fun X : Triple ↦ lpNorm p (X j)) :=
@@ -82,6 +89,7 @@ theorem continuous_tripleDeficit {p : ℝ} (hp : 0 < p) (K : ℝ) :
   exact ((continuous_const.mul (((hc 0).add (hc 1)).add (hc 2))).add ht).sub
     (continuous_const.mul (((hpairs 0 1).add (hpairs 0 2)).add (hpairs 1 2)))
 
+/-- The deficit is convex on the box for `p ≥ 256`. -/
 theorem convexOn_tripleDeficit {p K : ℝ} (hp : 256 ≤ p) (hK : 1 ≤ K) (hKp : K ≤ p) :
     ConvexOn ℝ entryBox (tripleDeficit p K) := by
   refine ⟨convex_entryBox, ?_⟩

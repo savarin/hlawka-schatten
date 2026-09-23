@@ -10,20 +10,25 @@ import HlawkaSchatten.DiagonalConstruction.BoxGeometry
 
 namespace HlawkaSchatten.DiagonalConstruction
 
+/-- The lower Hessian coefficient `(p-1)(43/100)^(p-2) / (3(157/100)^(p-1))`. -/
 noncomputable def lowerHessianCoefficient (p : ℝ) : ℝ :=
   (p - 1) * (43 / 100 : ℝ) ^ (p - 2) / (3 * (157 / 100 : ℝ) ^ (p - 1))
 
+/-- The upper Hessian coefficient `2(p-1)(38/100)^(p-2) / (162/100)^(p-1)`. -/
 noncomputable def upperHessianCoefficient (p : ℝ) : ℝ :=
   2 * (p - 1) * (19 / 50 : ℝ) ^ (p - 2) / (81 / 50 : ℝ) ^ (p - 1)
 
+/-- The lower Hessian coefficient is strictly positive. -/
 theorem lowerHessianCoefficient_pos {p : ℝ} (hp : 1 < p) : 0 < lowerHessianCoefficient p := by
   unfold lowerHessianCoefficient
   positivity
 
+/-- The upper Hessian coefficient is strictly positive. -/
 theorem upperHessianCoefficient_pos {p : ℝ} (hp : 1 < p) : 0 < upperHessianCoefficient p := by
   unfold upperHessianCoefficient
   positivity
 
+/-- A `(p-1)`-power bound using the `p`-norm. -/
 theorem lpNorm_pred_le_three_mul {p M : ℝ} (hp : 1 < p) (hM : 0 ≤ M)
     (v : Fin 3 → ℝ) (hv : ∀ i, |v i| ≤ M) :
     lpNorm p v ^ (p - 1) ≤ 3 * M ^ (p - 1) := by
@@ -40,6 +45,7 @@ theorem lpNorm_pred_le_three_mul {p M : ℝ} (hp : 1 < p) (hM : 0 ≤ M)
     simpa only [Real.rpow_one] using h
   exact hpower.trans (mul_le_mul_of_nonneg_right hthree (Real.rpow_nonneg hM _))
 
+/-- Lower bound on the norm Hessian inside the box. -/
 theorem normHessian_lower {p : ℝ} (hp : 2 < p) (v h : Fin 3 → ℝ)
     (hlo : ∀ i, 43 / 100 ≤ |v i|) (hhi : ∀ i, |v i| ≤ 157 / 100) :
     lowerHessianCoefficient p * euclideanSq (h - radialCoefficient p v h • v) ≤
@@ -99,6 +105,7 @@ private theorem erased_residual_sq_le (v h : Fin 3 → ℝ) (k : Fin 3)
     nsmul_eq_mul] at hh
   nlinarith [sq_nonneg (h k)]
 
+/-- Upper bound on the norm Hessian inside the box. -/
 theorem normHessian_upper {p : ℝ} (hp : 2 < p) (v h : Fin 3 → ℝ) (k : Fin 3)
     (hk : 81 / 50 ≤ |v k|) (hi : ∀ i, i ≠ k → |v i| ≤ 19 / 50) :
     normHessian p v h ≤ upperHessianCoefficient p * euclideanSq h := by

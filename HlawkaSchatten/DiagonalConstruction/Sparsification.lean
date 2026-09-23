@@ -25,6 +25,7 @@ namespace HlawkaSchatten.DiagonalConstruction
 
 variable {ι : Type*} [Fintype ι]
 
+/-- The fiber of nonneg weights with prescribed column moments. -/
 def momentFiber (A : ι → Fin 3 → ℝ) (b : Fin 3 → ℝ) : Set (ι → ℝ) :=
   {w | (∀ i, 0 ≤ w i) ∧ ∀ k, ∑ i, w i * A i k = b k}
 
@@ -56,8 +57,8 @@ private theorem isCompact_momentFiber (A : ι → Fin 3 → ℝ) (b : Fin 3 → 
     (fun j _ ↦ mul_nonneg (hw.1 j) (Finset.sum_nonneg fun k _ ↦ hA j k))
     (Finset.mem_univ i)
 
-/-- A concave objective on nonnegative weights has a minimizer supported
-on at most three coordinates, while preserving its three linear moments. -/
+/-- Any feasible weight vector is matched, with the same three moments,
+by one supported on at most three coordinates. -/
 theorem exists_sparse_concave_minimizer
     (A : ι → Fin 3 → ℝ) (b : Fin 3 → ℝ)
     (hA : ∀ i k, 0 ≤ A i k) (hpos : ∀ i, 0 < ∑ k, A i k)
@@ -99,7 +100,7 @@ theorem exists_sparse_concave_minimizer
   let d : ι → ℝ := fun i ↦ if h : w i ≠ 0 then ε * g ⟨i, h⟩ else 0
   have hdbound (i : ι) : |d i| ≤ w i := by
     by_cases hi : w i ≠ 0
-    · simpa only [d, dif_pos hi, abs_mul, abs_of_pos hε] using hεbound ⟨i, hi⟩
+    · simpa only [d, dite_eq_left hi, abs_mul, abs_of_pos hε] using hεbound ⟨i, hi⟩
     · simp [d, not_ne_iff.mp hi]
   have hdcoeff (k : Fin 3) : ∑ i, d i * A i k = 0 := by
     have hgk := congrArg (fun v : Fin 3 → ℝ ↦ v k) hg
@@ -109,16 +110,16 @@ theorem exists_sparse_concave_minimizer
       apply Finset.sum_congr rfl
       intro j _
       dsimp only [d]
-      rw [dif_pos j.2]
+      rw [dite_eq_left j.2]
       ring
     have hright : (∑ j : {i : ι // ¬w i ≠ 0}, d j.1 * A j.1 k) = 0 := by
       apply Finset.sum_eq_zero
       intro j _
-      simp only [d, dif_neg j.2, zero_mul]
+      simp only [d, dite_eq_right j.2, zero_mul]
     rw [← Fintype.sum_subtype_add_sum_subtype (fun i ↦ w i ≠ 0),
       hleft, hright, hgk, mul_zero, add_zero]
   have hdne : d j₀.1 ≠ 0 := by
-    simp only [d, dif_pos j₀.2]
+    simp only [d, dite_eq_left j₀.2]
     exact mul_ne_zero hε.ne' hj₀
   let u : ι → ℝ := w + d
   let z : ι → ℝ := w - d

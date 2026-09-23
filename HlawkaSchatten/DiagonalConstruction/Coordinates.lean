@@ -9,6 +9,7 @@ import HlawkaSchatten.DiagonalConstruction.Confinement
 
 namespace HlawkaSchatten.DiagonalConstruction
 
+/-- The `p`-norm is at most `3^(1/p)` times the max entry. -/
 theorem lpNorm_le_three_root_mul_max {p : ℝ} (hp : 0 < p) (x : Fin 3 → ℝ)
     (i : Fin 3) (hi : ∀ j, |x j| ≤ |x i|) :
     lpNorm p x ≤ (3 : ℝ) ^ (1 / p) * |x i| := by
@@ -24,6 +25,7 @@ theorem lpNorm_le_three_root_mul_max {p : ℝ} (hp : 0 < p) (x : Fin 3 → ℝ)
     ← Real.rpow_mul (abs_nonneg (x i)), mul_one_div_cancel hp.ne', Real.rpow_one] at h
   simpa only [lpNorm, Real.norm_eq_abs] using h
 
+/-- The bound `1 - 3^(-1/p) ≤ log(3)/p`. -/
 theorem inverse_three_root_deficit (p : ℝ) :
     1 - ((3 : ℝ) ^ (1 / p))⁻¹ ≤ Real.log 3 / p := by
   have h := Real.add_one_le_exp (-(Real.log 3 / p))
@@ -34,6 +36,7 @@ theorem inverse_three_root_deficit (p : ℝ) :
   rw [he]
   linarith
 
+/-- A signed entry is at most the norm. -/
 theorem signed_entry_le_norm {p s : ℝ} (hp : 1 ≤ p) (hs : |s| = 1)
     (x : Fin 3 → ℝ) (i : Fin 3) : s * x i ≤ lpNorm p x := by
   calc
@@ -99,17 +102,20 @@ theorem exists_large_signed_pair {p : ℝ} (hp : 256 ≤ p) (x y : Fin 3 → ℝ
 def orient (e : Equiv.Perm (Fin 3)) (s : Fin 3 → ℝ) (x : Fin 3 → ℝ) : Fin 3 → ℝ :=
   fun i ↦ s i * x (e i)
 
+/-- Orientation distributes over addition. -/
 theorem orient_add (e : Equiv.Perm (Fin 3)) (s x y : Fin 3 → ℝ) :
     orient e s (x + y) = orient e s x + orient e s y := by
   ext i
   exact mul_add _ _ _
 
+/-- The `p`-norm is invariant under orientation. -/
 theorem lpNorm_orient (p : ℝ) (e : Equiv.Perm (Fin 3)) (s x : Fin 3 → ℝ)
     (hs : ∀ i, |s i| = 1) : lpNorm p (orient e s x) = lpNorm p x := by
   calc
     _ = lpNorm p (x ∘ e) := by simp [lpNorm, orient, hs, Real.norm_eq_abs]
     _ = _ := lpNorm_comp_equiv p x e
 
+/-- The deficit is invariant under orientation. -/
 theorem hlawkaDeficit_orient (p K : ℝ) (e : Equiv.Perm (Fin 3)) (s x y z : Fin 3 → ℝ)
     (hs : ∀ i, |s i| = 1) :
     hlawkaDeficit p K (orient e s x) (orient e s y) (orient e s z) =

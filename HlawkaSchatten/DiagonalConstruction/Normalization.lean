@@ -17,25 +17,30 @@ noncomputable def hlawkaDeficit (p K : ℝ) (x y z : ι → ℝ) : ℝ :=
   (2 * K - 1) * (lpNorm p x + lpNorm p y + lpNorm p z) + lpNorm p (x + y + z) -
     K * (lpNorm p (x + y) + lpNorm p (x + z) + lpNorm p (y + z))
 
+/-- The deficit expressed in terms of gap functions. -/
 theorem hlawkaDeficit_eq (p K : ℝ) (x y z : ι → ℝ) :
     hlawkaDeficit p K x y z =
       K * pairGapSum (lpNorm p) x y z - tripleGap (lpNorm p) x y z := by
   unfold hlawkaDeficit pairGapSum pairGap tripleGap
   ring
 
+/-- The deficit is symmetric in the first two arguments. -/
 theorem hlawkaDeficit_swap_left (p K : ℝ) (x y z : ι → ℝ) :
     hlawkaDeficit p K y x z = hlawkaDeficit p K x y z := by
   simp only [hlawkaDeficit, add_comm, add_left_comm, add_assoc]
 
+/-- The deficit is symmetric in the last two arguments. -/
 theorem hlawkaDeficit_swap_right (p K : ℝ) (x y z : ι → ℝ) :
     hlawkaDeficit p K x z y = hlawkaDeficit p K x y z := by
   simp only [hlawkaDeficit, add_comm, add_left_comm, add_assoc]
 
+/-- The total norm is invariant under flipping a sign. -/
 theorem lpNorm_flip_total (p : ℝ) (x y z : ι → ℝ) :
     lpNorm p (-(x + y + z) + y + z) = lpNorm p x := by
   have h : -(x + y + z) + y + z = -x := by abel
   rw [h, lpNorm_neg]
 
+/-- The deficit of `(-(x+y+z), y, z)` differs from that of `(x, y, z)` by `(2K - 2)(N(x+y+z) - N(x))`. -/
 theorem hlawkaDeficit_flip (p K : ℝ) (x y z : ι → ℝ) :
     hlawkaDeficit p K (-(x + y + z)) y z = hlawkaDeficit p K x y z +
       (2 * K - 2) * (lpNorm p (x + y + z) - lpNorm p x) := by
@@ -80,11 +85,13 @@ theorem exists_failure_total_largest {p K : ℝ} (hK : 1 ≤ K)
     · simpa only [lpNorm_flip_total] using hv
     · simpa only [lpNorm_flip_total] using hw
 
+/-- The deficit scales linearly with `|c|` under scalar multiplication. -/
 theorem hlawkaDeficit_smul {p : ℝ} (hp : 0 < p) (K c : ℝ) (x y z : ι → ℝ) :
     hlawkaDeficit p K (c • x) (c • y) (c • z) = |c| * hlawkaDeficit p K x y z := by
   simp only [hlawkaDeficit, ← smul_add, lpNorm_smul hp]
   ring
 
+/-- A failure triple has positive norm sum. -/
 theorem failure_sum_pos {p K : ℝ} (hp : 0 < p) (x y z : ι → ℝ)
     (hfail : hlawkaDeficit p K x y z < 0) :
     0 < lpNorm p x + lpNorm p y + lpNorm p z := by

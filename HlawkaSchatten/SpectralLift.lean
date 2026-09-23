@@ -113,7 +113,7 @@ theorem orthonormalBasisOverlap_sum_scalarBregman_two_sided
           scalarBregman p (a ij.1) (b ij.2)) ≤
         M * ∑ ij : ι × κ, orthonormalBasisOverlap e f ij *
           (scalarMazur p (a ij.1) - scalarMazur p (b ij.2)) ^ 2 := by
-  simpa only [Finset.sum_filter, Finset.mem_univ, if_true] using
+  simpa only [Finset.sum_filter, Finset.mem_univ, ite_true] using
     finset_sum_scalarBregman_two_sided hp hbound
       (Finset.univ : Finset (ι × κ)) (orthonormalBasisOverlap e f)
       (fun ij ↦ a ij.1) (fun ij ↦ b ij.2)

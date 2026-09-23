@@ -41,25 +41,35 @@ to operators via spectral overlap weights, transfers to rectangular
 operators via Hermitian dilation, and closes through a radial Mazur map
 into Hilbert–Schmidt space where the classical Hlawka inequality applies.
 
-The diagonal construction is a separate proof. It reduces real coordinate
-triples to three dimensions, localizes a hypothetical strict counterexample
-near the cyclic sign matrix, and proves convexity of the sharp deficit on
-that region. Permutation averaging gives the cyclic bound. Circle averaging
-then transfers the result to complex coordinates, and the diagonal
-singular-value identity identifies their norm with the Schatten norm. The
-theorem includes unequal-norm triples; it assumes no equal-norm reduction.
-The construction does not settle exponents below 256 or sharpness for
-general matrices.
+The project also determines the sharp constant for complex diagonal
+Schatten norms, or equivalently scalar ℓ_p spaces. No explicit sharp
+Hlawka constant for ℓ_p spaces valid at infinitely many exponents
+appears in the Marinescu–Niculescu survey (arXiv:2407.03278),
+Audenaert–Kittaneh (arXiv:1201.5232) and its forward citations, or
+recent Schatten-norm work through September 2026. The
+generic-norm counterexample theorem (an informal verified result
+from the proof development, not formalized in Lean) shows that a
+sharp equal-norm reduction cannot hold for arbitrary
+smooth strictly convex norms, so the ℓ_p structure is essential.
+
+The proof reduces real coordinate triples to three dimensions,
+localizes a hypothetical strict counterexample near the cyclic sign
+matrix using an explicit scalar confinement, and proves convexity of
+the sharp deficit on that region. Permutation averaging gives the
+cyclic bound. Circle averaging then transfers the result to complex
+coordinates, and the diagonal singular-value identity identifies their
+norm with the Schatten norm. The theorem includes unequal-norm triples;
+it assumes no equal-norm reduction. The construction does not settle
+exponents below 256 or sharpness for general matrices.
 
 The audience is researchers in operator inequalities, noncommutative
 L^p geometry, and the formalization community working on functional
 analysis in Lean/Mathlib. No Hlawka constant material exists in Mathlib
-at the pinned revision (v4.33.0). Cross-prover novelty has not been
+at the pinned revision (v4.34.0). Cross-prover novelty has not been
 searched.
 
-See [BLUEPRINT.md](BLUEPRINT.md) for both proof routes and
-[proof/diagonal-construction.md](proof/diagonal-construction.md) for the
-explicit constant, Lean dependency map, and formalization choices.
+See [BLUEPRINT.md](BLUEPRINT.md) for both proof routes, the explicit
+constant formulas, the diagonal module map, and formalization choices.
 
 ## Trust boundary
 
@@ -102,7 +112,7 @@ to complex diagonal operators.
 
 ## Build and verify
 
-Lean and Mathlib v4.33.0 are pinned.
+Lean and Mathlib v4.34.0 are pinned.
 
 ```bash
 lake exe cache get
@@ -150,7 +160,7 @@ declarations use only the permitted axioms.
 
 Validated locally on 2026-09-22: the full Lake build, both boundary/axiom
 audits, both Comparator baselines, and both negative controls passed.
-Comparator used the Lean 4.33-compatible exporter and the macOS development
+Comparator at upstream `8d84e67` used the Lean 4.33-compatible exporter and the macOS development
 Landrun shim. Its default Lean kernel accepted the solutions; protected
 Landrun/NanoDa validation was not run locally.
 

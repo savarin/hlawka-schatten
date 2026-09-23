@@ -10,16 +10,19 @@ import HlawkaSchatten.DiagonalConstruction.BoxCoordinates
 
 namespace HlawkaSchatten.DiagonalConstruction
 
+/-- The Hessian of the deficit functional at `X` in direction `Z`. -/
 noncomputable def deficitHessian (p K : ℝ) (X Z : Triple) : ℝ :=
   (2 * K - 1) * (∑ j, normHessian p (X j) (Z j)) +
     normHessian p (totalTriple X) (totalTriple Z) -
       K * (∑ j, normHessian p (pairTriple X j) (pairTriple Z j))
 
+/-- Scaling the pair triple by subtraction. -/
 theorem pairTriple_sub_smul (X Z : Triple) (a : ℝ) :
     pairTriple (Z - a • X) = pairTriple Z - a • pairTriple X := by
   ext j i
   fin_cases j <;> simp [pairTriple] <;> ring
 
+/-- Upper bound on the sum of pair Hessians inside the box. -/
 theorem pair_hessian_sum_upper {p : ℝ} (hp : 2 < p) {X : Triple} (hX : X ∈ entryBox)
     (Z : Triple) (a : ℝ) :
     (∑ j, normHessian p (pairTriple X j) (pairTriple Z j)) ≤
@@ -37,6 +40,7 @@ theorem pair_hessian_sum_upper {p : ℝ} (hp : 2 < p) {X : Triple} (hX : X ∈ e
     (upperHessianCoefficient_pos (by linarith : 1 < p)).le
   nlinarith
 
+/-- The deficit Hessian is nonneg inside the box for `p ≥ 256`. -/
 theorem deficitHessian_nonneg {p K : ℝ} (hp : 256 ≤ p) (hK : 1 ≤ K) (hKp : K ≤ p)
     {X : Triple} (hX : X ∈ entryBox) (Z : Triple) : 0 ≤ deficitHessian p K X Z := by
   have hp1 : 1 < p := by linarith

@@ -25,11 +25,13 @@ noncomputable def diagonalOperator (d : ι → ℂ) :
     EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι :=
   Matrix.toEuclideanLin (Matrix.diagonal d)
 
+/-- The diagonal operator acts by coordinate multiplication. -/
 @[simp]
 theorem diagonalOperator_apply (d : ι → ℂ) (x : EuclideanSpace ℂ ι) (i : ι) :
     diagonalOperator d x i = d i * x i := by
   exact Matrix.mulVec_diagonal d (WithLp.ofLp x) i
 
+/-- The adjoint of a diagonal operator is the conjugate diagonal. -/
 theorem diagonalOperator_adjoint (d : ι → ℂ) :
     (diagonalOperator d).adjoint = diagonalOperator (fun i ↦ star (d i)) := by
   unfold diagonalOperator
@@ -39,6 +41,7 @@ theorem diagonalOperator_adjoint (d : ι → ℂ) :
   simp [Matrix.conjTranspose_apply, Matrix.diagonal_apply]
   split_ifs with h <;> simp_all
 
+/-- The Gram matrix of a diagonal operator is diagonal with `|d_i|²`. -/
 theorem diagonalOperator_gram (d : ι → ℂ) :
     (diagonalOperator d).adjoint.comp (diagonalOperator d) =
       diagonalOperator (fun i ↦ (‖d i‖ ^ 2 : ℝ)) := by
@@ -50,6 +53,7 @@ theorem diagonalOperator_gram (d : ι → ℂ) :
   exact Complex.normSq_eq_conj_mul_self.symm.trans
     (congrArg Complex.ofReal (Complex.normSq_eq_norm_sq (d i)))
 
+/-- The diagonal operator on a basis vector. -/
 theorem diagonalOperator_apply_basis (d : ι → ℂ) (i : ι) :
     diagonalOperator d (EuclideanSpace.basisFun ι ℂ i) =
       d i • EuclideanSpace.basisFun ι ℂ i := by

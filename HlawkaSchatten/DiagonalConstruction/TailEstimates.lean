@@ -15,11 +15,13 @@ at the common intermediate value `939 * p / 2000`.
 
 namespace HlawkaSchatten.DiagonalConstruction
 
+/-- Rational bounds on `log 2`. -/
 theorem log_two_bounds : (693 : ℝ) / 1000 < Real.log 2 ∧ Real.log 2 < 347 / 500 := by
   constructor
   · linarith [Real.log_two_gt_d9]
   · linarith [Real.log_two_lt_d9]
 
+/-- The tangent bound `log(p) ≤ p/256 + 23/5` for `p ≥ 256`. -/
 theorem log_le_cutoff_tangent {p : ℝ} (hp : 256 ≤ p) :
     Real.log p ≤ p / 256 + 23 / 5 := by
   have hp0 : 0 < p := by linarith
@@ -32,11 +34,13 @@ theorem log_le_cutoff_tangent {p : ℝ} (hp : 256 ≤ p) :
   rw [h256] at h
   linarith [log_two_bounds.2]
 
+/-- Bounds on `1/p` for `p ≥ 256`. -/
 theorem cutoff_inverse_bounds {p : ℝ} (hp : 256 ≤ p) :
     0 < p⁻¹ ∧ p⁻¹ ≤ 1 / 256 := by
   have hp0 : 0 < p := by linarith
   exact ⟨inv_pos.mpr hp0, by simpa using (one_div_le_one_div_of_le (by norm_num) hp)⟩
 
+/-- Bounds on `log(p)/p` for `p ≥ 256`. -/
 theorem log_mul_inv_bounds {p : ℝ} (hp : 256 ≤ p) :
     0 ≤ Real.log p * p⁻¹ ∧ Real.log p * p⁻¹ ≤ 7 / 320 := by
   have hp0 : 0 < p := by linarith
@@ -51,6 +55,7 @@ theorem log_mul_inv_bounds {p : ℝ} (hp : 256 ≤ p) :
 /-- The explicit cyclic parameter, written using `exp` for its estimates. -/
 noncomputable def constructionParameter (p : ℝ) : ℝ := Real.exp (-(Real.log p * p⁻¹))
 
+/-- The construction parameter lies in `[1/2, 1]` for `p ≥ 256`. -/
 theorem constructionParameter_bounds {p : ℝ} (hp : 256 ≤ p) :
     1 / 2 ≤ constructionParameter p ∧ constructionParameter p ≤ 1 := by
   have hl := log_mul_inv_bounds hp
@@ -60,18 +65,21 @@ theorem constructionParameter_bounds {p : ℝ} (hp : 256 ≤ p) :
     linarith
   · exact Real.exp_le_one_iff.mpr (neg_nonpos.mpr hl.1)
 
+/-- Raising the construction parameter to `p`. -/
 theorem constructionParameter_power {p : ℝ} (hp : 0 < p) :
     constructionParameter p ^ p = p⁻¹ := by
   rw [constructionParameter, Real.rpow_def_of_pos (Real.exp_pos _), Real.log_exp]
   have he : -(Real.log p * p⁻¹) * p = -Real.log p := by field_simp
   rw [he, Real.exp_neg, Real.exp_log hp]
 
+/-- The construction parameter satisfies `1 - t ≤ log(p)/p`. -/
 theorem constructionParameter_deficit {p : ℝ} :
     1 - constructionParameter p ≤ Real.log p * p⁻¹ := by
   have h := Real.add_one_le_exp (-(Real.log p * p⁻¹))
   dsimp [constructionParameter]
   linarith
 
+/-- The bound `3^(1/p) ≤ 1 + 2/p` for `p ≥ 1`. -/
 theorem three_root_le {p : ℝ} (hp : 1 ≤ p) :
     (3 : ℝ) ^ (1 / p) ≤ 1 + 2 * p⁻¹ := by
   have hp0 : 0 < p := zero_lt_one.trans_le hp
@@ -85,12 +93,14 @@ theorem three_root_le {p : ℝ} (hp : 1 ≤ p) :
   have hpi : p * p⁻¹ = 1 := mul_inv_cancel₀ hp0.ne'
   nlinarith
 
+/-- `cyclicB` is at least 2 for all `t`. -/
 theorem cyclicB_ge_two {p t : ℝ} (hp : 0 < p) : 2 ≤ cyclicB p t := by
   apply (Real.rpow_le_rpow_iff (by norm_num) (cyclicB_nonneg p t) hp).mp
   rw [cyclicB_rpow hp]
   have hn := Real.rpow_nonneg (abs_nonneg (1 - t)) p
   linarith
 
+/-- The cyclic singleton norm at the witness exceeds 1. -/
 theorem cyclicA_witness_ge_one {p : ℝ} (hp : 256 ≤ p) :
     1 ≤ cyclicA p (constructionParameter p) := by
   have hp0 : 0 < p := by linarith
@@ -100,6 +110,7 @@ theorem cyclicA_witness_ge_one {p : ℝ} (hp : 256 ≤ p) :
     linarith
   · positivity
 
+/-- `cyclicA - 1` at the witness is bounded above. -/
 theorem cyclicA_witness_sub_one_le {p : ℝ} (hp : 256 ≤ p) :
     cyclicA p (constructionParameter p) - 1 ≤ (347 / 500 : ℝ) * p⁻¹ + (p⁻¹) ^ 2 := by
   have hp0 : 0 < p := by linarith
@@ -126,6 +137,7 @@ theorem cyclicA_witness_sub_one_le {p : ℝ} (hp : 256 ≤ p) :
   rw [hA]
   nlinarith
 
+/-- Lower bound on the cyclic ratio numerator at the witness. -/
 theorem cyclic_witness_numerator_lower {p : ℝ} (hp : 256 ≤ p) :
     2 - (Real.log p + 3) * p⁻¹ ≤
       3 * cyclicA p (constructionParameter p) -
@@ -143,6 +155,7 @@ theorem cyclic_witness_numerator_lower {p : ℝ} (hp : 256 ≤ p) :
   have hsmall := mul_le_mul_of_nonneg_right hl.2 hi.1.le
   nlinarith
 
+/-- Upper bound on the cyclic ratio denominator at the witness. -/
 theorem cyclic_witness_denominator_upper {p : ℝ} (hp : 256 ≤ p) :
     6 * cyclicA p (constructionParameter p) - 3 * cyclicB p (constructionParameter p) ≤
       6 * ((347 / 500 : ℝ) * p⁻¹ + (p⁻¹) ^ 2) := by
@@ -150,6 +163,7 @@ theorem cyclic_witness_denominator_upper {p : ℝ} (hp : 256 ≤ p) :
   have hB := cyclicB_ge_two (t := constructionParameter p) (show 0 < p by linarith)
   linarith
 
+/-- The cyclic constant exceeds the rational separator `939/2000 · p`. -/
 theorem cyclicConstant_gt_separator {p : ℝ} (hp : 256 ≤ p) :
     (939 / 2000 : ℝ) * p < cyclicConstant p := by
   have hp0 : 0 < p := by linarith
@@ -168,6 +182,7 @@ theorem cyclicConstant_gt_separator {p : ℝ} (hp : 256 ≤ p) :
   exact hratio.trans_le (cyclicRatio_le_constant (by linarith)
     ⟨ht.1, by linarith [ht.2]⟩)
 
+/-- The `p`-th power of `q₀ = 53/150` is bounded. -/
 theorem q0_power_le_half_inverse {p : ℝ} (hp : 256 ≤ p) :
     (53 / 150 : ℝ) ^ p ≤ p⁻¹ / 2 := by
   have hp0 : 0 < p := by linarith
@@ -185,6 +200,7 @@ theorem q0_power_le_half_inverse {p : ℝ} (hp : 256 ≤ p) :
     _ ≤ (2 * p)⁻¹ := inv_anti₀ (by positivity) htwo
     _ = p⁻¹ / 2 := by field_simp
 
+/-- Lower bound on `1 - scalarEnvelopeRoot(q₀)` for `p ≥ 256`. -/
 theorem scalarEnvelopeRoot_q0_deficit_lower {p : ℝ} (hp : 256 ≤ p) :
     (693 / 1000 : ℝ) * p⁻¹ - (p⁻¹) ^ 2 ≤
       1 - scalarEnvelopeRoot p (53 / 150) := by
@@ -222,6 +238,7 @@ theorem scalarEnvelopeRoot_q0_deficit_lower {p : ℝ} (hp : 256 ≤ p) :
   rw [hg]
   nlinarith
 
+/-- The scalar envelope at `q₀` is below the separator. -/
 theorem scalarEnvelope_q0_lt_separator {p : ℝ} (hp : 256 ≤ p) :
     scalarEnvelope p (53 / 150) < (939 / 2000 : ℝ) * p := by
   have hp0 : 0 < p := by linarith
@@ -233,11 +250,13 @@ theorem scalarEnvelope_q0_lt_separator {p : ℝ} (hp : 256 ≤ p) :
   rw [scalarEnvelope, div_lt_iff₀ (scalarEnvelope_denominator_pos hp0 (by norm_num) (by norm_num))]
   nlinarith
 
+/-- The cyclic constant exceeds `p/3`. -/
 theorem cyclicConstant_gt_exponent_third {p : ℝ} (hp : 256 ≤ p) :
     p / 3 < cyclicConstant p := by
   have h := cyclicConstant_gt_separator hp
   linarith
 
+/-- The scalar envelope at `q₀` is below the cyclic constant. -/
 theorem scalarEnvelope_q0_lt_cyclicConstant {p : ℝ} (hp : 256 ≤ p) :
     scalarEnvelope p (53 / 150) < cyclicConstant p :=
   (scalarEnvelope_q0_lt_separator hp).trans (cyclicConstant_gt_separator hp)

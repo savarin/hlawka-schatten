@@ -15,6 +15,10 @@ an explicit one-parameter cyclic ratio. The bound holds in every finite
 dimension and is sharp in each dimension at least three. All three diagonal
 matrices may have different norms and arbitrary complex entries.
 
+The cyclic family is the triple `(-t, 1, 1), (1, -t, 1), (1, 1, -t)` for
+`t > 0`. The ratio `cyclicRatio p t` encodes its deficit quotient; the
+constant `cyclicConstant p` is the supremum over `t ∈ [1/2, 2]`.
+
 The Schatten norm below is defined using singular values of the diagonal
 linear operator, matching the existence boundary. This statement concerns
 diagonal matrices; it does not assert the bound for arbitrary operators.
@@ -27,18 +31,22 @@ noncomputable def diagonalSchattenNorm {n : ℕ} (p : ℝ) (d : Fin n → ℂ) :
   let T := Matrix.toEuclideanLin (Matrix.diagonal d)
   (∑ i ∈ T.singularValues.support, (T.singularValues i) ^ p) ^ (1 / p)
 
-/-- The three-body triangle deficit. -/
-def tripleGap {E : Type*} [Add E] (N : E → ℝ) (x y z : E) : ℝ :=
-  N x + N y + N z - N (x + y + z)
+/-- The pair deficit: `N(x) + N(y) - N(x + y)`. -/
+def pairGap {E : Type*} [Add E] (size : E → ℝ) (x y : E) : ℝ :=
+  size x + size y - size (x + y)
 
-/-- The sum of the three pair deficits. -/
-def pairGapSum {E : Type*} [Add E] (N : E → ℝ) (x y z : E) : ℝ :=
-  (N x + N y - N (x + y)) + (N x + N z - N (x + z)) +
-    (N y + N z - N (y + z))
+/-- The triple deficit: `N(x) + N(y) + N(z) - N(x + y + z)`. -/
+def tripleGap {E : Type*} [Add E] (size : E → ℝ) (x y z : E) : ℝ :=
+  size x + size y + size z - size (x + y + z)
 
-/-- A Hlawka constant for one size function. -/
-def HasHlawkaConstant {E : Type*} [Add E] (N : E → ℝ) (C : ℝ) : Prop :=
-  ∀ x y z, tripleGap N x y z ≤ C * pairGapSum N x y z
+/-- Sum of the three pair deficits. -/
+def pairGapSum {E : Type*} [Add E] (size : E → ℝ) (x y z : E) : ℝ :=
+  pairGap size x y + pairGap size x z + pairGap size y z
+
+/-- `C` is a Hlawka constant for `size` if the triple deficit never exceeds
+`C` times the sum of pair deficits. -/
+def HasHlawkaConstant {E : Type*} [Add E] (size : E → ℝ) (C : ℝ) : Prop :=
+  ∀ x y z, tripleGap size x y z ≤ C * pairGapSum size x y z
 
 /-- The common singleton norm in the cyclic family. -/
 noncomputable def cyclicA (p t : ℝ) : ℝ := (t ^ p + 2) ^ (1 / p)
