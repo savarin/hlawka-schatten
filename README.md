@@ -103,7 +103,7 @@ not been searched.
 The audience is researchers in operator inequalities, noncommutative L_p
 geometry, and the formalization community working on functional analysis
 in Lean/Mathlib. No Hlawka constant material exists in Mathlib at the
-pinned revision (v4.34.0).
+pinned revision (v4.35.0-rc2).
 
 ## Trust boundary
 
@@ -138,7 +138,7 @@ step to its modules and main declarations.
 
 ## Build and verify
 
-Lean and Mathlib v4.34.0 are pinned.
+Lean and Mathlib v4.35.0-rc2 are pinned.
 
 ```bash
 lake exe cache get
@@ -188,7 +188,7 @@ in the metadata refers to the Solutions and proof library; the Challenges
 deliberately contain sorry placeholders that the Solutions fill.
 
 Validated locally on 2026-09-22: the full Lake build and both boundary/axiom
-audits pass at `b3375b8` with Lean and Mathlib v4.34.0. The last Comparator
+audits pass at `b3375b8` with Lean and Mathlib v4.35.0-rc2. The last Comparator
 and negative-control runs on record passed at `79aa498` on v4.33.0 with
 Comparator at upstream `8d84e67`, the macOS development Landrun shim, and
 the default Lean kernel.
