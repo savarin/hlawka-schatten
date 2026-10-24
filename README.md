@@ -1,12 +1,16 @@
 # Dimension-independent Hlawka constants for Schatten norms
 
+[![Palomar entry PALOMAR-2026-09-07-000005 (existence)](https://img.shields.io/badge/Palomar_%C2%B7_existence-PALOMAR--2026--09--07--000005-0b7285)](https://palomar-registry.org/entry?id=PALOMAR-2026-09-07-000005&version=1)
+[![Palomar entry PALOMAR-2026-09-25-000006 (construction)](https://img.shields.io/badge/Palomar_%C2%B7_construction-PALOMAR--2026--09--25--000006-0b7285)](https://palomar-registry.org/entry?id=PALOMAR-2026-09-25-000006&version=1)
+
 Two results on Hlawka's inequality for Schatten p-norms, formalized in
-Lean 4 against Mathlib and prepared for submission to
-[Palomar](https://palomar-registry.org). **Existence:** a finite
+Lean 4 against Mathlib. **Existence:** a finite
 dimension-independent Hlawka constant exists for every 1 < p < ∞, and none
 exists at either endpoint. **Construction:** for complex diagonal matrices
 and every real p ≥ 256, the sharp constant is an explicit cyclic maximum
-K_p.
+K_p. Each result is registered as its own entry on
+[Palomar](https://palomar-registry.org), a public registry of
+machine-checked Lean proofs (details [below](#palomar-registry)).
 
 ## Main results
 
@@ -28,6 +32,44 @@ p ≥ 256:
   p-norm on complex diagonal matrices of every size;
 - `diagonal_hlawka_sharp`: from size three up, no smaller constant works;
 - `cyclic_maximum_attained`: some t ∈ [1/2, 2] attains K_p.
+
+## Palomar registry
+
+Each result is a separate entry, checked at its own commit:
+
+| Result | Entry | Registered | Commit | Statements checked | Independent checkers |
+|---|---|---|---|---|---|
+| Existence | [PALOMAR-2026-09-07-000005](https://palomar-registry.org/entry?id=PALOMAR-2026-09-07-000005&version=1), version 1 | 2026-09-07 | [`97c3363`](https://github.com/savarin/hlawka-schatten/tree/97c3363af2722dd6e94ce4d3ef749fab1efab6bf) | [1 theorem](https://github.com/savarin/hlawka-schatten/blob/97c3363af2722dd6e94ce4d3ef749fab1efab6bf/ExistenceChallenge.lean) | nanoda |
+| Construction | [PALOMAR-2026-09-25-000006](https://palomar-registry.org/entry?id=PALOMAR-2026-09-25-000006&version=1), version 1 | 2026-09-25 | [`1829591`](https://github.com/savarin/hlawka-schatten/tree/1829591140522193a81ae721330e4d775c81123e) | [3 theorems](https://github.com/savarin/hlawka-schatten/blob/1829591140522193a81ae721330e4d775c81123e/ConstructionDiagonalChallenge.lean) | nanoda, con-ron |
+
+The theorem links open each Challenge file as registered. Between
+`97c3363` and `1829591`, `ExistenceChallenge.lean` and
+`ExistenceSolution.lean` changed in comments only.
+
+For each entry, Palomar rebuilt the project at that entry's commit in a
+sandbox. It confirmed that the Solution file (`ExistenceSolution.lean`,
+`ConstructionDiagonalSolution.lean`) proves exactly the statements in its
+Challenge (see [Trust boundary](#trust-boundary)), using no axioms beyond
+`propext`, `Quot.sound` and `Classical.choice`. It then rechecked the
+proofs with Lean's kernel and the independently written checkers in the
+table. The construction entry lists two because it was checked on Lean
+v4.35.0-rc2, which ships both; the existence entry was checked on v4.33.0.
+
+Palomar's AI editorial review found no blocking problem and raised no
+warnings on either entry. That review checks that each Lean statement
+matches its written description and that the result has a plausible
+research audience. Palomar is a registry, not a journal: the review does
+not claim novelty and is not review by a human expert.
+
+Each registration covers only the listed commit and its pinned
+dependencies.
+
+- Machine-readable records:
+  [PALOMAR-2026-09-07-000005-v1.json](https://data.palomar-registry.org/entries/PALOMAR-2026-09-07-000005-v1.json),
+  [PALOMAR-2026-09-25-000006-v1.json](https://data.palomar-registry.org/entries/PALOMAR-2026-09-25-000006-v1.json)
+- Palomar's preserved copies of the source:
+  [existence snapshot](https://github.com/PalomarArchive/savarin--hlawka-schatten--2a35a3d9f959/tree/palomar/PALOMAR-2026-09-07-000005-v1/97c3363af2722dd6e94ce4d3ef749fab1efab6bf),
+  [construction snapshot](https://github.com/PalomarArchive/savarin--hlawka-schatten--2a35a3d9f959/tree/palomar/PALOMAR-2026-09-25-000006-v1/1829591140522193a81ae721330e4d775c81123e)
 
 ## The two results
 
@@ -166,9 +208,10 @@ On macOS, setting `FAKE_LANDRUN` to Comparator's development shim permits an
 unsandboxed local smoke test; this does not reproduce the protected submission
 environment.
 
-Palomar runs its own pinned Comparator, Landrun sandbox, and NanoDa
-kernel independently; `enable_nanoda` is set to `false` in the local
-config because the NanoDa binary is not distributed.
+Palomar runs its own checks, independently of these local settings; each
+entry's record lists the tools its run used (see
+[Palomar registry](#palomar-registry)). `enable_nanoda` is `false` in the
+local configs.
 
 ## Verification
 
@@ -194,8 +237,7 @@ Comparator at upstream `8d84e67`, the macOS development Landrun shim, and
 the default Lean kernel.
 
 CI builds the library and both Challenge/Solution pairs and runs both
-boundary audits. Palomar replays every proof through its protected NanoDa
-kernel at submission, independently of local settings.
+boundary audits.
 
 ## License
 
