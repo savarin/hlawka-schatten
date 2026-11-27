@@ -102,7 +102,7 @@ theorem fBandRows_of_checked (P : Band) (hW : P.weight ≤ 100) (trees : Fin 3 �
     exact False.elim (hOutside (by simpa only [radius,Nat.cast_ofNat,Nat.cast_one,chartCoord,
       FacetNumeric.chartRow,Tangent.chartRow] using hc))
   split at hleaf
-  · simp only [nearCorners,Bool.and_eq_true] at hleaf
+  · simp only [nearCorners,nearGroupFast_eq,Bool.and_eq_true] at hleaf
     obtain ⟨hsa, hr, hposA, hmagA⟩ := nearAxis_sound hleaf.1.1 haLoc
     obtain ⟨hsb, hs, hposB, hmagB⟩ := nearAxis_sound hleaf.1.2 hbLoc
     have haT := nearTangent_le_rpow hr hposA hmagA

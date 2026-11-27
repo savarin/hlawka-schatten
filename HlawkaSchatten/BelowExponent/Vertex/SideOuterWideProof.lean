@@ -67,8 +67,9 @@ theorem outerWideRectOK_sound {P : OuterPointBounds} {p : SideCornerEntry}
     (hp : P.Encloses (cornerRowCoefficients p.margin.get p.a p.b p.eta))
     (k : Fin 3) (U V : SideOuterSpan) (hc : outerWideRectOK P k U V = true) :
     SideOuterWideAt p k U V := by
+  rw [outerWideRectOK_eq_rat] at hc
   have ht := hc
-  simp only [outerWideRectOK, OuterPointBounds.spanOK, Bool.and_eq_true, decide_eq_true_eq] at ht
+  simp only [outerWideRectOKRat, OuterPointBounds.spanOK, Bool.and_eq_true, decide_eq_true_eq] at ht
   have hw := ht.1
   exact outerSpan_of_checks hp k U.bounds V.bounds
     (fun e => outerWideSpanAxes_encloses U e hw.1 hw.2.2.1)

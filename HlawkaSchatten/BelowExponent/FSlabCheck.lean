@@ -6,7 +6,7 @@ Authors: Ezzeri Esa
 
 module
 
-public import HlawkaSchatten.BelowExponent.FacetArchive.NearChecker
+public import HlawkaSchatten.BelowExponent.FSlabNearInteger
 
 /-! Exact checks for the two imbalance halves at each weighted F knot. -/
 
@@ -75,14 +75,57 @@ def nearGroup (P : Band) (j : Fin 3) (A B : Nat) (r s : ℚ) (ts : List TC.Tm) :
   let output := (ts.map fun t => (t.p : ℚ)*nearUpper (movement P A B t)).sum
   ts.all (fun t => decide (-1 < movement P A B t)) && decide (output ≤ input)
 
+def termMagnitude (A B : Nat) (t : TC.Tm) : Nat :=
+  (TC.gInt t (Nat.ble ctx.Da A) (nearShiftedMag A) (Nat.ble ctx.Da B) (nearShiftedMag B)).natAbs
+
+private theorem profileDen_check_pos (P : Band) : 0 < profileDen P := by
+  unfold profileDen lengthDen
+  split <;> norm_num
+
+theorem movement_eq (P : Band) (A B : Nat) (t : TC.Tm) :
+    movement P A B t = (termMagnitude A B t : ℚ)/(profileDen P*ctx.Da : Nat)-1 := by
+  unfold movement termMagnitude
+  rw [abs_div, abs_of_nonneg (show (0 : ℚ) ≤ (profileDen P : ℚ)*ctx.Da by positivity)]
+  simp only [Nat.cast_mul, Nat.cast_natAbs, Int.cast_abs]
+
+theorem movement_valid (P : Band) (A B : Nat) (t : TC.Tm) :
+    decide (-1 < movement P A B t) = decide (0 < termMagnitude A B t) := by
+  apply decide_eq_decide.mpr
+  rw [movement_eq, lt_sub_iff_add_lt]
+  have hD : (0 : ℚ) < (profileDen P*ctx.Da : Nat) := by
+    exact_mod_cast Nat.mul_pos (profileDen_check_pos P) (by decide : 0 < ctx.Da)
+  norm_num only [neg_add_cancel] at *
+  rw [lt_div_iff₀ hD, zero_mul]
+  norm_cast
+
+def nearGroupFast (P : Band) (j : Fin 3) (A B : Nat) (r s : ℚ) (ts : List TC.Tm) : Bool :=
+  FSlabNearInteger.groupOK (profileDen P*ctx.Da) ctx.Da
+    ((gamma P).getD j.val 0) ((gamma P).getD (chartA j).val 0) ((gamma P).getD (chartB j).val 0)
+    (nearShiftedMag A) (nearShiftedMag B) r s
+    (ts.map fun t => (t.p, termMagnitude A B t))
+
+theorem nearGroupFast_eq (P : Band) (j : Fin 3) (A B : Nat) (r s : ℚ) (ts : List TC.Tm) :
+    nearGroupFast P j A B r s ts = nearGroup P j A B r s ts := by
+  unfold nearGroupFast
+  rw [FSlabNearInteger.groupOK_spec _ _ _ _ _ _ _
+    (Nat.mul_pos (profileDen_check_pos P) (by decide)) (by decide)]
+  simp only [nearGroup, List.all_map, List.map_map]
+  apply congrArg₂ Bool.and
+  · apply congrArg (fun f : TC.Tm → Bool => ts.all f)
+    funext t
+    exact (movement_valid P A B t).symm
+  · apply decide_eq_decide.mpr
+    simp only [movement_eq]
+    rfl
+
 def nearCorners (P : Band) (j : Fin 3) (a₀ a₁ b₀ b₁ : Nat) : Bool :=
   let r := nearAnchor a₀ a₁
   let s := nearAnchor b₀ b₁
   nearAxis a₀ a₁ && nearAxis b₀ b₁ &&
     (List.finRange 3).all fun i =>
       let ts := groups P j i
-      nearGroup P j a₀ b₀ r s ts && nearGroup P j a₀ b₁ r s ts &&
-      nearGroup P j a₁ b₀ r s ts && nearGroup P j a₁ b₁ r s ts
+      nearGroupFast P j a₀ b₀ r s ts && nearGroupFast P j a₀ b₁ r s ts &&
+      nearGroupFast P j a₁ b₀ r s ts && nearGroupFast P j a₁ b₁ r s ts
 
 def leafOK (P : Band) (j : Fin 3) (F : TC.Face) (ca cb a₀ a₁ b₀ b₁ : Nat) : Bool :=
   if ca = 10001 then isConeBox radius j.val a₁ b₀ b₁
