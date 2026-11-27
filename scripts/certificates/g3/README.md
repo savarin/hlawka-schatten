@@ -1,9 +1,9 @@
 # Central and head certificates at the vertex
 
 The central chart bounds the critical row on its middle and upper parameter ranges.
-Each of the 120 sign-specific patches has a JSON record for its box and a compressed
-tree of witnesses. The trees cover the closed boxes through successive cuts. Lean
-checks the leaves and joins the two signs on each box.
+Each of the 120 sign-specific patches has a JSON record for its box and compressed
+witness trees. The trees cover closed boxes through successive cuts. Lean checks
+the leaves and joins the two signs on each box.
 
 From the repository root, compare the generated modules with the proof sources.
 
@@ -12,9 +12,22 @@ python3 scripts/certificates/g3/central_chart.py --check HlawkaSchatten/BelowExp
 python3 scripts/certificates/g3/head_literals.py --check HlawkaSchatten/BelowExponent/G3HeadDataCore.lean
 ```
 
-The first command reproduces the 1,528 Lean files from `plans.zip`, puts them into the
+The first command reproduces the 1,307 Lean files from `plans.zip`, puts them into the
 committed layout with [`layout.py`](../layout.py) and checks every file against `outputs.sha256`. To write those files elsewhere, pass `--output DIR`.
 The archive contains the recorded subdivisions, rational endpoints and witnesses.
+
+For 78 patches, a ratio chart replaces the part where the far-row center divided
+by the signed row magnitude lies in `[-1,1]`. A tree in the original coordinates
+covers the remainder, including zero row magnitude. The other 42 patches retain
+the original construction. The total leaf count is 55,094, down from 82,005;
+these counts describe the witnesses, not checking time.
+
+The original `.json.gz` trees remain in the archive. Selected records add `ratio`
+metadata and `.chart.json.gz` and `.remainder.json.gz` trees. `ratio-selection.json`
+records the selection rule, original archive digest and counts for every patch.
+The emitter performs no search. It checks signs, bounds and leaf counts before
+writing the two trees. `ratioUnion_signedGap` proves their union covers the same
+closed physical box, and `signed_box_pair` joins both signs without losing zero.
 
 The second command reproduces the head chart’s 2,049 power bounds and 50 ratio
 rows. With no arguments it writes the Lean table declarations to standard output.

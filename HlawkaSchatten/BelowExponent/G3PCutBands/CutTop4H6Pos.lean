@@ -6,8 +6,9 @@ Authors: Ezzeri Esa
 
 module
 
-public import HlawkaSchatten.BelowExponent.G3PCutBands.CutTop4H6PosPart0
-public import HlawkaSchatten.BelowExponent.G3PCutBands.CutTop4H6PosPart1
+public import HlawkaSchatten.BelowExponent.G3PRatioSound
+public import HlawkaSchatten.BelowExponent.G3PCutBands.CutTop4H6PosChart
+public import HlawkaSchatten.BelowExponent.G3PCutBands.CutTop4H6PosRest
 
 /-! Certificate data for the ordered G3 vertex corner: cut band piece `CutTop4H6Pos`. -/
 
@@ -19,13 +20,9 @@ set_option linter.mathlibStandardSet false
 
 namespace HlawkaSchatten.BelowExponent.G3P
 
-def CutTop4H6PosBox : Box := ⟨![27/68, 19/100, 0, -8], ![63/136, 1/5, 1, 8]⟩
-
-set_option maxRecDepth 16000 in
-def CutTop4H6PosTree : CertTree :=
-  .cut 3 (3/4) (CutTop4H6PosPart0Tree) (CutTop4H6PosPart1Tree)
-
-set_option maxRecDepth 16000 in
-theorem CutTop4H6Pos_checked : CutTop4H6PosTree.commonOK CutTop4H6PosBox true = true := CertTree.commonCut_ok (CutTop4H6PosPart0_checked) (CutTop4H6PosPart1_checked)
+theorem CutTop4H6Pos_gap : SignedBoxGap CutTop4H6PosRestBox true :=
+  ratioUnion_signedGap (B := CutTop4H6PosRestBox) true
+    (by norm_num : (0 : ℚ) ≤ 1)
+    CutTop4H6PosChart_ok CutTop4H6PosRest_ok
 
 end HlawkaSchatten.BelowExponent.G3P

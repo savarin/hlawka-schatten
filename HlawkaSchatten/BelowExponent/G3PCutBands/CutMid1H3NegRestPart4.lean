@@ -1,0 +1,153 @@
+/-
+Copyright (c) 2026 Ezzeri Esa. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Ezzeri Esa
+-/
+
+module
+
+public import HlawkaSchatten.BelowExponent.G3PRatioData
+
+/-! Certificate data for the ordered G3 vertex corner: cut band piece `CutMid1H3NegRestPart4`. -/
+
+set_option autoImplicit true
+set_option relaxedAutoImplicit true
+set_option linter.mathlibStandardSet false
+
+@[expose] public section
+
+namespace HlawkaSchatten.BelowExponent.G3P
+
+def CutMid1H3NegRestPart4Box : Box := (((((((((((⟨![27/68, 7/100, 0, -8], ![9/17, 9/100, 1, 8]⟩ : Box)).lowerChild 3 (3/4)).upperChild 3 (-1/4)).lowerChild 3 (1/4)).lowerChild 2 (1/2)).lowerChild 2 (1/8)).lowerChild 3 (0)).upperChild 1 (2/25)).upperChild 1 (17/200)).upperChild 3 (-1/8)).lowerChild 0 (63/136)
+
+set_option maxRecDepth 16000 in
+def CutMid1H3NegRestPart4Tree : RatioRemainder :=
+  .cut 1 (7/80)
+    (.cut 3 (-1/16)
+      (.original (.row ⟨84190079491, 85369689272, (.direct 3393509060 1671633516), (.chord .universal 0 10180665226)⟩))
+      (.cut 1 (69/800)
+        (.cut 0 (117/272)
+          (.cut 3 (-1/32)
+            (.original (.row ⟨84190079491, 84782106923, (.direct 1131165907 224276190), (.chord .universal 0 10180665226)⟩))
+            (.cut 2 (1/16)
+              (.original (.row ⟨84190079491, 84782106923, (.direct 0 530734385), (.chord .universal 0 3393555298)⟩))
+              (.covered)))
+          (.cut 3 (-1/32)
+            (.original (.row ⟨84190079491, 84782106923, (.direct 1131165907 177697947), (.chord .universal 0 10180665226)⟩))
+            (.cut 1 (137/1600)
+              (.cut 2 (1/16)
+                (.original (.row ⟨84190079491, 84486654991, (.direct 0 589736272), (.chord .universal 0 3393555298)⟩))
+                (.covered))
+              (.cut 0 (243/544)
+                (.cut 2 (1/16)
+                  (.original (.row ⟨84486654990, 84782106923, (.direct 0 563450046), (.chord .universal 0 3393555298)⟩))
+                  (.covered))
+                (.cut 2 (1/16)
+                  (.original (.row ⟨84486654990, 84782106923, (.direct 0 596882352), (.chord .universal 0 3393555298)⟩))
+                  (.covered))))))
+        (.cut 0 (117/272)
+          (.cut 3 (-1/32)
+            (.original (.row ⟨84782106922, 85369689272, (.direct 1131165907 214784850), (.chord .universal 0 10180665226)⟩))
+            (.cut 2 (1/16)
+              (.original (.row ⟨84782106922, 85369689272, (.direct 0 543539767), (.chord .universal 0 3393555298)⟩))
+              (.covered)))
+          (.cut 3 (-1/32)
+            (.original (.row ⟨84782106922, 85369689272, (.direct 1131165907 168336594), (.chord .universal 0 10180665226)⟩))
+            (.cut 1 (139/1600)
+              (.cut 0 (243/544)
+                (.cut 2 (1/16)
+                  (.original (.row ⟨84782106922, 85076447640, (.direct 0 570230240), (.chord .universal 0 3393555298)⟩))
+                  (.covered))
+                (.cut 2 (1/16)
+                  (.original (.row ⟨84782106922, 85076447640, (.direct 0 604064849), (.chord .universal 0 3393555298)⟩))
+                  (.covered)))
+              (.cut 0 (243/544)
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85076447639, 85369689272, (.direct 0 577044780), (.chord .universal 0 3393555298)⟩))
+                  (.covered))
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85076447639, 85369689272, (.direct 0 611283730), (.chord .universal 0 3393555298)⟩))
+                  (.covered))))))))
+    (.cut 3 (-1/16)
+      (.original (.row ⟨85369689271, 86531900009, (.direct 3393509060 1627209814), (.chord .universal 0 10180665226)⟩))
+      (.cut 0 (117/272)
+        (.cut 1 (71/800)
+          (.cut 3 (-1/32)
+            (.original (.row ⟨85369689271, 85952922711, (.direct 1131165907 205433732), (.chord .universal 0 10180665226)⟩))
+            (.cut 1 (141/1600)
+              (.cut 0 (225/544)
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85369689271, 85661843730, (.direct 0 516842652), (.chord .universal 0 3393555298)⟩))
+                  (.covered))
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85369689271, 85661843730, (.direct 0 549990957), (.chord .universal 0 3393555298)⟩))
+                  (.covered)))
+              (.cut 0 (225/544)
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85661843729, 85952922711, (.direct 0 522935375), (.chord .universal 0 3393555298)⟩))
+                  (.covered))
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85661843729, 85952922711, (.direct 0 556474444), (.chord .universal 0 3393555298)⟩))
+                  (.covered)))))
+          (.cut 3 (-1/32)
+            (.original (.row ⟨85952922710, 86531900009, (.direct 1131165907 196225205), (.chord .universal 0 10180665226)⟩))
+            (.cut 0 (225/544)
+              (.cut 1 (143/1600)
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85952922710, 86242937708, (.direct 0 529058422), (.chord .universal 0 3393555298)⟩))
+                  (.covered))
+                (.cut 2 (1/16)
+                  (.original (.row ⟨86242937707, 86531900009, (.direct 0 535211769), (.chord .universal 0 3393555298)⟩))
+                  (.covered)))
+              (.cut 1 (143/1600)
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85952922710, 86242937708, (.direct 0 562990200), (.chord .universal 0 3393555298)⟩))
+                  (.covered))
+                (.cut 2 (1/16)
+                  (.original (.row ⟨86242937707, 86531900009, (.direct 0 569538198), (.chord .universal 0 3393555298)⟩))
+                  (.covered))))))
+        (.cut 1 (71/800)
+          (.cut 3 (-1/32)
+            (.original (.row ⟨85369689271, 85952922711, (.direct 1131165907 159151685), (.chord .universal 0 10180665226)⟩))
+            (.cut 1 (141/1600)
+              (.cut 0 (243/544)
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85369689271, 85661843730, (.direct 0 583893637), (.chord .universal 0 3393555298)⟩))
+                  (.covered))
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85369689271, 85661843730, (.direct 0 618538963), (.chord .universal 0 3393555298)⟩))
+                  (.covered)))
+              (.cut 0 (243/544)
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85661843729, 85952922711, (.direct 0 590776780), (.chord .universal 0 3393555298)⟩))
+                  (.covered))
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85661843729, 85952922711, (.direct 0 625830518), (.chord .universal 0 3393555298)⟩))
+                  (.covered)))))
+          (.cut 3 (-1/32)
+            (.original (.row ⟨85952922710, 86531900009, (.direct 1131165907 150146740), (.chord .universal 0 10180665226)⟩))
+            (.cut 0 (243/544)
+              (.cut 1 (143/1600)
+                (.cut 2 (1/16)
+                  (.original (.row ⟨85952922710, 86242937708, (.direct 0 597694182), (.chord .universal 0 3393555298)⟩))
+                  (.covered))
+                (.cut 2 (1/16)
+                  (.original (.row ⟨86242937707, 86531900009, (.direct 0 604645814), (.chord .universal 0 3393555298)⟩))
+                  (.covered)))
+              (.cut 1 (143/1600)
+                (.cut 3 (-1/64)
+                  (.original (.row ⟨85952922710, 86242937708, (.direct 377054043 91234618), (.chord .universal 0 10180665226)⟩))
+                  (.cut 2 (1/16)
+                    (.original (.row ⟨85952922710, 86242937708, (.direct 0 633158364), (.chord .universal 0 3393555298)⟩))
+                    (.covered)))
+                (.cut 3 (-1/64)
+                  (.original (.row ⟨86242937707, 86531900009, (.direct 377054043 94912445), (.chord .universal 0 10180665226)⟩))
+                  (.cut 2 (1/16)
+                    (.original (.row ⟨86242937707, 86531900009, (.direct 0 640522471), (.chord .universal 0 3393555298)⟩))
+                    (.covered)))))))))
+
+set_option maxRecDepth 16000 in
+theorem CutMid1H3NegRestPart4_ok : CutMid1H3NegRestPart4Tree.ok CutMid1H3NegRestPart4Box false (1) = true :=
+  by decide +kernel
+
+end HlawkaSchatten.BelowExponent.G3P

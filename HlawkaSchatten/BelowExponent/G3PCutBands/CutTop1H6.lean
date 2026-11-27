@@ -8,6 +8,7 @@ module
 
 public import HlawkaSchatten.BelowExponent.G3PCertSound
 public import HlawkaSchatten.BelowExponent.G3PCommonDenSound
+public import HlawkaSchatten.BelowExponent.G3PRatioSound
 public import HlawkaSchatten.BelowExponent.G3PCutBands.CutTop1H6Pos
 public import HlawkaSchatten.BelowExponent.G3PCutBands.CutTop1H6Neg
 
@@ -26,7 +27,7 @@ theorem CutTop1H6_gap {h σ s z : ℝ} (hh : 0 < h)
     (hLow : 27/68 ≤ h) (hHigh : h ≤ 63/136) (sLow : 4/25 ≤ σ)
     (sHigh : σ ≤ 17/100) (hs : |s| ≤ 1) (hz : |z| ≤ 8) :
     0 ≤ g3FacetGap h σ 1 s z := by
-  exact box_pair (CertTree.ok_of_commonOK CutTop1H6Pos_checked) (CertTree.ok_of_commonOK CutTop1H6Neg_checked) hh hσ hσ₁ hCap hs hz
+  exact signed_box_pair CutTop1H6Pos_gap CutTop1H6Neg_gap hh hσ hσ₁ hCap hs hz
       (by simpa using hLow) (by simpa using hHigh) (by simpa using sLow) (by simpa using sHigh)
 
 end HlawkaSchatten.BelowExponent.G3P

@@ -17,8 +17,9 @@ import layout  # noqa: E402  (scripts/certificates/layout.py)
 HERE = Path(__file__).resolve().parent
 MODULE = "HlawkaSchatten.BelowExponent.G3PCutBands"
 GRIDS = {"Mid": (F(1, 20), F(3, 20), 10, 8), "Top": (F(3, 20), F(1, 5), 10, 16)}
-PLAN_SHA = "ec5a05e56dfaab486dfdcd566e2a767986d10ec26958a9eb00c70b617aaf0fa2"
-MANIFEST_SHA = "07468a12f17bc7d68d20a41375c8203a23c433ad17d238162b0b2b707858d41c"
+WITNESS_SCALE = 2**38  # G3P.units in G3PCertData.lean
+PLAN_SHA = "af12857b298de8a4277aecb78b6ec985be25e6d17f4d8f161f1e531bc3ddd042"
+MANIFEST_SHA = "7b7c329d20dfe182dc0dcbc643461978e43665559ba798bb1e7d315cbcf9224b"
 
 def lean_witness(data):
     low, high, jensen, far = data
@@ -53,7 +54,11 @@ def leaf_count(node):
 
 def module_source(imports, code):
     declarations = "\n".join("public import " + name for name in imports)
-    return (f"module\n\n{declarations}\n\n@[expose] public section\n\n"
+    # Every G3 checker imports Mathlib. State its settings explicitly so fresh output
+    # does not depend on whether the generated import files already exist on disk.
+    settings = ("set_option autoImplicit true\nset_option relaxedAutoImplicit true\n"
+                "set_option linter.mathlibStandardSet false")
+    return (f"module\n\n{declarations}\n\n{settings}\n\n@[expose] public section\n\n"
             f"namespace HlawkaSchatten.BelowExponent.G3P\n\n{code}\n\nend HlawkaSchatten.BelowExponent.G3P\n")
 
 
@@ -101,6 +106,100 @@ def emit_tree(write, name, box, sign, tree, size):
     write(f"{name}.lean", module_source(dependencies, code))
 
 
+def lean_ratio_tree(node, depth=1):
+    """Render the ratio chart or its physical-coordinate remainder, without searching."""
+    if len(node) != 1:
+        axis, knot, lower, upper = node
+        indent = "  " * (depth + 1)
+        return (f".cut {axis} ({knot})\n{indent}({lean_ratio_tree(lower, depth + 1)})"
+                f"\n{indent}({lean_ratio_tree(upper, depth + 1)})")
+    kind, *args = node[0]
+    if kind == "original":
+        return f".original ({lean_tree(args[0])})"
+    if kind in ("cone", "empty"):
+        return ".original ." + kind
+    if kind == "covered":
+        return ".covered"
+    if kind != "chord":
+        raise ValueError(f"Unknown ratio leaf {kind}")
+    low, high, left, right, cap, jensen, far = args[0]
+    jw = ".zero" if jensen[0] == "zero" else f"(.direct {jensen[1]} {jensen[2]})"
+    if far[0] == "universal":
+        factor = ".universal"
+    elif far[0] == "midpoint":
+        factor = "(.midpoint ⟨" + ", ".join(map(str, far[1:])) + "⟩)"
+    elif far[0] == "secant":
+        factor = "(.secant " + " ".join(map(str, far[1:])) + ")"
+    else:
+        raise ValueError(f"Unknown far factor {far[0]}")
+    return f".row ⟨{low}, {high}, {jw}, {left}, {right}, {F(cap, WITNESS_SCALE)}, .leaf {factor}⟩"
+
+
+def emit_ratio_tree(write, name, box, sign, tree, kind, cap, size):
+    dependencies = []
+    positive = "true" if sign > 0 else "false"
+    arguments = positive if kind == "RatioChart" else f"{positive} ({cap})"
+    root_box = lean_box(box)
+
+    def module(label, cell, content, proof, imports):
+        code = f"""def {label}Box : Box := {cell}
+
+set_option maxRecDepth 16000 in
+def {label}Tree : {kind} :=
+  {content}
+
+set_option maxRecDepth 16000 in
+theorem {label}_ok : {label}Tree.ok {label}Box {arguments} = true :=
+  {proof}"""
+        write(label + ".lean", module_source(imports, code))
+
+    def subtree(node, cell):
+        if leaf_count(node) <= size:
+            part = f"{name}Part{len(dependencies)}"
+            dependencies.append(MODULE + "." + part)
+            module(part, cell, lean_ratio_tree(node), "by decide +kernel",
+                   ["HlawkaSchatten.BelowExponent.G3PRatioData"])
+            return part + "Tree", part + "_ok"
+        axis, knot, lower, upper = node
+        lt, lp = subtree(lower, f"({cell}).lowerChild {axis} ({knot})")
+        rt, rp = subtree(upper, f"({cell}).upperChild {axis} ({knot})")
+        return (f".cut {axis} ({knot}) ({lt}) ({rt})", f"{kind}.cut_ok ({lp}) ({rp})")
+
+    if leaf_count(tree) <= size:
+        module(name, root_box, lean_ratio_tree(tree), "by decide +kernel",
+               ["HlawkaSchatten.BelowExponent.G3PRatioData"])
+    else:
+        content, proof = subtree(tree, f"({root_box} : Box)")
+        module(name, root_box, content, proof, dependencies)
+
+
+def emit_ratio_patch(write, archive, name, record, bounds, sign):
+    """Join the closed ratio strip to the retained complement on the original box."""
+    ratio = record["ratio"]
+    cap = F(ratio["cap"])
+    if not 0 < cap <= 8:
+        raise ValueError(f"Invalid ratio cap in {record['name']}")
+    for field, suffix, kind, expected in (
+            ("chart", "Chart", "RatioChart", bounds[:3] + [(-cap, cap)]),
+            ("remainder", "Rest", "RatioRemainder", bounds)):
+        member = record["name"] + "." + field + ".json.gz"
+        box, tree_sign, tree = json.loads(gzip.decompress(archive.read(member)))
+        if ([tuple(map(F, interval)) for interval in box] != expected or tree_sign != sign
+                or leaf_count(tree) != ratio[field + "_leaves"]):
+            raise ValueError(f"Wrong bounds, sign or leaf count in {member}")
+        emit_ratio_tree(write, name + suffix, box, sign, tree, kind, cap, 128)
+    if ratio["chart_leaves"] + ratio["remainder_leaves"] >= record["selected"]:
+        raise ValueError(f"Ratio route does not reduce the tree in {record['name']}")
+    positive = "true" if sign > 0 else "false"
+    body = (f"theorem {name}_gap : SignedBoxGap {name}RestBox {positive} :=\n"
+            f"  ratioUnion_signedGap (B := {name}RestBox) {positive}\n"
+            f"    (by norm_num : (0 : ℚ) ≤ {cap})\n"
+            f"    {name}Chart_ok {name}Rest_ok")
+    imports = ["HlawkaSchatten.BelowExponent.G3PRatioSound",
+               MODULE + "." + name + "Chart", MODULE + "." + name + "Rest"]
+    write(name + ".lean", module_source(imports, body))
+
+
 def metadata(archive, group, i, j):
     records = []
     for sign, suffix in ((1, "Pos"), (-1, "Neg")):
@@ -113,8 +212,8 @@ def metadata(archive, group, i, j):
     return records
 
 
-def box_pair_proof(pos, neg, hlow, hhigh, slow, shigh):
-    return (f"exact box_pair {pos} {neg} hh hσ hσ₁ hCap hs hz\n"
+def box_pair_proof(pos, neg, hlow, hhigh, slow, shigh, theorem="box_pair"):
+    return (f"exact {theorem} {pos} {neg} hh hσ hσ₁ hCap hs hz\n"
             f"      (by simpa using {hlow}) (by simpa using {hhigh}) "
             f"(by simpa using {slow}) (by simpa using {shigh})")
 
@@ -134,18 +233,33 @@ def emit_patch(write, archive, group, i, j):
     s0, s1 = low + i * ds, low + (i + 2) * ds
     base = f"Cut{group}{i // 2}H{j // 2}"
     imports = ["HlawkaSchatten.BelowExponent.G3PCertSound", "HlawkaSchatten.BelowExponent.G3PCommonDenSound"]
-    for record, suffix in zip(metadata(archive, group, i, j), ("Pos", "Neg")):
+    records = metadata(archive, group, i, j)
+    uses_ratio = any("ratio" in record for record in records)
+    if uses_ratio:
+        imports.append("HlawkaSchatten.BelowExponent.G3PRatioSound")
+    proofs = []
+    for record, suffix in zip(records, ("Pos", "Neg")):
         packed = archive.read(record["name"] + ".json.gz")
         box, sign, tree = json.loads(gzip.decompress(packed))
         bounds = [tuple(map(F, interval)) for interval in box]
         if (bounds != [(h0, h1), (s0, s1), (0, 1), (-8, 8)]
                 or sign != record["sign"] or leaf_count(tree) != record["selected"]):
             raise ValueError(f"Wrong bounds, sign or leaf count in {record['name']}")
-        emit_tree(write, base + suffix, box, sign, tree, 128)
+        if "ratio" in record:
+            emit_ratio_patch(write, archive, base + suffix, record, bounds, sign)
+            proofs.append(base + suffix + "_gap")
+        else:
+            emit_tree(write, base + suffix, box, sign, tree, 128)
+            if uses_ratio:
+                positive = "true" if sign > 0 else "false"
+                proofs.append(f"(signedGap_of_commonOK {positive} {base}{suffix}_checked)")
+            else:
+                proofs.append(f"(CertTree.ok_of_commonOK {base}{suffix}_checked)")
         imports.append(MODULE + "." + base + suffix)
-    pos, neg = [f"(CertTree.ok_of_commonOK {base}{sign}_checked)" for sign in ("Pos", "Neg")]
+    pos, neg = proofs
     body = gap_statement(base + "_gap", h0, h1, s0, s1)
-    body += "\n  " + box_pair_proof(pos, neg, "hLow", "hHigh", "sLow", "sHigh")
+    body += "\n  " + box_pair_proof(pos, neg, "hLow", "hHigh", "sLow", "sHigh",
+                                   "signed_box_pair" if uses_ratio else "box_pair")
     write(base + ".lean", module_source(imports, body))
 
 

@@ -1,0 +1,49 @@
+/-
+Copyright (c) 2026 Ezzeri Esa. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Ezzeri Esa
+-/
+
+module
+
+public import HlawkaSchatten.BelowExponent.G3PRatioData
+
+/-! Certificate data for the ordered G3 vertex corner: cut band piece `CutTop2H0NegChartPart6`. -/
+
+set_option autoImplicit true
+set_option relaxedAutoImplicit true
+set_option linter.mathlibStandardSet false
+
+@[expose] public section
+
+namespace HlawkaSchatten.BelowExponent.G3P
+
+def CutTop2H0NegChartPart6Box : Box := ((((⟨![0, 17/100, 0, -1], ![9/136, 9/50, 1, 1]⟩ : Box)).lowerChild 3 (1/4)).upperChild 3 (-1/4)).upperChild 2 (1/2)
+
+set_option maxRecDepth 16000 in
+def CutTop2H0NegChartPart6Tree : RatioChart :=
+  .cut 3 (0)
+    (.cut 3 (-1/8)
+      (.row ⟨117423580139, 120689819475, (.direct 30541785600 31497915909), 91625974997, 274877906944, 374416013081/274877906944, .leaf (.secant 993888389401 30541785600 3082652371 10180561190)⟩)
+      (.cut 3 (-1/16)
+        (.row ⟨117423580139, 120689819475, (.direct 10180561190 10929770585), 91625974997, 274877906944, 398108116639/274877906944, .leaf (.secant 907805998772 10180561190 38057447 3393509060)⟩)
+        (.cut 3 (-1/32)
+          (.row ⟨117423580139, 120689819475, (.direct 3393509060 3936562161), 91625974997, 274877906944, 54315645971/34359738368, .leaf (.secant 865852635331 3393509060 1349257390 1131165907)⟩)
+          (.row ⟨117423580139, 120689819475, (.direct 1131165907 1515968947), 91625974997, 274877906944, 239076674513/137438953472, .leaf (.secant 845151822349 1131165907 3715346965 0)⟩))))
+    (.cut 2 (3/4)
+      (.cut 3 (1/8)
+        (.cut 3 (1/16)
+          (.cut 3 (1/32)
+            (.row ⟨117423580139, 120689819475, (.direct 0 94935999), 91625974997, 174227471798, 498865027569/274877906944, .leaf (.secant 824636475650 0 6858526993 1131165907)⟩)
+            (.row ⟨117423580139, 120689819475, (.direct 377054043 156672176), 91625974997, 174227471798, 7728790089/4294967296, .leaf (.midpoint ⟨804307792578, 1131165907, 36197925553, 1158333617689, 36197309053, 396585378034⟩)⟩))
+          (.row ⟨117423580139, 120689819475, (.direct 1131165907 769208297), 91625974997, 174227471798, 254128076013/137438953472, .leaf (.midpoint ⟨784166997248, 3393509060, 54296884765, 868750156237, 54296144964, 388782703074⟩)⟩))
+        (.cut 3 (3/16)
+          (.row ⟨117423580139, 120689819475, (.direct 3393509060 2814893090), 91625974997, 174227471798, 499104287/268435456, .leaf (.midpoint ⟨744454106434, 10180561190, 81445321801, 651562574406, 81444489524, 380867298586⟩)⟩)
+          (.row ⟨117423580139, 120689819475, (.direct 6452795533 5689550710), 91625974997, 174227471798, 257522182057/137438953472, .leaf (.midpoint ⟨705508172521, 19358451269, 103245922769, 550644921433, 103245073436, 372833410511⟩)⟩)))
+      (.row ⟨117423580139, 120689819475, (.direct 0 94935999), 174227471798, 274877906944, 2, .leaf .universal⟩))
+
+set_option maxRecDepth 16000 in
+theorem CutTop2H0NegChartPart6_ok : CutTop2H0NegChartPart6Tree.ok CutTop2H0NegChartPart6Box false = true :=
+  by decide +kernel
+
+end HlawkaSchatten.BelowExponent.G3P

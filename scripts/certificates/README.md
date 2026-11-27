@@ -16,11 +16,11 @@ Each generator writes a plain Lean module. [`layout.py`](layout.py) then gives i
 | Vertex band VC | Uses the same curvature proof and point bounds as the middle. | [Vertex band](../../HlawkaSchatten/BelowExponent/Vertex/CurvatureCut/VcComplete.lean) |
 | Vertex side SC | `vertex` emits the side assembly and shared inputs. Lean-assisted samples reconstruct an outer point and a complete packed near-cone cell. | [Vertex side](../../HlawkaSchatten/BelowExponent/Vertex/SideCutCorners/CoarseComplete.lean) |
 | Vertex edge | Reuses the balanced edge limit and the head, low and side charts at the vertex. | [Vertex edge](../../HlawkaSchatten/BelowExponent/G3EdgeComplete.lean) |
-| Vertex corner G3 | The recorded central-chart plans reproduce all 1,528 middle and upper files. Integer powers reproduce the 2,049 power bounds and 50 ratio rows in the head. | [Vertex corner](../../HlawkaSchatten/BelowExponent/G3Wider.lean) |
+| Vertex corner G3 | The recorded central-chart plans reproduce all 1,307 middle and upper files, choosing ratio charts with a physical remainder on 78 patches. Integer powers reproduce the 2,049 power bounds and 50 ratio rows in the head. | [Vertex corner](../../HlawkaSchatten/BelowExponent/G3Wider.lean) |
 
 ### Commands
 
-To regenerate and byte-compare all 2,442 Python-emitted Lean files and the G3 head table, run the first command. The remaining commands isolate individual families, pin the junction inputs and reproduce a Lean-assisted side witness.
+To regenerate and byte-compare all 2,221 Python-emitted Lean files and the G3 head table, run the first command. The remaining commands isolate individual families, pin the junction inputs and reproduce a Lean-assisted side witness.
 
 ```sh
 python3 scripts/certificates/check.py
