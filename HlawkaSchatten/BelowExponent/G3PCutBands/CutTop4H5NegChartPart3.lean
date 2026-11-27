@@ -6,7 +6,7 @@ Authors: Ezzeri Esa
 
 module
 
-public import HlawkaSchatten.BelowExponent.G3PRatioData
+public import HlawkaSchatten.BelowExponent.G3PCutBands.CutTop4H5NegPower
 
 /-! Certificate data for the ordered G3 vertex corner: cut band piece `CutTop4H5NegChartPart3`. -/
 
@@ -207,7 +207,7 @@ def CutTop4H5NegChartPart3Tree : RatioChart :=
                   (.row ⟨125417011705, 126950446638, (.direct 1035300126 4280972290), 65931360876, 91625974997, 190722352671/137438953472, .leaf (.secant 668451449550 30186612663 34922204517 10180561190)⟩))))))))
 
 set_option maxRecDepth 16000 in
-theorem CutTop4H5NegChartPart3_ok : CutTop4H5NegChartPart3Tree.ok CutTop4H5NegChartPart3Box false = true :=
+theorem CutTop4H5NegChartPart3_ok : CutTop4H5NegChartPart3Tree.geometryOK CutTop4H5NegPowerCache CutTop4H5NegChartPart3Box false = true :=
   by decide +kernel
 
 end HlawkaSchatten.BelowExponent.G3P

@@ -444,7 +444,7 @@ private theorem powers_le_lint {H : TC.Hdr} (hT : TC.tabOK H.prof H.tab = true)
   induction ts with
   | nil => simp [TC.lint]
   | cons t ts ih =>
-    simp only [List.map_cons, List.sum_cons, TC.lint, TC.tmVal_eq, Nat.cast_add, add_div, Nat.cast_mul]
+    simp only [List.map_cons, List.sum_cons, TC.lint_cons_eq_reference, TC.tmVal_eq, Nat.cast_add, add_div, Nat.cast_mul]
     refine add_le_add ?_ ih
     exact (mul_le_mul_of_nonneg_left (power_term_le hT hk hd sa ua sb ub t) (Nat.cast_nonneg _)).trans_eq
       (by ring)

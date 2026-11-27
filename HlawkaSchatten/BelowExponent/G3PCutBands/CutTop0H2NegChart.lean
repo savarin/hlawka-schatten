@@ -28,7 +28,7 @@ def CutTop0H2NegChartTree : RatioChart :=
   .cut 3 (1/4) (.cut 3 (-1/4) (CutTop0H2NegChartPart0Tree) (.cut 2 (1/2) (CutTop0H2NegChartPart1Tree) (CutTop0H2NegChartPart2Tree))) (CutTop0H2NegChartPart3Tree)
 
 set_option maxRecDepth 16000 in
-theorem CutTop0H2NegChart_ok : CutTop0H2NegChartTree.ok CutTop0H2NegChartBox false = true :=
-  RatioChart.cut_ok (RatioChart.cut_ok (CutTop0H2NegChartPart0_ok) (RatioChart.cut_ok (CutTop0H2NegChartPart1_ok) (CutTop0H2NegChartPart2_ok))) (CutTop0H2NegChartPart3_ok)
+theorem CutTop0H2NegChart_ok : CutTop0H2NegChartTree.geometryOK CutTop0H2NegPowerCache CutTop0H2NegChartBox false = true :=
+  RatioChart.geometryCut_ok (RatioChart.geometryCut_ok (CutTop0H2NegChartPart0_ok) (RatioChart.geometryCut_ok (CutTop0H2NegChartPart1_ok) (CutTop0H2NegChartPart2_ok))) (CutTop0H2NegChartPart3_ok)
 
 end HlawkaSchatten.BelowExponent.G3P

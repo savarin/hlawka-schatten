@@ -7,6 +7,7 @@ Authors: Ezzeri Esa
 module
 
 public import HlawkaSchatten.BelowExponent.Vertex.RadicalCheck
+public import HlawkaSchatten.BelowExponent.Vertex.IntegerKernel
 public import Mathlib.Data.Rat.Floor
 public import Mathlib.Algebra.BigOperators.Fin
 
@@ -32,11 +33,44 @@ namespace DyadicBounds
 
 def units : ℕ := 2 ^ 96
 
+theorem units_int : ((units : ℕ) : ℤ) = Int.ofNat 79228162514264337593543950336 := by
+  simp only [units, Int.ofNat_eq_natCast]; norm_num
+
+private theorem units_pos_rat : (0 : ℚ) < ((units : ℕ) : ℚ) := by
+  simp only [units]; positivity
+
 def lower (a : DyadicBounds) : ℚ := (a.lo : ℚ) / (units : ℚ)
 
 def upper (a : DyadicBounds) : ℚ := (a.hi : ℚ) / (units : ℚ)
 
-def ofRat (a : RatBounds) : DyadicBounds := ⟨⌊a.lo * units⌋, ⌈a.hi * units⌉, true⟩
+def ofRatImpl (a : RatBounds) : DyadicBounds := ⟨⌊a.lo * units⌋, ⌈a.hi * units⌉, true⟩
+
+/-- `⌊a.lo * 2^96⌋` and `⌈a.hi * 2^96⌉` by integer division of the lowest-terms fractions, for
+kernel reduction; compiled code runs `ofRatImpl` (`ofRat_eq_ofRatImpl`). -/
+noncomputable def ofRat (a : RatBounds) : DyadicBounds :=
+  ⟨Int.ediv_k (Int.mul_k a.lo.num (Int.ofNat 79228162514264337593543950336)) (Int.ofNat a.lo.den),
+    Int.neg_k (Int.ediv_k (Int.neg_k (Int.mul_k a.hi.num (Int.ofNat 79228162514264337593543950336)))
+      (Int.ofNat a.hi.den)), true⟩
+
+private theorem floor_mul_units (q : ℚ) :
+    ⌊q * ((units : ℕ) : ℚ)⌋ = q.num * ((units : ℕ) : ℤ) / (q.den : ℤ) := by
+  rw [← Rat.floor_intCast_div_natCast]; congr 1
+  conv_lhs => rw [← Rat.num_div_den q]
+  push_cast; ring
+
+@[csimp] theorem ofRat_eq_ofRatImpl : @ofRat = @ofRatImpl := by
+  funext a
+  have hc : ⌈a.hi * ((units : ℕ) : ℚ)⌉ =
+      -((-(a.hi.num * ((units : ℕ) : ℤ))) / (a.hi.den : ℤ)) := by
+    have h1 : ⌈a.hi * ((units : ℕ) : ℚ)⌉ = -⌊(-a.hi) * ((units : ℕ) : ℚ)⌋ := by
+      rw [neg_mul, Int.floor_neg, neg_neg]
+    rw [h1, floor_mul_units, Rat.neg_num, Rat.neg_den, neg_mul]
+  simp only [ofRat, ofRatImpl, Int.ediv_k_eq, Int.mul_k_eq, Int.neg_k_eq, Int.mul_def, units_int.symm,
+    Int.ofNat_eq_natCast, floor_mul_units, hc]
+  rfl
+
+theorem ofRat_def (a : RatBounds) : ofRat a = ⟨⌊a.lo * units⌋, ⌈a.hi * units⌉, true⟩ := by
+  rw [ofRat_eq_ofRatImpl]; rfl
 
 def point (q : ℚ) : DyadicBounds := ofRat (RatBounds.point q)
 
@@ -44,9 +78,27 @@ def ofNumerator (n : ℤ) : DyadicBounds := ⟨n, n, true⟩
 
 def require (a : DyadicBounds) (b : Bool) : DyadicBounds := { a with ok := a.ok && b }
 
-def add (a b : DyadicBounds) : DyadicBounds := ⟨a.lo+b.lo, a.hi+b.hi, a.ok && b.ok⟩
+def addImpl (a b : DyadicBounds) : DyadicBounds := ⟨a.lo+b.lo, a.hi+b.hi, a.ok && b.ok⟩
 
-def sub (a b : DyadicBounds) : DyadicBounds := ⟨a.lo-b.hi, a.hi-b.lo, a.ok && b.ok⟩
+noncomputable def add (a b : DyadicBounds) : DyadicBounds :=
+  ⟨Int.add_k a.lo b.lo, Int.add_k a.hi b.hi, a.ok && b.ok⟩
+
+@[csimp] theorem add_eq_addImpl : @add = @addImpl := by
+  funext a b; simp only [add, addImpl, Int.add_k_eq, Int.add_def]
+
+theorem add_def (a b : DyadicBounds) : a.add b = ⟨a.lo+b.lo, a.hi+b.hi, a.ok && b.ok⟩ := by
+  rw [add_eq_addImpl]; rfl
+
+def subImpl (a b : DyadicBounds) : DyadicBounds := ⟨a.lo-b.hi, a.hi-b.lo, a.ok && b.ok⟩
+
+noncomputable def sub (a b : DyadicBounds) : DyadicBounds :=
+  ⟨Int.sub_k a.lo b.hi, Int.sub_k a.hi b.lo, a.ok && b.ok⟩
+
+@[csimp] theorem sub_eq_subImpl : @sub = @subImpl := by
+  funext a b; simp only [sub, subImpl, Int.sub_k_eq]
+
+theorem sub_def (a b : DyadicBounds) : a.sub b = ⟨a.lo-b.hi, a.hi-b.lo, a.ok && b.ok⟩ := by
+  rw [sub_eq_subImpl]; rfl
 
 def ceilDiv (a b : ℤ) : ℤ := -((-a) / b)
 
@@ -56,22 +108,116 @@ def productLo (a b : DyadicBounds) : ℤ :=
 def productHi (a b : DyadicBounds) : ℤ :=
   max (max (a.lo*b.lo) (a.lo*b.hi)) (max (a.hi*b.lo) (a.hi*b.hi))
 
-def mul (a b : DyadicBounds) : DyadicBounds := ⟨productLo a b / units, ceilDiv (productHi a b) units, a.ok && b.ok⟩
+def mulImpl (a b : DyadicBounds) : DyadicBounds :=
+  ⟨productLo a b / units, ceilDiv (productHi a b) units, a.ok && b.ok⟩
 
-def abs (a : DyadicBounds) : DyadicBounds := ⟨max 0 (max a.lo (-a.hi)), max |a.lo| |a.hi|, a.ok⟩
+noncomputable def mul (a b : DyadicBounds) : DyadicBounds :=
+  let p1 := Int.mul_k a.lo b.lo
+  let p2 := Int.mul_k a.lo b.hi
+  let p3 := Int.mul_k a.hi b.lo
+  let p4 := Int.mul_k a.hi b.hi
+  ⟨Int.ediv_k (intMinK (intMinK p1 p2) (intMinK p3 p4)) (Int.ofNat 79228162514264337593543950336),
+    Int.neg_k (Int.ediv_k (Int.neg_k (intMaxK (intMaxK p1 p2) (intMaxK p3 p4))) (Int.ofNat 79228162514264337593543950336)),
+    a.ok && b.ok⟩
+
+@[csimp] theorem mul_eq_mulImpl : @mul = @mulImpl := by
+  funext a b
+  simp only [mul, mulImpl, productLo, productHi, ceilDiv, intMinK_eq, intMaxK_eq, Int.mul_k_eq,
+    Int.ediv_k_eq, Int.neg_k_eq, units_int]
+  rfl
+
+theorem mul_def (a b : DyadicBounds) :
+    a.mul b = ⟨productLo a b / units, ceilDiv (productHi a b) units, a.ok && b.ok⟩ := by
+  rw [mul_eq_mulImpl]; rfl
+
+def absImpl (a : DyadicBounds) : DyadicBounds := ⟨max 0 (max a.lo (-a.hi)), max |a.lo| |a.hi|, a.ok⟩
+
+noncomputable def abs (a : DyadicBounds) : DyadicBounds :=
+  ⟨intMaxK (Int.ofNat 0) (intMaxK a.lo (Int.neg_k a.hi)),
+    intMaxK (Int.ofNat (Int.natAbs_k a.lo)) (Int.ofNat (Int.natAbs_k a.hi)), a.ok⟩
+
+@[csimp] theorem abs_eq_absImpl : @abs = @absImpl := by
+  funext a
+  simp only [abs, absImpl, intMaxK_eq, Int.neg_k_eq, Int.natAbs_k_eq, Int.ofNat_eq_natCast,
+    Int.natCast_natAbs, Nat.cast_zero]
+  rfl
+
+theorem abs_def (a : DyadicBounds) : a.abs = ⟨max 0 (max a.lo (-a.hi)), max |a.lo| |a.hi|, a.ok⟩ := by
+  rw [abs_eq_absImpl]; rfl
 
 def square (a : DyadicBounds) : DyadicBounds := a.abs.mul a.abs
 
-def reciprocal (a : DyadicBounds) : DyadicBounds := ⟨
+def reciprocalImpl (a : DyadicBounds) : DyadicBounds := ⟨
   ((units : ℤ) * units) / a.hi, ceilDiv ((units : ℤ) * units) a.lo, a.ok && decide (0 < a.lo)⟩
+
+noncomputable def reciprocal (a : DyadicBounds) : DyadicBounds :=
+  ⟨Int.ediv_k (Int.ofNat 6277101735386680763835789423207666416102355444464034512896) a.hi,
+    Int.neg_k (Int.ediv_k (Int.neg_k (Int.ofNat 6277101735386680763835789423207666416102355444464034512896)) a.lo), a.ok && intPosK a.lo⟩
+
+@[csimp] theorem reciprocal_eq_reciprocalImpl : @reciprocal = @reciprocalImpl := by
+  funext a
+  have h : ((units : ℕ) : ℤ) * ((units : ℕ) : ℤ) = Int.ofNat 6277101735386680763835789423207666416102355444464034512896 := by
+    simp only [units, Int.ofNat_eq_natCast]; norm_num
+  simp only [reciprocal, reciprocalImpl, ceilDiv, h, Int.ediv_k_eq, Int.neg_k_eq, intPosK_eq]
+  rfl
+
+theorem reciprocal_def (a : DyadicBounds) : a.reciprocal = ⟨((units : ℤ) * units) / a.hi,
+    ceilDiv ((units : ℤ) * units) a.lo, a.ok && decide (0 < a.lo)⟩ := by
+  rw [reciprocal_eq_reciprocalImpl]; rfl
 
 def div (a b : DyadicBounds) : DyadicBounds := a.mul b.reciprocal
 
-def intersect (a b : DyadicBounds) : DyadicBounds := ⟨max a.lo b.lo, min a.hi b.hi, a.ok && b.ok⟩
+def intersectImpl (a b : DyadicBounds) : DyadicBounds := ⟨max a.lo b.lo, min a.hi b.hi, a.ok && b.ok⟩
 
-def upperOK (a : DyadicBounds) (q : ℚ) : Bool := a.ok && decide (a.upper ≤ q)
+noncomputable def intersect (a b : DyadicBounds) : DyadicBounds :=
+  ⟨intMaxK a.lo b.lo, intMinK a.hi b.hi, a.ok && b.ok⟩
 
-def lowerOK (a : DyadicBounds) (q : ℚ) : Bool := a.ok && decide (q ≤ a.lower)
+@[csimp] theorem intersect_eq_intersectImpl : @intersect = @intersectImpl := by
+  funext a b; simp only [intersect, intersectImpl, intMaxK_eq, intMinK_eq]
+
+theorem intersect_def (a b : DyadicBounds) :
+    a.intersect b = ⟨max a.lo b.lo, min a.hi b.hi, a.ok && b.ok⟩ := by
+  rw [intersect_eq_intersectImpl]; rfl
+
+def upperOKImpl (a : DyadicBounds) (q : ℚ) : Bool := a.ok && decide (a.upper ≤ q)
+
+noncomputable def upperOK (a : DyadicBounds) (q : ℚ) : Bool :=
+  a.ok && intNonnegK (Int.sub_k (Int.mul_k q.num (Int.ofNat 79228162514264337593543950336)) (Int.mul_k a.hi (Int.ofNat q.den)))
+
+@[csimp] theorem upperOK_eq_upperOKImpl : @upperOK = @upperOKImpl := by
+  funext a q
+  unfold upperOK upperOKImpl upper
+  congr 1
+  rw [intNonnegK_eq, Int.sub_k_eq, Int.mul_k_eq, Int.mul_k_eq, Int.mul_def, Int.mul_def, ← units_int]
+  apply decide_eq_decide.mpr
+  have hd : (0 : ℚ) < q.den := by exact_mod_cast q.den_pos
+  rw [sub_nonneg, div_le_iff₀ units_pos_rat]
+  conv_rhs => rw [← Rat.num_div_den q]
+  rw [div_mul_eq_mul_div, le_div_iff₀ hd]
+  constructor <;> intro h <;> exact_mod_cast h
+
+theorem upperOK_def (a : DyadicBounds) (q : ℚ) : a.upperOK q = (a.ok && decide (a.upper ≤ q)) := by
+  rw [upperOK_eq_upperOKImpl]; rfl
+
+def lowerOKImpl (a : DyadicBounds) (q : ℚ) : Bool := a.ok && decide (q ≤ a.lower)
+
+noncomputable def lowerOK (a : DyadicBounds) (q : ℚ) : Bool :=
+  a.ok && intNonnegK (Int.sub_k (Int.mul_k a.lo (Int.ofNat q.den)) (Int.mul_k q.num (Int.ofNat 79228162514264337593543950336)))
+
+@[csimp] theorem lowerOK_eq_lowerOKImpl : @lowerOK = @lowerOKImpl := by
+  funext a q
+  unfold lowerOK lowerOKImpl lower
+  congr 1
+  rw [intNonnegK_eq, Int.sub_k_eq, Int.mul_k_eq, Int.mul_k_eq, Int.mul_def, Int.mul_def, ← units_int]
+  apply decide_eq_decide.mpr
+  have hd : (0 : ℚ) < q.den := by exact_mod_cast q.den_pos
+  rw [sub_nonneg, le_div_iff₀ units_pos_rat]
+  conv_rhs => rw [← Rat.num_div_den q]
+  rw [div_mul_eq_mul_div, div_le_iff₀ hd]
+  constructor <;> intro h <;> exact_mod_cast h
+
+theorem lowerOK_def (a : DyadicBounds) (q : ℚ) : a.lowerOK q = (a.ok && decide (q ≤ a.lower)) := by
+  rw [lowerOK_eq_lowerOKImpl]; rfl
 
 def sumThree (f : Fin 3 → DyadicBounds) : DyadicBounds := ((f 0).add (f 1)).add (f 2)
 

@@ -72,7 +72,7 @@ def SideConeCoarseTree.checkWith (tileCheck : SideCoarseTile → Bool) :
   | .cutU l r, U, V => l.checkWith tileCheck U.first V && r.checkWith tileCheck U.second V
   | .cutV l r, U, V => l.checkWith tileCheck U V.first && r.checkWith tileCheck U V.second
 
-def SideConeCoarseTree.check (C : ParameterCell) (T : SideConeCoarseTree) :=
+noncomputable def SideConeCoarseTree.check (C : ParameterCell) (T : SideConeCoarseTree) :=
   T.checkWith (SideCoarseTile.check C)
 
 private theorem sideUNodes_order : ∀ i j : Fin 28, i.val ≤ j.val → sideUNodes.get i ≤ sideUNodes.get j :=

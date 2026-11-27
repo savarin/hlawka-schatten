@@ -7,6 +7,7 @@ Authors: Ezzeri Esa
 module
 
 public import HlawkaSchatten.BelowExponent.FSlabNearInteger
+public import HlawkaSchatten.BelowExponent.FSlabNearKernel
 
 /-! Exact checks for the two imbalance halves at each weighted F knot. -/
 
@@ -98,15 +99,35 @@ theorem movement_valid (P : Band) (A B : Nat) (t : TC.Tm) :
   rw [lt_div_iff₀ hD, zero_mul]
   norm_cast
 
-def nearGroupFast (P : Band) (j : Fin 3) (A B : Nat) (r s : ℚ) (ts : List TC.Tm) : Bool :=
+noncomputable def termMagnitudeKernel (A B : Nat) (t : TC.Tm) : Nat :=
+  TC.agOf t (Nat.ble ctx.Da A) (nearShiftedMag A) (Nat.ble ctx.Da B) (nearShiftedMag B)
+
+theorem termMagnitudeKernel_eq (A B : Nat) (t : TC.Tm) :
+    termMagnitudeKernel A B t = termMagnitude A B t := by
+  unfold termMagnitudeKernel termMagnitude
+  exact_mod_cast TC.ag_spec t (Nat.ble ctx.Da A) (nearShiftedMag A)
+    (Nat.ble ctx.Da B) (nearShiftedMag B)
+
+def nearGroupFastImpl (P : Band) (j : Fin 3) (A B : Nat) (r s : ℚ) (ts : List TC.Tm) : Bool :=
   FSlabNearInteger.groupOK (profileDen P*ctx.Da) ctx.Da
     ((gamma P).getD j.val 0) ((gamma P).getD (chartA j).val 0) ((gamma P).getD (chartB j).val 0)
     (nearShiftedMag A) (nearShiftedMag B) r s
     (ts.map fun t => (t.p, termMagnitude A B t))
 
+noncomputable def nearGroupFast (P : Band) (j : Fin 3) (A B : Nat) (r s : ℚ) (ts : List TC.Tm) : Bool :=
+  FSlabNearKernel.groupOKK (profileDen P*ctx.Da) ctx.Da
+    ((gamma P).getD j.val 0) ((gamma P).getD (chartA j).val 0) ((gamma P).getD (chartB j).val 0)
+    (nearShiftedMag A) (nearShiftedMag B) r s
+    (ts.map fun t => (t.p, termMagnitudeKernel A B t))
+
+@[csimp] theorem nearGroupFast_eq_impl : @nearGroupFast = @nearGroupFastImpl := by
+  funext P j A B r s ts
+  simp only [nearGroupFast, nearGroupFastImpl, FSlabNearKernel.groupOKK_eq, termMagnitudeKernel_eq]
+
 theorem nearGroupFast_eq (P : Band) (j : Fin 3) (A B : Nat) (r s : ℚ) (ts : List TC.Tm) :
     nearGroupFast P j A B r s ts = nearGroup P j A B r s ts := by
-  unfold nearGroupFast
+  rw [nearGroupFast_eq_impl]
+  unfold nearGroupFastImpl
   rw [FSlabNearInteger.groupOK_spec _ _ _ _ _ _ _
     (Nat.mul_pos (profileDen_check_pos P) (by decide)) (by decide)]
   simp only [nearGroup, List.all_map, List.map_map]

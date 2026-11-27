@@ -66,6 +66,23 @@ theorem rcoef_spec (C : Ctx) (p m e : Nat) (hda : 0 < C.da) (hdb : 0 < C.db) (hm
     simp only [rcoef, this, Bool.cond_false]
     exact ⟨cdiv_spec _ _ (Nat.mul_pos hda h3), cdiv_spec _ _ (Nat.mul_pos (Nat.mul_pos hdb hm) h3)⟩
 
+theorem lint_cons_eq_reference (C : Ctx) (Y : Nat) (sa : Bool) (ua : Nat)
+    (sb : Bool) (ub : Nat) (t : Tm) (ts : List Tm) :
+    lint C Y sa ua sb ub (t :: ts) = tmVal C Y sa ua sb ub t + lint C Y sa ua sb ub ts := by rfl
+
+theorem acoef_eq_reference (C : Ctx) (code : Nat) :
+    acoef C code =
+  if code = 0 then (0, 0) else
+  let i := (code - 1) % 64
+  let m := 64 + i
+  let e := 6 + (code - 1) / 64
+  let ql := field C.Qlo C.W i
+  let qh := field C.Qhi C.W i
+  let Cneg := if e ≤ 7 then cdiv ((C.n2k2 * qh * 3 ^ (7 - e)) <<< C.sh) C.k2
+              else cdiv ((C.n2k2 * qh) <<< C.sh) (C.k2 * 3 ^ (e - 7))
+  let Dn := ((C.n1 * ql) <<< (e + C.sh)) / (C.k1 * m * 3 ^ (e - 6))
+  (Cneg, Dn) := by rfl
+
 /-- D3, a-nodes, cleared denominators (code ≥ 1; m = 64 + i, e = 6 + (code-1)/64, i = (code-1) % 64):
     Cneg k2 [3^(e-7)] ≥ (n2 - k2) Qhi [3^(7-e)] 2^(K-K0)  and  Dn k1 m 3^(e-6) ≤ n1 Qlo 2^e 2^(K-K0). -/
 theorem acoef_spec (C : Ctx) (code : Nat) (hk1 : 0 < C.k1) (hk2 : 0 < C.k2) (hc : code ≠ 0) :
@@ -82,13 +99,13 @@ theorem acoef_spec (C : Ctx) (code : Nat) (hk1 : 0 < C.k1) (hk2 : 0 < C.k2) (hc 
   have h3' : 0 < C.k1 * (64 + i) * 3 ^ (e - 6) :=
     Nat.mul_pos (Nat.mul_pos hk1 (by omega)) (Nat.pow_pos (by decide))
   refine ⟨fun he => ?_, fun he => ?_, ?_⟩
-  · simp only [acoef, hcode, ite_false]
+  · simp only [acoef_eq_reference, hcode, ite_false]
     rw [ite_eq_left he]
     exact cdiv_spec _ _ hk2
-  · simp only [acoef, hcode, ite_false]
+  · simp only [acoef_eq_reference, hcode, ite_false]
     rw [ite_eq_right (by omega)]
     exact cdiv_spec _ _ (Nat.mul_pos hk2 h3)
-  · simp only [acoef, hcode, ite_false]
+  · simp only [acoef_eq_reference, hcode, ite_false]
     exact Nat.div_mul_le_self _ _
 
 theorem p1OK_spec (P : Prof) (T : Tab) (n : Nat) (h : p1OK P T n = true) :

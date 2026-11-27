@@ -26,7 +26,7 @@ def CutTop0H5NegRestTree : RatioRemainder :=
   .cut 3 (3/4) (CutTop0H5NegRestPart0Tree) (CutTop0H5NegRestPart1Tree)
 
 set_option maxRecDepth 16000 in
-theorem CutTop0H5NegRest_ok : CutTop0H5NegRestTree.ok CutTop0H5NegRestBox false (1) = true :=
-  RatioRemainder.cut_ok (CutTop0H5NegRestPart0_ok) (CutTop0H5NegRestPart1_ok)
+theorem CutTop0H5NegRest_ok : CutTop0H5NegRestTree.geometryOK CutTop0H5NegPowerCache CutTop0H5NegRestBox false (1) = true :=
+  RatioRemainder.geometryCut_ok (CutTop0H5NegRestPart0_ok) (CutTop0H5NegRestPart1_ok)
 
 end HlawkaSchatten.BelowExponent.G3P

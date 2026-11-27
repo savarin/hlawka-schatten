@@ -30,6 +30,6 @@ def CutMid0H1NegTree : CertTree :=
   .cut 3 (3/4) (.cut 3 (-1/4) (CutMid0H1NegPart0Tree) (.cut 3 (1/4) (.cut 2 (1/2) (.cut 2 (1/8) (CutMid0H1NegPart1Tree) (CutMid0H1NegPart2Tree)) (CutMid0H1NegPart3Tree)) (CutMid0H1NegPart4Tree))) (CutMid0H1NegPart5Tree)
 
 set_option maxRecDepth 16000 in
-theorem CutMid0H1Neg_checked : CutMid0H1NegTree.commonOK CutMid0H1NegBox false = true := CertTree.commonCut_ok (CertTree.commonCut_ok (CutMid0H1NegPart0_checked) (CertTree.commonCut_ok (CertTree.commonCut_ok (CertTree.commonCut_ok (CutMid0H1NegPart1_checked) (CutMid0H1NegPart2_checked)) (CutMid0H1NegPart3_checked)) (CutMid0H1NegPart4_checked))) (CutMid0H1NegPart5_checked)
+theorem CutMid0H1Neg_checked : CutMid0H1NegTree.geometryOK CutMid0H1NegPowerCache CutMid0H1NegBox false = true := CertTree.geometryCut_ok (CertTree.geometryCut_ok (CutMid0H1NegPart0_checked) (CertTree.geometryCut_ok (CertTree.geometryCut_ok (CertTree.geometryCut_ok (CutMid0H1NegPart1_checked) (CutMid0H1NegPart2_checked)) (CutMid0H1NegPart3_checked)) (CutMid0H1NegPart4_checked))) (CutMid0H1NegPart5_checked)
 
 end HlawkaSchatten.BelowExponent.G3P

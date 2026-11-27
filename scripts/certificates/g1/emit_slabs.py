@@ -7,12 +7,16 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import layout  # noqa: E402  (scripts/certificates/layout.py)
 
+KERNEL_SLABS = set(range(13))
+
 
 def slab_source(index):
+    kernel = index in KERNEL_SLABS
+    checker = "G1CompactKernelSound" if kernel else "G1CompactIntegerBlocks"
     lines = [
         "module",
         "",
-        "public import HlawkaSchatten.BelowExponent.G1CompactIntegerBlocks",
+        f"public import HlawkaSchatten.BelowExponent.{checker}",
         "meta import Mathlib.Tactic.FinCases",
         "",
         f"/-! Exact corner comparisons for compact G1 slab {index}, four bins per check. -/",
@@ -31,6 +35,7 @@ def slab_source(index):
             lines.extend([
                 "",
                 f"private theorem {label}Block{block:02d} : intSideBlock {index} {endpoint} {block} = true := by",
+                *(["  apply intSideBlock_of_kernel"] if kernel else []),
                 "  decide +kernel",
             ])
         lines.extend([

@@ -35,6 +35,7 @@ def compare(source, expected):
 def main():
     check_manifest(HERE / "regional-inputs.sha256")
     check_manifest(HERE / "g1/slabs.sha256")
+    run(HERE / "g1/emit_ordinates.py", "--check")
     catalog = json.loads((FACETS / "catalog.json").read_text())
     with TemporaryDirectory(prefix="hlawka-witnesses-") as work:
         temp = Path(work)

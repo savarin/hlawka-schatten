@@ -19,7 +19,7 @@ set_option linter.mathlibStandardSet false
 
 namespace HlawkaSchatten.BelowExponent.Vertex
 
-def vcOuterTreesOK (P : OuterPointBounds) (trees : Vector SideOuterTree 12) : Bool :=
+noncomputable def vcOuterTreesOK (P : OuterPointBounds) (trees : Vector SideOuterTree 12) : Bool :=
   (List.finRange 3).all fun k => [false,true].all fun s => [false,true].all fun t =>
     (trees.get (outerTreeIndex k s t)).check (outerWideRectOK P) (fun _ _ _ => false) k
       (sideOuterStart s) (sideOuterStart t)

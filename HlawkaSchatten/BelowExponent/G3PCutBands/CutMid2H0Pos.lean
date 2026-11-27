@@ -6,7 +6,7 @@ Authors: Ezzeri Esa
 
 module
 
-public import HlawkaSchatten.BelowExponent.G3PCommonDen
+public import HlawkaSchatten.BelowExponent.G3PCutBands.CutMid2H0PosPower
 
 /-! Certificate data for the ordered G3 vertex corner: cut band piece `CutMid2H0Pos`. -/
 
@@ -91,6 +91,6 @@ def CutMid2H0PosTree : CertTree :=
             (.row ⟨86531900008, 95281442641, (.direct 5340438828596 5285421692856), (.variance 126745607266)⟩)))))
 
 set_option maxRecDepth 16000 in
-theorem CutMid2H0Pos_checked : CutMid2H0PosTree.commonOK CutMid2H0PosBox true = true := by decide +kernel
+theorem CutMid2H0Pos_checked : CutMid2H0PosTree.geometryOK CutMid2H0PosPowerCache CutMid2H0PosBox true = true := by decide +kernel
 
 end HlawkaSchatten.BelowExponent.G3P

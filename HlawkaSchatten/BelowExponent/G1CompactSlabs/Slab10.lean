@@ -6,7 +6,7 @@ Authors: Ezzeri Esa
 
 module
 
-public import HlawkaSchatten.BelowExponent.G1CompactIntegerBlocks
+public import HlawkaSchatten.BelowExponent.G1CompactKernelSound
 meta import Mathlib.Tactic.FinCases
 
 /-! Exact corner comparisons for compact G1 slab 10, four bins per check. -/
@@ -25,51 +25,67 @@ set_option maxRecDepth 16000
 set_option maxHeartbeats 0
 
 private theorem leftBlock00 : intSideBlock 10 false 0 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock01 : intSideBlock 10 false 1 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock02 : intSideBlock 10 false 2 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock03 : intSideBlock 10 false 3 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock04 : intSideBlock 10 false 4 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock05 : intSideBlock 10 false 5 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock06 : intSideBlock 10 false 6 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock07 : intSideBlock 10 false 7 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock08 : intSideBlock 10 false 8 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock09 : intSideBlock 10 false 9 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock10 : intSideBlock 10 false 10 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock11 : intSideBlock 10 false 11 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock12 : intSideBlock 10 false 12 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock13 : intSideBlock 10 false 13 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock14 : intSideBlock 10 false 14 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlock15 : intSideBlock 10 false 15 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem leftBlocks (block : Fin 16) : intSideBlock 10 false block = true := by
@@ -92,51 +108,67 @@ private theorem leftBlocks (block : Fin 16) : intSideBlock 10 false block = true
   · exact leftBlock15
 
 private theorem rightBlock00 : intSideBlock 10 true 0 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock01 : intSideBlock 10 true 1 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock02 : intSideBlock 10 true 2 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock03 : intSideBlock 10 true 3 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock04 : intSideBlock 10 true 4 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock05 : intSideBlock 10 true 5 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock06 : intSideBlock 10 true 6 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock07 : intSideBlock 10 true 7 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock08 : intSideBlock 10 true 8 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock09 : intSideBlock 10 true 9 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock10 : intSideBlock 10 true 10 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock11 : intSideBlock 10 true 11 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock12 : intSideBlock 10 true 12 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock13 : intSideBlock 10 true 13 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock14 : intSideBlock 10 true 14 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlock15 : intSideBlock 10 true 15 = true := by
+  apply intSideBlock_of_kernel
   decide +kernel
 
 private theorem rightBlocks (block : Fin 16) : intSideBlock 10 true block = true := by

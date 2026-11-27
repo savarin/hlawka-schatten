@@ -34,7 +34,7 @@ def CutMid4H1NegChartTree : RatioChart :=
   .cut 3 (1/4) (.cut 3 (-1/4) (CutMid4H1NegChartPart0Tree) (.cut 2 (1/2) (.cut 2 (1/8) (CutMid4H1NegChartPart1Tree) (.cut 2 (5/16) (.cut 0 (27/136) (.cut 1 (7/50) (CutMid4H1NegChartPart2Tree) (CutMid4H1NegChartPart3Tree)) (.cut 1 (7/50) (CutMid4H1NegChartPart4Tree) (CutMid4H1NegChartPart5Tree))) (.cut 3 (0) (CutMid4H1NegChartPart6Tree) (CutMid4H1NegChartPart7Tree)))) (CutMid4H1NegChartPart8Tree))) (CutMid4H1NegChartPart9Tree)
 
 set_option maxRecDepth 16000 in
-theorem CutMid4H1NegChart_ok : CutMid4H1NegChartTree.ok CutMid4H1NegChartBox false = true :=
-  RatioChart.cut_ok (RatioChart.cut_ok (CutMid4H1NegChartPart0_ok) (RatioChart.cut_ok (RatioChart.cut_ok (CutMid4H1NegChartPart1_ok) (RatioChart.cut_ok (RatioChart.cut_ok (RatioChart.cut_ok (CutMid4H1NegChartPart2_ok) (CutMid4H1NegChartPart3_ok)) (RatioChart.cut_ok (CutMid4H1NegChartPart4_ok) (CutMid4H1NegChartPart5_ok))) (RatioChart.cut_ok (CutMid4H1NegChartPart6_ok) (CutMid4H1NegChartPart7_ok)))) (CutMid4H1NegChartPart8_ok))) (CutMid4H1NegChartPart9_ok)
+theorem CutMid4H1NegChart_ok : CutMid4H1NegChartTree.geometryOK CutMid4H1NegPowerCache CutMid4H1NegChartBox false = true :=
+  RatioChart.geometryCut_ok (RatioChart.geometryCut_ok (CutMid4H1NegChartPart0_ok) (RatioChart.geometryCut_ok (RatioChart.geometryCut_ok (CutMid4H1NegChartPart1_ok) (RatioChart.geometryCut_ok (RatioChart.geometryCut_ok (RatioChart.geometryCut_ok (CutMid4H1NegChartPart2_ok) (CutMid4H1NegChartPart3_ok)) (RatioChart.geometryCut_ok (CutMid4H1NegChartPart4_ok) (CutMid4H1NegChartPart5_ok))) (RatioChart.geometryCut_ok (CutMid4H1NegChartPart6_ok) (CutMid4H1NegChartPart7_ok)))) (CutMid4H1NegChartPart8_ok))) (CutMid4H1NegChartPart9_ok)
 
 end HlawkaSchatten.BelowExponent.G3P

@@ -52,8 +52,9 @@ theorem ofRat_mem {a : RatBounds} {x : ℝ} (h : a.Contains x) : (ofRat a).Conta
   have hlo : (⌊a.lo * (units : ℚ)⌋ : ℚ) / units ≤ a.lo := (div_le_iff₀ ratUnits_pos).2 (Int.floor_le _)
   have hhi : a.hi ≤ (⌈a.hi * (units : ℚ)⌉ : ℚ) / units := (le_div_iff₀ ratUnits_pos).2 (Int.le_ceil _)
   intro _
-  exact ⟨(show decode (ofRat a).lo ≤ (a.lo : ℝ) by unfold decode ofRat; exact_mod_cast hlo).trans h.1,
-    h.2.trans (show (a.hi : ℝ) ≤ decode (ofRat a).hi by unfold decode ofRat; exact_mod_cast hhi)⟩
+  rw [ofRat_def]
+  exact ⟨(show decode (⌊a.lo * (units : ℚ)⌋) ≤ (a.lo : ℝ) by unfold decode; exact_mod_cast hlo).trans h.1,
+    h.2.trans (show (a.hi : ℝ) ≤ decode (⌈a.hi * (units : ℚ)⌉) by unfold decode; exact_mod_cast hhi)⟩
 
 theorem point_mem (q : ℚ) : (point q).Contains (q : ℝ) := ofRat_mem (RatBounds.point_mem q)
 
@@ -66,14 +67,14 @@ theorem Contains.add {a b : DyadicBounds} {x y : ℝ} (ha : a.Contains x) (hb : 
     (a.add b).Contains (x+y) := by
   intro hok
   obtain ⟨ha', hb'⟩ := Bool.and_eq_true_iff.mp hok
-  simpa only [DyadicBounds.add, decode_add] using
+  simpa only [DyadicBounds.add_def, decode_add] using
     And.intro (add_le_add (ha ha').1 (hb hb').1) (add_le_add (ha ha').2 (hb hb').2)
 
 theorem Contains.sub {a b : DyadicBounds} {x y : ℝ} (ha : a.Contains x) (hb : b.Contains y) :
     (a.sub b).Contains (x-y) := by
   intro hok
   obtain ⟨ha', hb'⟩ := Bool.and_eq_true_iff.mp hok
-  simpa only [DyadicBounds.sub, decode_sub] using
+  simpa only [DyadicBounds.sub_def, decode_sub] using
     And.intro (sub_le_sub (ha ha').1 (hb hb').2) (sub_le_sub (ha ha').2 (hb hb').1)
 
 private theorem le_ceil_mul (a : ℤ) {b : ℤ} (hb : b ≠ 0) : a ≤ ceilDiv a b * b := by
@@ -104,6 +105,7 @@ private theorem rat_decode (v : ℤ) : (((v : ℚ) / (units : ℚ) : ℚ) : ℝ)
 
 theorem Contains.mul {a b : DyadicBounds} {x y : ℝ} (ha : a.Contains x) (hb : b.Contains y) :
     (a.mul b).Contains (x*y) := by
+  rw [mul_def]
   intro hok
   obtain ⟨ha', hb'⟩ := Bool.and_eq_true_iff.mp hok
   have haR : (RatBounds.mk a.lower a.upper).Contains x := by
@@ -112,9 +114,10 @@ theorem Contains.mul {a b : DyadicBounds} {x y : ℝ} (ha : a.Contains x) (hb : 
     simpa only [lower, upper, RatBounds.Contains, rat_decode] using hb hb'
   have hh := RatBounds.mul_mem haR hbR
   simp only [RatBounds.Contains, RatBounds.mul, Rat.cast_mul, Rat.cast_min, Rat.cast_max, lower, upper, rat_decode] at hh
-  have hlo : ∀ {i j}, i*j ≥ productLo a b → decode ((a.mul b).lo) ≤ decode i * decode j :=
+  have hlo : ∀ {i j}, i*j ≥ productLo a b → decode (productLo a b / units) ≤ decode i * decode j :=
     fun h => floor_product h
-  have hhi : ∀ {i j}, i*j ≤ productHi a b → decode i * decode j ≤ decode ((a.mul b).hi) :=
+  have hhi : ∀ {i j}, i*j ≤ productHi a b →
+      decode i * decode j ≤ decode (ceilDiv (productHi a b) units) :=
     fun h => ceil_product h
   refine ⟨?_, ?_⟩
   · apply le_trans _ hh.1
@@ -129,7 +132,7 @@ theorem Contains.mul {a b : DyadicBounds} {x y : ℝ} (ha : a.Contains x) (hb : 
 theorem Contains.abs {a : DyadicBounds} {x : ℝ} (ha : a.Contains x) : a.abs.Contains |x| := by
   intro hok
   obtain ⟨hx, hy⟩ := ha hok
-  simp only [DyadicBounds.abs, decode_mono.map_max, decode_zero, decode_neg, decode_abs]
+  simp only [DyadicBounds.abs_def, decode_mono.map_max, decode_zero, decode_neg, decode_abs]
   refine ⟨max_le (abs_nonneg x) (max_le (hx.trans (le_abs_self x)) ((neg_le_neg hy).trans (neg_le_abs x))), ?_⟩
   exact abs_le.mpr ⟨(neg_le_neg (le_max_left _ _)).trans ((neg_abs_le _).trans hx),
     hy.trans ((le_abs_self _).trans (le_max_right _ _))⟩
@@ -139,6 +142,7 @@ theorem Contains.square {a : DyadicBounds} {x : ℝ} (ha : a.Contains x) : a.squ
   simpa only [DyadicBounds.square, ← pow_two, sq_abs] using h
 
 theorem Contains.reciprocal {a : DyadicBounds} {x : ℝ} (ha : a.Contains x) : a.reciprocal.Contains (1/x) := by
+  rw [reciprocal_def]
   intro hok
   obtain ⟨h, hlo⟩ := Bool.and_eq_true_iff.mp hok
   have hL := decode_pos (of_decide_eq_true hlo)
@@ -151,12 +155,12 @@ theorem Contains.reciprocal {a : DyadicBounds} {x : ℝ} (ha : a.Contains x) : a
     exact_mod_cast Int.ediv_mul_le ((units : ℤ) * units) hi.ne'
   have hcHi : (units : ℝ) * units ≤ (ceilDiv ((units : ℤ) * units) a.lo : ℝ) * (a.lo : ℝ) := by
     exact_mod_cast le_ceil_mul ((units : ℤ) * units) (of_decide_eq_true hlo : 0 < a.lo).ne'
-  have hlo' : decode a.reciprocal.lo ≤ 1 / decode a.hi := by
-    unfold decode DyadicBounds.reciprocal
+  have hlo' : decode (((units : ℤ) * units) / a.hi) ≤ 1 / decode a.hi := by
+    unfold decode
     rw [one_div_div]
     exact (div_le_div_iff₀ realUnits_pos (by exact_mod_cast hi)).2 hcLo
-  have hhi' : 1 / decode a.lo ≤ decode a.reciprocal.hi := by
-    unfold decode DyadicBounds.reciprocal
+  have hhi' : 1 / decode a.lo ≤ decode (ceilDiv ((units : ℤ) * units) a.lo) := by
+    unfold decode
     rw [one_div_div]
     exact (div_le_div_iff₀ (by exact_mod_cast (of_decide_eq_true hlo : 0 < a.lo)) realUnits_pos).2 hcHi
   exact ⟨hlo'.trans (one_div_le_one_div_of_le hx (ha h).2),
@@ -170,17 +174,19 @@ theorem Contains.intersect {a b : DyadicBounds} {x : ℝ} (ha : a.Contains x) (h
     (a.intersect b).Contains x := by
   intro hok
   obtain ⟨ha', hb'⟩ := Bool.and_eq_true_iff.mp hok
-  simp only [DyadicBounds.intersect, decode_mono.map_max, decode_mono.map_min]
+  simp only [DyadicBounds.intersect_def, decode_mono.map_max, decode_mono.map_min]
   exact ⟨max_le (ha ha').1 (hb hb').1, le_min (ha ha').2 (hb hb').2⟩
 
 theorem Contains.le_upper {a : DyadicBounds} {x : ℝ} {q : ℚ} (h : a.Contains x) (hc : a.upperOK q = true) :
     x ≤ (q : ℝ) := by
+  rw [upperOK_def] at hc
   obtain ⟨hok, hq⟩ := Bool.and_eq_true_iff.mp hc
   exact (h hok).2.trans (by
     simpa only [upper, rat_decode] using (show (a.upper : ℝ) ≤ q by exact_mod_cast of_decide_eq_true hq))
 
 theorem Contains.lower_le {a : DyadicBounds} {x : ℝ} {q : ℚ} (h : a.Contains x) (hc : a.lowerOK q = true) :
     (q : ℝ) ≤ x := by
+  rw [lowerOK_def] at hc
   obtain ⟨hok, hq⟩ := Bool.and_eq_true_iff.mp hc
   exact (show (q : ℝ) ≤ decode a.lo from by
     simpa only [lower, rat_decode] using (show (q : ℝ) ≤ a.lower by exact_mod_cast of_decide_eq_true hq)).trans (h hok).1

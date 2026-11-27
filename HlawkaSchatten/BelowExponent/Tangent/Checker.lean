@@ -83,10 +83,10 @@ structure CellData where
 deriving Inhabited
 
 /-- field `i` of width `W` of a packed table -/
-def field (T W i : Nat) : Nat := (T >>> (W * i)) % 2 ^ W
+def field (T W i : Nat) : Nat := Nat.mod (Nat.shiftRight T (Nat.mul W i)) (Nat.pow 2 W)
 
 /-- ceiling division -/
-def cdiv (a b : Nat) : Nat := (a + b - 1) / b
+def cdiv (a b : Nat) : Nat := Nat.div (Nat.sub (Nat.add a b) 1) b
 
 /-! Kernel-speed conventions (measured, see report.md): comparisons are `bif` on `Nat.ble`/`Nat.blt`/`Nat.beq`
 inside small NON-recursive helpers (about 2x faster than `if` on a decidable Prop; a direct `Nat.ble` inside the
@@ -162,28 +162,32 @@ def mkCtx (H : Hdr) : Ctx :=
 /-- (An, Bn): A = An/2^K >= R (1 - n1/(2k1)), B = Bn/2^K >= R n2/(2 k2) / r,  R = p/2^K0 3^(MR/2 - e), r = m 4^-e -/
 def rcoef (C : Ctx) (p m e : Nat) : Nat × Nat :=
   bif Nat.ble e C.h then
-    let t := 3 ^ (C.h - e)
-    (cdiv (p * t * C.ca) C.da, cdiv ((p * t * C.cb) <<< (2 * e)) (C.db * m))
+    let t := Nat.pow 3 (Nat.sub C.h e)
+    (cdiv (Nat.mul (Nat.mul p t) C.ca) C.da,
+      cdiv (Nat.shiftLeft (Nat.mul (Nat.mul p t) C.cb) (Nat.mul 2 e)) (Nat.mul C.db m))
   else
-    let t := 3 ^ (e - C.h)
-    (cdiv (p * C.ca) (C.da * t), cdiv ((p * C.cb) <<< (2 * e)) (C.db * m * t))
+    let t := Nat.pow 3 (Nat.sub e C.h)
+    (cdiv (Nat.mul p C.ca) (Nat.mul C.da t),
+      cdiv (Nat.shiftLeft (Nat.mul p C.cb) (Nat.mul 2 e)) (Nat.mul (Nat.mul C.db m) t))
 
 /-- (Cneg, Dn): C = -Cneg/2^K <= -(n2/k2 - 1) hi,  D = Dn/2^K <= (n1/k1) lo / a0;  a0 = m 2^-e,
     lo = Qlo/2^K0 3^(6-e) <= a0^q <= hi = Qhi/2^K0 3^(7-e).  Code 0 is the bound u^q >= 0. -/
 def acoef (C : Ctx) (code : Nat) : Nat × Nat :=
   if code = 0 then (0, 0) else
-  let i := (code - 1) % 64
-  let m := 64 + i
-  let e := 6 + (code - 1) / 64
+  let i := Nat.mod (Nat.sub code 1) 64
+  let m := Nat.add 64 i
+  let e := Nat.add 6 (Nat.div (Nat.sub code 1) 64)
   let ql := field C.Qlo C.W i
   let qh := field C.Qhi C.W i
-  let Cneg := if e ≤ 7 then cdiv ((C.n2k2 * qh * 3 ^ (7 - e)) <<< C.sh) C.k2
-              else cdiv ((C.n2k2 * qh) <<< C.sh) (C.k2 * 3 ^ (e - 7))
-  let Dn := ((C.n1 * ql) <<< (e + C.sh)) / (C.k1 * m * 3 ^ (e - 6))
+  let Cneg := if e ≤ 7 then
+      cdiv (Nat.shiftLeft (Nat.mul (Nat.mul C.n2k2 qh) (Nat.pow 3 (Nat.sub 7 e))) C.sh) C.k2
+    else cdiv (Nat.shiftLeft (Nat.mul C.n2k2 qh) C.sh) (Nat.mul C.k2 (Nat.pow 3 (Nat.sub e 7)))
+  let Dn := Nat.div (Nat.shiftLeft (Nat.mul C.n1 ql) (Nat.add e C.sh))
+    (Nat.mul (Nat.mul C.k1 m) (Nat.pow 3 (Nat.sub e 6)))
   (Cneg, Dn)
 
 /-- f e := Ylo <= X 4^e (monotone in e) -/
-def fe (X Ylo e : Nat) : Bool := Nat.ble Ylo (X <<< (2 * e))
+def fe (X Ylo e : Nat) : Bool := Nat.ble Ylo (Nat.shiftLeft X (Nat.mul 2 e))
 
 /-- given f e: the smallest e' <= e with f e' -/
 def eDown (X Ylo : Nat) : Nat → Nat
@@ -198,17 +202,19 @@ def eUp (X Ylo : Nat) : Nat → Nat → Nat
 /-- the smallest e with f e, searched from e = h = MR/2 (85-90% of the nodes have e in h-1 .. h+2) -/
 def esearch (h X Ylo : Nat) : Nat :=
   bif fe X Ylo h then
-    (bif fe X Ylo (h - 1) then (bif fe X Ylo (h - 2) then eDown X Ylo (h - 2) else h - 1) else h)
+    (bif fe X Ylo (Nat.sub h 1) then
+      (bif fe X Ylo (Nat.sub h 2) then eDown X Ylo (Nat.sub h 2) else Nat.sub h 1) else h)
   else
-    (bif fe X Ylo (h + 1) then h + 1 else bif fe X Ylo (h + 2) then h + 2 else eUp X Ylo 128 (h + 3))
+    (bif fe X Ylo (Nat.add h 1) then Nat.add h 1 else
+      bif fe X Ylo (Nat.add h 2) then Nat.add h 2 else eUp X Ylo 128 (Nat.add h 3))
 
 /-- the r-node (m, e), 2^(MR-2) <= m < 2^MR, with m 4^-e nearest to X/Y (c1's `choose_rnode`).
     Only a choice: soundness holds for every node. -/
 def node (C : Ctx) (X Y : Nat) : Nat × Nat :=
-  let Ylo := Y <<< (C.MR - 2)
+  let Ylo := Nat.shiftLeft Y (Nat.sub C.MR 2)
   let e := esearch C.h X Ylo
-  let m := (2 * (X <<< (2 * e)) + Y) / (2 * Y)
-  bif Nat.ble C.mhi m then (C.mlo, e - 1)
+  let m := Nat.div (Nat.add (Nat.mul 2 (Nat.shiftLeft X (Nat.mul 2 e))) Y) (Nat.mul 2 Y)
+  bif Nat.ble C.mhi m then (C.mlo, Nat.sub e 1)
   else bif Nat.blt m C.mlo then (C.mlo, e) else (m, e)
 
 /-- An Y + Bn X  (an upper bound of (X/Y)^(q/2) times 2^K Y), and 0 for X = 0 -/
@@ -216,8 +222,8 @@ def termL (C : Ctx) (X Y : Nat) : Nat :=
   bif Nat.beq X 0 then 0 else
   match node C X Y with
   | (m, e) =>
-    match rcoef C (field C.P1 C.W (m - C.mlo)) m e with
-    | (An, Bn) => An * Y + Bn * X
+    match rcoef C (field C.P1 C.W (Nat.sub m C.mlo)) m e with
+    | (An, Bn) => Nat.add (Nat.mul An Y) (Nat.mul Bn X)
 
 /-! ## Geometry of a cone cell -/
 
@@ -282,18 +288,20 @@ structure Face where
 
 /-- p_s (An Y + Bn X) for one member at the corner with signs sa, sb and magnitudes ua = |a|, ub = |b| -/
 def tmVal (C : Ctx) (Y : Nat) (sa : Bool) (ua : Nat) (sb : Bool) (ub : Nat) (t : Tm) : Nat :=
-  let t1 := t.c1 * ua
-  let t2 := t.c2 * ub
+  let t1 := Nat.mul t.c1 ua
+  let t2 := Nat.mul t.c2 ub
   let g1 := beqB t.s1 sa
   let g2 := beqB t.s2 sb
-  let P := (bif t.s0 then t.c0 else 0) + (bif g1 then t1 else 0) + (bif g2 then t2 else 0)
-  let N := (bif t.s0 then 0 else t.c0) + (bif g1 then 0 else t1) + (bif g2 then 0 else t2)
-  let ag := bif Nat.ble N P then P - N else N - P
-  t.p * termL C (ag * ag) Y
+  let P := Nat.add (Nat.add (bif t.s0 then t.c0 else 0) (bif g1 then t1 else 0))
+    (bif g2 then t2 else 0)
+  let N := Nat.add (Nat.add (bif t.s0 then 0 else t.c0) (bif g1 then 0 else t1))
+    (bif g2 then 0 else t2)
+  let ag := bif Nat.ble N P then Nat.sub P N else Nat.sub N P
+  Nat.mul t.p (termL C (Nat.mul ag ag) Y)
 
 def lint (C : Ctx) (Y : Nat) (sa : Bool) (ua : Nat) (sb : Bool) (ub : Nat) : List Tm → Nat
   | [] => 0
-  | t :: ts => tmVal C Y sa ua sb ub t + lint C Y sa ua sb ub ts
+  | t :: ts => Nat.add (tmVal C Y sa ua sb ub t) (lint C Y sa ua sb ub ts)
 
 /-- max over the cell vertices of  sum_s p_s (An Y + Bn X_s)  at one corner -/
 def lmaxV (C : Ctx) (Y : Nat) (sa : Bool) (ua : Nat) (sb : Bool) (ub : Nat) : List (List Tm) → Nat
@@ -304,19 +312,22 @@ def lmaxV (C : Ctx) (Y : Nat) (sa : Bool) (ua : Nat) (sb : Bool) (ub : Nat) : Li
 def lmaxAt (C : Ctx) (F : Face) (A B : Nat) : Nat :=
   let sa := Nat.ble C.Da A
   let sb := Nat.ble C.Da B
-  lmaxV C F.Y sa (bif sa then A - C.Da else C.Da - A) sb (bif sb then B - C.Da else C.Da - B) F.terms
+  lmaxV C F.Y sa (bif sa then Nat.sub A C.Da else Nat.sub C.Da A)
+    sb (bif sb then Nat.sub B C.Da else Nat.sub C.Da B) F.terms
 
 /-- L(corner) + (g_k Cneg_a + g_l Cneg_b) Da F  <=  (g_j 2^K Da + g_k Dn_a |a| + g_l Dn_b |b|) F -/
 def cornerOK (C : Ctx) (F : Face) (lhsAdd Dna Dnb A B Lc : Nat) : Bool :=
-  let ua := bif Nat.ble C.Da A then A - C.Da else C.Da - A
-  let ub := bif Nat.ble C.Da B then B - C.Da else C.Da - B
-  Nat.ble (Lc + lhsAdd) ((F.gj2K + F.gk * Dna * ua + F.gl * Dnb * ub) * F.F)
+  let ua := bif Nat.ble C.Da A then Nat.sub A C.Da else Nat.sub C.Da A
+  let ub := bif Nat.ble C.Da B then Nat.sub B C.Da else Nat.sub C.Da B
+  Nat.ble (Nat.add Lc lhsAdd)
+    (Nat.mul (Nat.add (Nat.add F.gj2K (Nat.mul (Nat.mul F.gk Dna) ua))
+      (Nat.mul (Nat.mul F.gl Dnb) ub)) F.F)
 
 def leafOK (C : Ctx) (F : Face) (A1 A2 B1 B2 ca cb L11 L12 L21 L22 : Nat) : Bool :=
   (Nat.ble C.Da A1 || Nat.ble A2 C.Da) && (Nat.ble C.Da B1 || Nat.ble B2 C.Da) &&
   match acoef C ca, acoef C cb with
   | (Cna, Dna), (Cnb, Dnb) =>
-    let add := (F.gk * Cna + F.gl * Cnb) * C.Da * F.F
+    let add := Nat.mul (Nat.mul (Nat.add (Nat.mul F.gk Cna) (Nat.mul F.gl Cnb)) C.Da) F.F
     cornerOK C F add Dna Dnb A1 B1 L11 && cornerOK C F add Dna Dnb A1 B2 L12 &&
     cornerOK C F add Dna Dnb A2 B1 L21 && cornerOK C F add Dna Dnb A2 B2 L22
 

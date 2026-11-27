@@ -6,7 +6,7 @@ Authors: Ezzeri Esa
 
 module
 
-public import HlawkaSchatten.BelowExponent.G3PRatioData
+public import HlawkaSchatten.BelowExponent.G3PCutBands.CutMid0H3NegPower
 
 /-! Certificate data for the ordered G3 vertex corner: cut band piece `CutMid0H3NegRestPart5`. -/
 
@@ -33,7 +33,7 @@ def CutMid0H3NegRestPart5Tree : RatioRemainder :=
     (.original (.row ⟨65259754744, 76698504229, (.direct 174227225485 175998233810), (.variance 482607912254)⟩))
 
 set_option maxRecDepth 16000 in
-theorem CutMid0H3NegRestPart5_ok : CutMid0H3NegRestPart5Tree.ok CutMid0H3NegRestPart5Box false (1) = true :=
+theorem CutMid0H3NegRestPart5_ok : CutMid0H3NegRestPart5Tree.geometryOK CutMid0H3NegPowerCache CutMid0H3NegRestPart5Box false (1) = true :=
   by decide +kernel
 
 end HlawkaSchatten.BelowExponent.G3P

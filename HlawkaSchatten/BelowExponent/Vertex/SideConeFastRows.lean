@@ -7,6 +7,7 @@ Authors: Ezzeri Esa
 module
 
 public import HlawkaSchatten.BelowExponent.Vertex.SideConeFixed
+public import HlawkaSchatten.BelowExponent.Vertex.SideConeParameterKernel
 
 /-! Share the fixed-point parameter terms and the one-dimensional row factors across SC boxes. -/
 
@@ -129,10 +130,106 @@ def SideFastParameter.canonical (P : SideFastParameter) : SideFastParameterTerms
   let z : SideFastAxisSamples := ⟨zero,zero,zero⟩
   (SideDyadicInputs.ofRat (B.input (P.pack z z zero))).parameterTerms
 
-def SideFastParameter.check (P : SideFastParameter) : Bool :=
+/-- The rational parameter check; compiled code runs it (`check_eq_checkImpl`). -/
+def SideFastParameter.checkImpl (P : SideFastParameter) : Bool :=
   let B := P.box (RatBounds.point 0) (RatBounds.point 0)
   B.parameterOK && firstFactorRangeOK B.exponent B.baseShift true P.first &&
     firstFactorRangeOK B.slope B.baseShift false P.slope && decide (P.terms = P.canonical)
+
+/-- The inputs of `P.canonical` in exact kernel fractions, given the radical-jet coefficients. -/
+noncomputable def SideFastParameter.canonicalInputsK (P : SideFastParameter)
+    (params : AxisCoefficientIntervals) : SideDyadicInputs :=
+  let c := P.cell
+  let G := c.sideGradientK P.roots
+  let shift := sideBaseShiftK c
+  let slopeP := sideNearExponent.sub (RatBounds.point 1)
+  let one : FactorSamples := ⟨RatBounds.point 1, RatBounds.point 1⟩
+  let z := RatBoundsK.point RatK.zero
+  let base := sideBaseK c
+  let X := (sideShiftK c (RatBounds.point 0) (RatBounds.point 0)).divPositive base
+  let pin (v : DyadicBounds) : DyadicBounds := ⟨v.lo, v.hi, true⟩
+  ⟨.ofRat sideNearExponent, .ofRat c.a, .ofRat c.b, .ofRat c.η,
+    ![pin (params.d.get 1).value, pin (params.d.get 2).value],
+    ![pin (params.weight.get 0).value, pin (params.weight.get 1).value,
+      pin (params.weight.get 2).value],
+    ![(G.evaluate 1).toDyadic, (G.evaluate 2).toDyadic],
+    (sideFirstFactorRangeK sideNearExponent shift true P.first).toDyadic,
+    (sideFirstFactorRangeK slopeP shift false P.slope).toDyadic,
+    ![(sideFirstFactorRangeK slopeP z false one).toDyadic,
+      (sideFirstFactorRangeK slopeP z false one).toDyadic],
+    ![(sideSecondFactorRangeK sideNearExponent z one).toDyadic,
+      (sideSecondFactorRangeK sideNearExponent z one).toDyadic],
+    ![(sideSecondFactorRangeK slopeP z one).toDyadic,
+      (sideSecondFactorRangeK slopeP z one).toDyadic],
+    ((⟨base.hi.inv, RatK.one⟩ : RatBoundsK).mul
+      (sideSecondFactorRangeK sideNearExponent X one)).toDyadic⟩
+
+theorem SideFastParameter.canonicalInputsK_eq (P : SideFastParameter) :
+    (P.canonicalInputsK (axisCoefficientIntervals P.cell P.roots 0)).parameterTerms =
+      P.canonical := by
+  let B := P.box (RatBounds.point 0) (RatBounds.point 0)
+  have hz : (RatBoundsK.point RatK.zero).val = RatBounds.point 0 := by
+    simp [RatBoundsK.val_point]
+  have hshift : (sideBaseShiftK P.cell).val = B.baseShift := sideBaseShiftK_val B
+  have hb : (sideBaseK P.cell).val = B.base := sideBaseK_val' B
+  have hs : (sideShiftK P.cell (RatBounds.point 0) (RatBounds.point 0)).val = B.shift :=
+    sideShiftK_val' B
+  have hX : ((sideShiftK P.cell (RatBounds.point 0) (RatBounds.point 0)).divPositive
+      (sideBaseK P.cell)).val = B.argument := by
+    rw [RatBoundsK.val_divPositive, hs, hb]; rfl
+  have hbhi : (sideBaseK P.cell).hi.val = B.base.hi := congrArg RatBounds.hi hb
+  have hG : (P.cell.sideGradientK P.roots).val = B.cell.sideGradient B.roots :=
+    ParameterCell.sideGradientK_val _ _
+  unfold SideFastParameter.canonical
+  congr 1
+  simp only [SideFastParameter.canonicalInputsK, SideDyadicInputs.ofRat, SideNearBox.input,
+    SideNearBox.inputFrom, SideNearBox.parameterValues, SideNearBox.dyadicValues]
+  refine (SideDyadicInputs.mk.injEq ..).mpr ⟨rfl, rfl, rfl, rfl, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · funext j; fin_cases j <;> simp [DyadicBounds.ofRat_toSideRat] <;> exact ⟨rfl, rfl⟩
+  · funext j; fin_cases j <;> simp [DyadicBounds.ofRat_toSideRat] <;> exact ⟨rfl, rfl⟩
+  · funext j; fin_cases j
+    · simp only [Fin.zero_eta, Fin.isValue, Matrix.cons_val_zero, RatBoundsK.toDyadic_eq,
+        SideGradientInputsK.evaluate_val, hG]; rfl
+    · simp only [Fin.mk_one, Fin.isValue, Matrix.cons_val_one,
+        RatBoundsK.toDyadic_eq, SideGradientInputsK.evaluate_val, hG]; rfl
+  · rw [RatBoundsK.toDyadic_eq, sideFirstFactorRangeK_val, hshift]; rfl
+  · rw [RatBoundsK.toDyadic_eq, sideFirstFactorRangeK_val, hshift]; rfl
+  · funext j; fin_cases j <;>
+      simp only [Fin.zero_eta, Fin.mk_one, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
+        RatBoundsK.toDyadic_eq, sideFirstFactorRangeK_val, hz] <;> rfl
+  · funext j; fin_cases j <;>
+      simp only [Fin.zero_eta, Fin.mk_one, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
+        RatBoundsK.toDyadic_eq, sideSecondFactorRangeK_val, hz] <;> rfl
+  · funext j; fin_cases j <;>
+      simp only [Fin.zero_eta, Fin.mk_one, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
+        RatBoundsK.toDyadic_eq, sideSecondFactorRangeK_val, hz] <;> rfl
+  · rw [RatBoundsK.toDyadic_eq, RatBoundsK.val_mul, sideSecondFactorRangeK_val, hX]
+    simp only [RatBoundsK.val, RatK.val_inv, RatK.val_one, hbhi, SideNearBox.scaledBase, one_div]
+    rfl
+
+/-- The parameter check in kernel form: exact fractions for the root, gradient and factor-range
+guards and for the canonical inputs, which share one radical-jet computation. -/
+noncomputable def SideFastParameter.check (P : SideFastParameter) : Bool :=
+  let B := P.box (RatBounds.point 0) (RatBounds.point 0)
+  let params := axisCoefficientIntervals P.cell P.roots 0
+  (P.cell.rootsOKK P.roots && P.cell.sideGradientOKK && (params.d.get 1).value.ok &&
+      (params.d.get 2).value.ok &&
+      ((List.finRange 3).all fun j => (params.weight.get j).value.ok) &&
+      decide (0 ≤ B.cell.a.lo ∧ 1 ≤ B.exponent.lo ∧ B.exponent.hi ≤ 2 ∧ 1 ≤ B.base.lo)) &&
+    sideFirstFactorRangeOKK B.exponent (sideBaseShiftK P.cell) true P.first &&
+    sideFirstFactorRangeOKK B.slope (sideBaseShiftK P.cell) false P.slope &&
+    decide (P.terms = (P.canonicalInputsK params).parameterTerms)
+
+@[csimp] theorem SideFastParameter.check_eq_checkImpl :
+    @SideFastParameter.check = @SideFastParameter.checkImpl := by
+  funext P
+  have hshift : (sideBaseShiftK P.cell).val =
+      (P.box (RatBounds.point 0) (RatBounds.point 0)).baseShift :=
+    sideBaseShiftK_val (P.box (RatBounds.point 0) (RatBounds.point 0))
+  simp only [SideFastParameter.check, SideFastParameter.checkImpl, SideNearBox.parameterOK,
+    SideNearBox.dyadicValues, ParameterCell.rootsOKK_eq, ParameterCell.sideGradientOKK_eq,
+    sideFirstFactorRangeOKK_eq, hshift, SideFastParameter.canonicalInputsK_eq]
+  rfl
 
 def SideFastParameter.mixedInterval (P : SideFastParameter) (U V : RatBounds)
     (mixed : FactorSamples) : DyadicBounds :=
@@ -285,6 +382,7 @@ theorem four_checks {a b c d : Bool} (h : (a && b && c && d) = true) :
 theorem leaf {P : SideFastParameter} {U V : RatBounds} {S T : SideFastAxis}
     {M : FactorSamples} (hP : P.check = true) (hU : S.check U = true)
     (hV : T.check V = true) (h : P.leafCheck U V S T M = true) : SideConeOn P.cell U V := by
+  rw [SideFastParameter.check_eq_checkImpl] at hP
   obtain ⟨hp, base, slope, terms⟩ := four_checks hP
   obtain ⟨u₁, u₂, us, utable⟩ := four_checks hU
   obtain ⟨v₁, v₂, vs, vtable⟩ := four_checks hV

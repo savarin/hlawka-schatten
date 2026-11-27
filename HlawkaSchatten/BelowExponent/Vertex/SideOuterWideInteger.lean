@@ -37,12 +37,12 @@ theorem outerPoint_div_256 (n : ℤ) :
   have h : (n : ℚ) / 256 * ((DyadicBounds.units : ℕ) : ℚ) =
       ((n * 309485009821345068724781056 : ℤ) : ℚ) := by
     simp only [DyadicBounds.units]; push_cast; ring
-  simp only [DyadicBounds.point, DyadicBounds.ofRat, RatBounds.point, h, Int.floor_intCast,
+  simp only [DyadicBounds.point, DyadicBounds.ofRat_def, RatBounds.point, h, Int.floor_intCast,
     Int.ceil_intCast]
 
 /-- `lowerOK 0` without the division by 2^96. -/
 theorem outerLowerOK_zero (a : DyadicBounds) : a.lowerOK 0 = (a.ok && decide (0 ≤ a.lo)) := by
-  simp only [DyadicBounds.lowerOK, DyadicBounds.lower, DyadicBounds.units]
+  simp only [DyadicBounds.lowerOK_def, DyadicBounds.lower, DyadicBounds.units]
   congr 1
   apply decide_eq_decide.mpr
   constructor
@@ -162,7 +162,7 @@ theorem outerChord_point_eq (values : Array (Array ℤ)) (N : ℤ) (D : ℕ) (hD
   have hc : (W : ℚ) / ((D : ℚ) * 2^64) * ((DyadicBounds.units : ℕ) : ℚ) =
       ((W * 4294967296 : ℤ) : ℚ) / (D : ℚ) := by
     simp only [DyadicBounds.units]; push_cast; field_simp; ring
-  simp only [DyadicBounds.point, DyadicBounds.ofRat, RatBounds.point, hc,
+  simp only [DyadicBounds.point, DyadicBounds.ofRat_def, RatBounds.point, hc,
     Rat.floor_intCast_div_natCast,
     outerCeil_intCast_div_natCast]
 

@@ -7,6 +7,7 @@ Authors: Ezzeri Esa
 module
 
 public import HlawkaSchatten.BelowExponent.Vertex.SideConeFastDirect
+public import HlawkaSchatten.BelowExponent.Vertex.SideConeLeafKernel
 
 /-! Closed wider row rectangles with the same near-cone parameter checks. -/
 
@@ -23,8 +24,9 @@ structure SideCoarseAxis where
   data : SideFastAxis
   checked : data.check bounds = true
 
-def SideFastDirectTree.checkOn (U V : SideCoarseAxis) (C : ParameterCell) : SideFastDirectTree → Bool
-  | .leaf P _ M => C.containedIn P.cell && P.leafCheck U.bounds V.bounds U.data V.data M
+noncomputable def SideFastDirectTree.checkOn (U V : SideCoarseAxis) (C : ParameterCell) :
+    SideFastDirectTree → Bool
+  | .leaf P _ M => C.containedIn P.cell && P.leafCheckK U.bounds V.bounds U.data V.data M
   | .bisect k l r => l.checkOn U V (C.sideHalf k false) && r.checkOn U V (C.sideHalf k true)
 
 theorem SideFastDirectTree.checkOn_sound (U V : SideCoarseAxis) (C : ParameterCell)
@@ -32,6 +34,7 @@ theorem SideFastDirectTree.checkOn_sound (U V : SideCoarseAxis) (C : ParameterCe
   induction T generalizing C with
   | leaf P hp M =>
     obtain ⟨hc, ht⟩ := Bool.and_eq_true_iff.mp hT
+    rw [SideFastParameter.leafCheckK_eq] at ht
     intro a b η u v ha hu hv
     exact SideFastParameter.leafCheck_sound hp U.checked V.checked ht
       (ParameterCell.containedIn_sound hc ha) hu hv
@@ -47,7 +50,7 @@ structure SideCoarseTile where
   v : SideCoarseAxis
   tree : SideFastDirectTree
 
-def SideCoarseTile.check (C : ParameterCell) (T : SideCoarseTile) : Bool :=
+noncomputable def SideCoarseTile.check (C : ParameterCell) (T : SideCoarseTile) : Bool :=
   T.tree.checkOn T.u T.v C
 
 def SideCoarseTile.covers (T : SideCoarseTile) (ij : Fin 27 × Fin 36) : Bool :=

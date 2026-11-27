@@ -12,7 +12,7 @@ python3 scripts/certificates/g3/central_chart.py --check HlawkaSchatten/BelowExp
 python3 scripts/certificates/g3/head_literals.py --check HlawkaSchatten/BelowExponent/G3HeadDataCore.lean
 ```
 
-The first command reproduces the 1,307 Lean files from `plans.zip`, puts them into the
+The first command reproduces the 1,427 Lean files from `plans.zip`, puts them into the
 committed layout with [`layout.py`](../layout.py) and checks every file against `outputs.sha256`. To write those files elsewhere, pass `--output DIR`.
 The archive contains the recorded subdivisions, rational endpoints and witnesses.
 
@@ -28,6 +28,12 @@ records the selection rule, original archive digest and counts for every patch.
 The emitter performs no search. It checks signs, bounds and leaf counts before
 writing the two trees. `ratioUnion_signedGap` proves their union covers the same
 closed physical box, and `signed_box_pair` joins both signs without losing zero.
+
+Each signed patch has a checked table of complete endpoint and sigma power inputs.
+The geometry checker reuses a comparison only after an exact key match; otherwise
+it performs the full comparison. Its exact fraction arithmetic is proved equivalent
+to the original rational helpers on all inputs. Numeric modules import the checker
+and table; the physical patch assembly imports the soundness proofs.
 
 The second command reproduces the head chart’s 2,049 power bounds and 50 ratio
 rows. With no arguments it writes the Lean table declarations to standard output.

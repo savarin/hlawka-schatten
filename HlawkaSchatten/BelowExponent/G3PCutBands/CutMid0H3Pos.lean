@@ -26,6 +26,6 @@ def CutMid0H3PosTree : CertTree :=
   .cut 3 (3/4) (CutMid0H3PosPart0Tree) (CutMid0H3PosPart1Tree)
 
 set_option maxRecDepth 16000 in
-theorem CutMid0H3Pos_checked : CutMid0H3PosTree.commonOK CutMid0H3PosBox true = true := CertTree.commonCut_ok (CutMid0H3PosPart0_checked) (CutMid0H3PosPart1_checked)
+theorem CutMid0H3Pos_checked : CutMid0H3PosTree.geometryOK CutMid0H3PosPowerCache CutMid0H3PosBox true = true := CertTree.geometryCut_ok (CutMid0H3PosPart0_checked) (CutMid0H3PosPart1_checked)
 
 end HlawkaSchatten.BelowExponent.G3P

@@ -7,6 +7,7 @@ Authors: Ezzeri Esa
 module
 
 public import HlawkaSchatten.BelowExponent.G3PRatioSound
+public import HlawkaSchatten.BelowExponent.G3PGeometryCheckSound
 public import HlawkaSchatten.BelowExponent.G3PCutBands.CutTop2H4PosChart
 public import HlawkaSchatten.BelowExponent.G3PCutBands.CutTop2H4PosRest
 
@@ -23,6 +24,7 @@ namespace HlawkaSchatten.BelowExponent.G3P
 theorem CutTop2H4Pos_gap : SignedBoxGap CutTop2H4PosRestBox true :=
   ratioUnion_signedGap (B := CutTop2H4PosRestBox) true
     (by norm_num : (0 : ℚ) ≤ 1)
-    CutTop2H4PosChart_ok CutTop2H4PosRest_ok
+    (RatioChart.ok_of_geometryOK CutTop2H4PosPowerCache_valid CutTop2H4PosChart_ok)
+    (RatioRemainder.ok_of_geometryOK CutTop2H4PosPowerCache_valid CutTop2H4PosRest_ok)
 
 end HlawkaSchatten.BelowExponent.G3P
