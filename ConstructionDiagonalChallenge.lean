@@ -3,9 +3,12 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import Mathlib.Analysis.InnerProductSpace.SingularValues
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Topology.Order.Compact
+
+module
+
+public import Mathlib.Analysis.InnerProductSpace.SingularValues
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Topology.Order.Compact
 
 /-!
 # The sharp cyclic Hlawka constant for diagonal Schatten norms (Challenge)
@@ -23,6 +26,8 @@ The Schatten norm below is defined using singular values of the diagonal
 linear operator, matching the existence boundary. This statement concerns
 diagonal matrices; it does not assert the bound for arbitrary operators.
 -/
+
+@[expose] public section
 
 namespace PalomarHlawkaSchatten.ConstructionDiagonal
 

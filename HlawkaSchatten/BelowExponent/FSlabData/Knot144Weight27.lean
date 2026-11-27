@@ -1,0 +1,2701 @@
+/-
+Copyright (c) 2026 Ezzeri Esa. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Ezzeri Esa
+-/
+
+module
+
+public import HlawkaSchatten.BelowExponent.FSlabCheck
+
+/-! Exact data for the weighted F-slab facet checks: `Knot144Weight27`. -/
+
+set_option autoImplicit true
+set_option relaxedAutoImplicit true
+set_option linter.mathlibStandardSet false
+
+@[expose] public section
+
+namespace HlawkaSchatten.BelowExponent.FSlabCheck
+
+set_option maxRecDepth 40000
+set_option maxHeartbeats 0
+
+def k144w27Low : Band := ⟨144, 27, false⟩
+
+def k144w27LowChart0 : FacetNumeric.RowTree :=
+  (.splitA
+    (.splitB
+      (.splitA
+        (.splitB
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.box 10001 0)
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10001 0)
+                                      (.splitA
+                                        (.box 10000 0)
+                                        (.box 10000 0)
+                                      )
+                                    )
+                                    (.splitB
+                                      (.box 10001 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                )
+                                (.splitB
+                                  (.splitA
+                                    (.box 10001 0)
+                                    (.box 10000 0)
+                                  )
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                )
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                )
+                                (.splitB
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                  (.box 10000 0)
+                                )
+                              )
+                            )
+                            (.splitB
+                              (.box 127 128)
+                              (.box 127 126)
+                            )
+                          )
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.box 10000 0)
+                                  (.box 10000 0)
+                                )
+                                (.splitB
+                                  (.box 128 125)
+                                  (.box 128 124)
+                                )
+                              )
+                              (.splitA
+                                (.box 10000 0)
+                                (.box 128 122)
+                              )
+                            )
+                            (.splitB
+                              (.box 127 124)
+                              (.box 126 122)
+                            )
+                          )
+                        )
+                        (.splitB
+                          (.box 125 127)
+                          (.box 125 123)
+                        )
+                      )
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.box 128 120)
+                              (.box 128 118)
+                            )
+                            (.splitB
+                              (.box 126 120)
+                              (.box 126 118)
+                            )
+                          )
+                          (.splitA
+                            (.box 128 115)
+                            (.box 126 115)
+                          )
+                        )
+                        (.splitB
+                          (.box 125 119)
+                          (.box 123 115)
+                        )
+                      )
+                    )
+                    (.splitB
+                      (.box 121 125)
+                      (.box 121 117)
+                    )
+                  )
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.box 127 111)
+                          (.box 127 107)
+                        )
+                        (.box 124 110)
+                      )
+                      (.box 126 102)
+                    )
+                    (.splitB
+                      (.box 121 109)
+                      (.box 117 101)
+                    )
+                  )
+                )
+                (.splitB
+                  (.box 109 121)
+                  (.box 109 105)
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.box 125 93)
+                      (.box 125 85)
+                    )
+                    (.box 119 90)
+                  )
+                  (.splitA
+                    (.box 125 73)
+                    (.box 117 73)
+                  )
+                )
+                (.splitB
+                  (.box 113 90)
+                  (.box 105 73)
+                )
+              )
+            )
+            (.splitB
+              (.box 89 113)
+              (.box 89 81)
+            )
+          )
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.box 121 177)
+                  (.box 121 145)
+                )
+                (.splitB
+                  (.box 105 177)
+                  (.box 105 145)
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.box 121 225)
+                  (.box 121 257)
+                )
+                (.splitB
+                  (.box 105 225)
+                  (.box 105 257)
+                )
+              )
+            )
+            (.splitB
+              (.box 89 161)
+              (.splitA
+                (.splitB
+                  (.box 89 225)
+                  (.box 89 257)
+                )
+                (.splitB
+                  (.box 73 225)
+                  (.box 73 321)
+                )
+              )
+            )
+          )
+        )
+        (.splitB
+          (.box 161 97)
+          (.splitA
+            (.splitB
+              (.box 161 161)
+              (.splitA
+                (.splitB
+                  (.box 177 225)
+                  (.box 177 321)
+                )
+                (.box 145 257)
+              )
+            )
+            (.box 129 193)
+          )
+        )
+      )
+      (.splitA
+        (.splitB
+          (.splitA
+            (.splitB
+              (.box 113 257)
+              (.box 113 161)
+            )
+            (.splitB
+              (.splitA
+                (.box 89 257)
+                (.splitB
+                  (.box 73 0)
+                  (.box 73 225)
+                )
+              )
+              (.box 81 161)
+            )
+          )
+          (.box 97 97)
+        )
+        (.splitB
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.box 177 0)
+                  (.box 177 225)
+                )
+                (.box 145 257)
+              )
+              (.box 161 161)
+            )
+            (.box 129 193)
+          )
+          (.box 129 97)
+        )
+      )
+    )
+    (.splitB
+      (.splitA
+        (.splitB
+          (.box 129 97)
+          (.box 129 193)
+        )
+        (.box 97 65)
+      )
+      (.box 0 129)
+    )
+  )
+
+theorem k144w27LowChart0_ok : checkChart k144w27Low 0 k144w27LowChart0 = true := by decide +kernel
+
+def k144w27LowChart1 : FacetNumeric.RowTree :=
+  (.splitA
+    (.splitB
+      (.splitA
+        (.splitB
+          (.box 97 97)
+          (.splitA
+            (.splitB
+              (.box 113 161)
+              (.box 113 257)
+            )
+            (.splitB
+              (.box 81 161)
+              (.splitA
+                (.box 81 257)
+                (.splitB
+                  (.box 73 225)
+                  (.splitA
+                    (.box 77 321)
+                    (.box 67 321)
+                  )
+                )
+              )
+            )
+          )
+        )
+        (.splitB
+          (.box 129 97)
+          (.splitA
+            (.splitB
+              (.box 161 161)
+              (.splitA
+                (.splitB
+                  (.box 177 225)
+                  (.splitA
+                    (.splitB
+                      (.box 185 289)
+                      (.box 185 0)
+                    )
+                    (.box 169 321)
+                  )
+                )
+                (.splitB
+                  (.box 145 225)
+                  (.box 161 321)
+                )
+              )
+            )
+            (.box 129 193)
+          )
+        )
+      )
+      (.splitA
+        (.splitB
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.box 121 257)
+                  (.box 121 225)
+                )
+                (.splitB
+                  (.box 105 257)
+                  (.box 105 225)
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.box 121 145)
+                  (.box 121 177)
+                )
+                (.splitB
+                  (.box 105 145)
+                  (.box 105 177)
+                )
+              )
+            )
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.box 89 321)
+                  (.box 89 225)
+                )
+                (.splitB
+                  (.splitA
+                    (.box 77 321)
+                    (.box 67 321)
+                  )
+                  (.box 73 225)
+                )
+              )
+              (.box 89 161)
+            )
+          )
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.box 125 73)
+                    (.box 117 73)
+                  )
+                  (.splitA
+                    (.splitB
+                      (.box 125 85)
+                      (.box 125 93)
+                    )
+                    (.splitB
+                      (.box 117 85)
+                      (.box 117 93)
+                    )
+                  )
+                )
+                (.splitB
+                  (.box 105 74)
+                  (.box 109 89)
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.box 127 101)
+                        (.box 123 101)
+                      )
+                      (.splitA
+                        (.splitB
+                          (.box 127 107)
+                          (.box 127 111)
+                        )
+                        (.splitB
+                          (.box 123 107)
+                          (.box 123 111)
+                        )
+                      )
+                    )
+                    (.splitB
+                      (.box 117 102)
+                      (.box 119 109)
+                    )
+                  )
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.box 128 115)
+                            (.box 126 115)
+                          )
+                          (.splitA
+                            (.splitB
+                              (.box 128 118)
+                              (.box 128 120)
+                            )
+                            (.splitB
+                              (.box 126 118)
+                              (.box 126 120)
+                            )
+                          )
+                        )
+                        (.splitB
+                          (.box 125 115)
+                          (.box 124 119)
+                        )
+                      )
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.box 10000 0)
+                                (.box 10000 0)
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.box 10000 0)
+                                  (.box 10000 0)
+                                )
+                                (.splitB
+                                  (.box 10000 0)
+                                  (.box 10000 0)
+                                )
+                              )
+                            )
+                            (.splitB
+                              (.box 127 122)
+                              (.splitA
+                                (.box 127 124)
+                                (.box 126 124)
+                              )
+                            )
+                          )
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                )
+                                (.splitB
+                                  (.box 10000 0)
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                )
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.splitA
+                                        (.box 10000 0)
+                                        (.box 10000 0)
+                                      )
+                                      (.box 10001 0)
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10001 0)
+                                    )
+                                  )
+                                  (.box 10001 0)
+                                )
+                                (.splitB
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                  (.splitA
+                                    (.box 10001 0)
+                                    (.box 10000 0)
+                                  )
+                                )
+                              )
+                            )
+                            (.splitB
+                              (.splitA
+                                (.box 127 126)
+                                (.box 126 126)
+                              )
+                              (.box 127 128)
+                            )
+                          )
+                        )
+                        (.splitB
+                          (.box 124 123)
+                          (.box 125 127)
+                        )
+                      )
+                    )
+                    (.splitB
+                      (.box 119 117)
+                      (.box 121 125)
+                    )
+                  )
+                )
+                (.splitB
+                  (.box 109 105)
+                  (.box 113 121)
+                )
+              )
+            )
+            (.splitB
+              (.box 89 81)
+              (.box 97 112)
+            )
+          )
+        )
+        (.splitB
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.box 185 385)
+                      (.box 185 289)
+                    )
+                    (.box 169 321)
+                  )
+                  (.box 177 225)
+                )
+                (.splitB
+                  (.box 161 321)
+                  (.box 145 225)
+                )
+              )
+              (.box 161 161)
+            )
+            (.box 129 193)
+          )
+          (.box 161 97)
+        )
+      )
+    )
+    (.splitB
+      (.box 0 129)
+      (.splitA
+        (.splitB
+          (.box 129 193)
+          (.box 129 97)
+        )
+        (.box 97 65)
+      )
+    )
+  )
+
+theorem k144w27LowChart1_ok : checkChart k144w27Low 1 k144w27LowChart1 = true := by decide +kernel
+
+def k144w27LowChart2 : FacetNumeric.RowTree :=
+  (.splitA
+    (.splitB
+      (.splitA
+        (.box 65 129)
+        (.splitB
+          (.box 129 97)
+          (.splitA
+            (.box 161 193)
+            (.splitB
+              (.box 193 161)
+              (.splitA
+                (.box 225 257)
+                (.splitB
+                  (.box 257 225)
+                  (.splitA
+                    (.box 289 321)
+                    (.splitB
+                      (.box 321 289)
+                      (.box 385 385)
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (.splitA
+        (.splitB
+          (.splitA
+            (.box 105 162)
+            (.splitB
+              (.box 81 129)
+              (.splitA
+                (.box 89 177)
+                (.splitB
+                  (.box 73 145)
+                  (.box 72 184)
+                )
+              )
+            )
+          )
+          (.splitA
+            (.splitB
+              (.splitA
+                (.box 113 90)
+                (.splitB
+                  (.box 105 81)
+                  (.splitA
+                    (.box 109 93)
+                    (.splitB
+                      (.box 101 85)
+                      (.box 101 94)
+                    )
+                  )
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.box 121 110)
+                    (.splitB
+                      (.box 117 105)
+                      (.splitA
+                        (.box 119 111)
+                        (.splitB
+                          (.box 115 107)
+                          (.splitA
+                            (.box 116 111)
+                            (.box 114 111)
+                          )
+                        )
+                      )
+                    )
+                  )
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.box 126 119)
+                        (.splitB
+                          (.box 123 117)
+                          (.splitA
+                            (.box 124 120)
+                            (.splitB
+                              (.box 122 118)
+                              (.splitA
+                                (.box 122 120)
+                                (.splitB
+                                  (.box 122 120)
+                                  (.box 122 121)
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.box 128 122)
+                              (.box 127 125)
+                            )
+                            (.splitB
+                              (.box 126 123)
+                              (.splitA
+                                (.splitB
+                                  (.box 127 124)
+                                  (.box 126 125)
+                                )
+                                (.splitB
+                                  (.box 125 124)
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                )
+                              )
+                            )
+                          )
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.box 1 126)
+                                  (.box 128 127)
+                                )
+                                (.splitB
+                                  (.box 127 126)
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.splitA
+                                        (.box 10000 0)
+                                        (.box 10000 0)
+                                      )
+                                    )
+                                  )
+                                )
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10001 0)
+                                    )
+                                    (.splitB
+                                      (.splitA
+                                        (.box 10000 0)
+                                        (.box 10000 0)
+                                      )
+                                      (.box 10001 0)
+                                    )
+                                  )
+                                  (.box 10001 0)
+                                )
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.splitA
+                                        (.splitB
+                                          (.box 10000 0)
+                                          (.box 10001 0)
+                                        )
+                                        (.splitB
+                                          (.box 10000 0)
+                                          (.box 10001 0)
+                                        )
+                                      )
+                                      (.box 10001 0)
+                                    )
+                                    (.splitB
+                                      (.splitA
+                                        (.splitB
+                                          (.box 10000 0)
+                                          (.box 10001 0)
+                                        )
+                                        (.box 10000 0)
+                                      )
+                                      (.splitA
+                                        (.box 10001 0)
+                                        (.box 10000 0)
+                                      )
+                                    )
+                                  )
+                                  (.splitA
+                                    (.box 10001 0)
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                )
+                              )
+                            )
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.splitA
+                                        (.box 10000 0)
+                                        (.box 10000 0)
+                                      )
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                )
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                    (.box 10000 0)
+                                  )
+                                  (.splitA
+                                    (.splitB
+                                      (.box 126 126)
+                                      (.box 126 127)
+                                    )
+                                    (.box 10000 0)
+                                  )
+                                )
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.splitA
+                                        (.box 10000 0)
+                                        (.box 10000 0)
+                                      )
+                                      (.box 10000 0)
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                  (.box 127 128)
+                                )
+                                (.splitB
+                                  (.box 126 127)
+                                  (.box 126 1)
+                                )
+                              )
+                            )
+                          )
+                        )
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.box 125 122)
+                                  (.box 124 123)
+                                )
+                                (.splitB
+                                  (.box 124 122)
+                                  (.box 10000 0)
+                                )
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.box 10000 0)
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                )
+                                (.splitB
+                                  (.box 10000 0)
+                                  (.box 10000 0)
+                                )
+                              )
+                            )
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.box 122 122)
+                                  (.box 10000 0)
+                                )
+                                (.box 10000 0)
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.box 123 123)
+                                  (.box 123 125)
+                                )
+                                (.box 122 124)
+                              )
+                            )
+                          )
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                  (.box 125 126)
+                                )
+                                (.splitB
+                                  (.box 124 125)
+                                  (.box 124 127)
+                                )
+                              )
+                              (.box 125 128)
+                            )
+                            (.box 122 126)
+                          )
+                        )
+                      )
+                    )
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.box 120 116)
+                            (.splitB
+                              (.box 118 114)
+                              (.box 118 116)
+                            )
+                          )
+                          (.splitA
+                            (.splitB
+                              (.box 120 118)
+                              (.splitA
+                                (.box 121 120)
+                                (.box 120 120)
+                              )
+                            )
+                            (.splitB
+                              (.box 118 118)
+                              (.box 118 120)
+                            )
+                          )
+                        )
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.box 116 114)
+                              (.box 116 116)
+                            )
+                            (.box 114 115)
+                          )
+                          (.splitA
+                            (.splitB
+                              (.box 116 118)
+                              (.box 116 120)
+                            )
+                            (.box 114 119)
+                          )
+                        )
+                      )
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.box 121 122)
+                                (.box 120 122)
+                              )
+                              (.box 120 124)
+                            )
+                            (.box 118 122)
+                          )
+                          (.box 119 125)
+                        )
+                        (.box 115 123)
+                      )
+                    )
+                  )
+                )
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.box 111 103)
+                        (.box 107 102)
+                      )
+                      (.splitA
+                        (.splitB
+                          (.box 111 107)
+                          (.splitA
+                            (.box 112 111)
+                            (.box 110 111)
+                          )
+                        )
+                        (.splitB
+                          (.box 107 107)
+                          (.box 107 111)
+                        )
+                      )
+                    )
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.box 103 99)
+                          (.box 103 103)
+                        )
+                        (.box 99 101)
+                      )
+                      (.splitA
+                        (.box 103 108)
+                        (.box 99 109)
+                      )
+                    )
+                  )
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.box 112 115)
+                          (.box 111 119)
+                        )
+                        (.box 107 115)
+                      )
+                      (.box 109 121)
+                    )
+                    (.box 101 117)
+                  )
+                )
+              )
+            )
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.box 93 77)
+                    (.box 85 76)
+                  )
+                  (.splitA
+                    (.splitB
+                      (.box 93 85)
+                      (.box 93 94)
+                    )
+                    (.splitB
+                      (.box 85 85)
+                      (.box 85 93)
+                    )
+                  )
+                )
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.box 77 69)
+                      (.box 77 77)
+                    )
+                    (.box 69 73)
+                  )
+                  (.splitA
+                    (.box 81 86)
+                    (.box 69 89)
+                  )
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.box 93 100)
+                      (.box 93 109)
+                    )
+                    (.box 85 101)
+                  )
+                  (.box 89 113)
+                )
+                (.box 73 105)
+              )
+            )
+          )
+        )
+        (.splitB
+          (.splitA
+            (.splitB
+              (.splitA
+                (.box 177 225)
+                (.splitB
+                  (.box 145 257)
+                  (.box 145 225)
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.box 177 145)
+                  (.splitA
+                    (.box 185 177)
+                    (.box 169 177)
+                  )
+                )
+                (.splitB
+                  (.box 145 145)
+                  (.box 145 177)
+                )
+              )
+            )
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.box 225 257)
+                  (.box 225 225)
+                )
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.box 289 321)
+                      (.box 289 289)
+                    )
+                    (.splitB
+                      (.box 385 385)
+                      (.box 321 289)
+                    )
+                  )
+                  (.box 257 225)
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.box 225 145)
+                  (.box 225 177)
+                )
+                (.box 257 145)
+              )
+            )
+          )
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.box 185 73)
+                  (.box 177 89)
+                )
+                (.box 145 73)
+              )
+              (.box 161 97)
+            )
+            (.box 129 81)
+          )
+        )
+      )
+    )
+    (.splitB
+      (.splitA
+        (.splitB
+          (.splitA
+            (.box 193 97)
+            (.box 161 97)
+          )
+          (.splitA
+            (.splitB
+              (.box 193 161)
+              (.splitA
+                (.splitB
+                  (.box 257 225)
+                  (.splitA
+                    (.splitB
+                      (.box 321 289)
+                      (.box 385 385)
+                    )
+                    (.box 289 257)
+                  )
+                )
+                (.box 225 193)
+              )
+            )
+            (.splitB
+              (.box 161 161)
+              (.box 161 193)
+            )
+          )
+        )
+        (.splitB
+          (.box 97 81)
+          (.box 81 129)
+        )
+      )
+      (.splitA
+        (.splitB
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.box 385 385)
+                      (.box 321 289)
+                    )
+                    (.box 289 257)
+                  )
+                  (.box 257 225)
+                )
+                (.box 225 193)
+              )
+              (.box 193 161)
+            )
+            (.box 161 193)
+          )
+          (.box 129 65)
+        )
+        (.box 97 129)
+      )
+    )
+  )
+
+theorem k144w27LowChart2_ok : checkChart k144w27Low 2 k144w27LowChart2 = true := by decide +kernel
+
+def k144w27High : Band := ⟨144, 27, true⟩
+
+def k144w27HighChart0 : FacetNumeric.RowTree :=
+  (.splitA
+    (.splitB
+      (.splitA
+        (.splitB
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.box 10001 0)
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10001 0)
+                                      (.splitA
+                                        (.box 10000 0)
+                                        (.box 10000 0)
+                                      )
+                                    )
+                                    (.splitB
+                                      (.box 10001 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                )
+                                (.splitB
+                                  (.splitA
+                                    (.box 10001 0)
+                                    (.box 10000 0)
+                                  )
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                )
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                )
+                                (.splitB
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                  (.box 10000 0)
+                                )
+                              )
+                            )
+                            (.splitB
+                              (.splitA
+                                (.box 127 128)
+                                (.box 126 128)
+                              )
+                              (.splitA
+                                (.box 127 126)
+                                (.box 126 126)
+                              )
+                            )
+                          )
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.box 10000 0)
+                                  (.box 10000 0)
+                                )
+                                (.splitB
+                                  (.box 128 125)
+                                  (.box 128 124)
+                                )
+                              )
+                              (.splitA
+                                (.box 10000 0)
+                                (.box 128 122)
+                              )
+                            )
+                            (.splitB
+                              (.splitA
+                                (.box 127 124)
+                                (.box 126 124)
+                              )
+                              (.box 126 122)
+                            )
+                          )
+                        )
+                        (.splitB
+                          (.splitA
+                            (.box 125 127)
+                            (.box 122 127)
+                          )
+                          (.box 124 123)
+                        )
+                      )
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.box 128 120)
+                              (.box 128 118)
+                            )
+                            (.splitB
+                              (.box 126 120)
+                              (.box 126 118)
+                            )
+                          )
+                          (.splitA
+                            (.box 128 115)
+                            (.box 126 115)
+                          )
+                        )
+                        (.splitB
+                          (.box 124 119)
+                          (.box 123 115)
+                        )
+                      )
+                    )
+                    (.splitB
+                      (.splitA
+                        (.box 121 125)
+                        (.box 115 125)
+                      )
+                      (.box 119 117)
+                    )
+                  )
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.box 127 111)
+                          (.box 127 107)
+                        )
+                        (.box 123 110)
+                      )
+                      (.box 126 102)
+                    )
+                    (.splitB
+                      (.box 117 110)
+                      (.box 117 101)
+                    )
+                  )
+                )
+                (.splitB
+                  (.box 110 121)
+                  (.box 109 105)
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.box 125 93)
+                      (.box 125 85)
+                    )
+                    (.box 119 90)
+                  )
+                  (.splitA
+                    (.box 125 73)
+                    (.box 117 73)
+                  )
+                )
+                (.splitB
+                  (.box 109 89)
+                  (.box 105 73)
+                )
+              )
+            )
+            (.splitB
+              (.box 90 113)
+              (.box 89 81)
+            )
+          )
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.box 121 177)
+                  (.box 121 145)
+                )
+                (.splitB
+                  (.box 105 177)
+                  (.box 105 145)
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.box 121 225)
+                  (.box 121 257)
+                )
+                (.box 105 194)
+              )
+            )
+            (.splitB
+              (.splitA
+                (.box 89 161)
+                (.box 73 161)
+              )
+              (.splitA
+                (.splitB
+                  (.box 89 225)
+                  (.box 89 257)
+                )
+                (.splitB
+                  (.box 73 225)
+                  (.box 73 257)
+                )
+              )
+            )
+          )
+        )
+        (.splitB
+          (.splitA
+            (.box 65 97)
+            (.box 193 97)
+          )
+          (.splitA
+            (.splitB
+              (.box 161 161)
+              (.splitA
+                (.splitB
+                  (.box 177 225)
+                  (.box 177 257)
+                )
+                (.box 161 193)
+              )
+            )
+            (.splitB
+              (.box 193 161)
+              (.box 129 193)
+            )
+          )
+        )
+      )
+      (.splitA
+        (.splitB
+          (.splitA
+            (.splitB
+              (.box 113 257)
+              (.box 113 161)
+            )
+            (.splitB
+              (.splitA
+                (.box 89 257)
+                (.box 73 257)
+              )
+              (.box 81 161)
+            )
+          )
+          (.box 97 97)
+        )
+        (.splitB
+          (.splitA
+            (.splitB
+              (.splitA
+                (.box 177 257)
+                (.box 145 0)
+              )
+              (.box 161 161)
+            )
+            (.box 129 193)
+          )
+          (.box 129 97)
+        )
+      )
+    )
+    (.splitB
+      (.splitA
+        (.splitB
+          (.box 129 97)
+          (.box 0 129)
+        )
+        (.box 97 65)
+      )
+      (.splitA
+        (.box 0 129)
+        (.box 97 65)
+      )
+    )
+  )
+
+theorem k144w27HighChart0_ok : checkChart k144w27High 0 k144w27HighChart0 = true := by decide +kernel
+
+def k144w27HighChart1 : FacetNumeric.RowTree :=
+  (.splitA
+    (.splitB
+      (.splitA
+        (.splitB
+          (.box 97 97)
+          (.splitA
+            (.splitB
+              (.box 113 161)
+              (.box 113 257)
+            )
+            (.splitB
+              (.box 81 161)
+              (.splitA
+                (.box 81 257)
+                (.splitB
+                  (.box 73 225)
+                  (.splitA
+                    (.box 77 321)
+                    (.box 67 321)
+                  )
+                )
+              )
+            )
+          )
+        )
+        (.splitB
+          (.box 160 80)
+          (.splitA
+            (.splitB
+              (.box 161 161)
+              (.splitA
+                (.splitB
+                  (.box 177 225)
+                  (.splitA
+                    (.splitB
+                      (.box 185 289)
+                      (.box 185 385)
+                    )
+                    (.splitB
+                      (.box 169 289)
+                      (.box 169 385)
+                    )
+                  )
+                )
+                (.splitB
+                  (.box 145 225)
+                  (.box 153 321)
+                )
+              )
+            )
+            (.splitB
+              (.box 193 161)
+              (.box 225 257)
+            )
+          )
+        )
+      )
+      (.splitA
+        (.splitB
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.box 121 257)
+                  (.box 121 225)
+                )
+                (.splitB
+                  (.box 105 257)
+                  (.box 105 225)
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.box 121 145)
+                  (.box 121 178)
+                )
+                (.splitB
+                  (.box 105 145)
+                  (.box 105 178)
+                )
+              )
+            )
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.box 89 321)
+                  (.box 89 225)
+                )
+                (.splitB
+                  (.splitA
+                    (.box 77 321)
+                    (.box 67 321)
+                  )
+                  (.box 73 225)
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.box 89 145)
+                  (.box 89 177)
+                )
+                (.box 73 161)
+              )
+            )
+          )
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.box 125 74)
+                    (.box 117 74)
+                  )
+                  (.splitA
+                    (.splitB
+                      (.box 125 85)
+                      (.box 125 93)
+                    )
+                    (.splitB
+                      (.box 117 85)
+                      (.box 117 93)
+                    )
+                  )
+                )
+                (.splitB
+                  (.box 109 73)
+                  (.splitA
+                    (.box 113 89)
+                    (.box 101 89)
+                  )
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.box 127 102)
+                        (.box 123 102)
+                      )
+                      (.splitA
+                        (.splitB
+                          (.box 127 107)
+                          (.box 127 111)
+                        )
+                        (.splitB
+                          (.box 123 107)
+                          (.box 123 111)
+                        )
+                      )
+                    )
+                    (.splitB
+                      (.box 119 101)
+                      (.splitA
+                        (.box 121 109)
+                        (.box 115 109)
+                      )
+                    )
+                  )
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.box 128 114)
+                              (.box 128 116)
+                            )
+                            (.splitB
+                              (.box 126 114)
+                              (.box 126 116)
+                            )
+                          )
+                          (.splitA
+                            (.splitB
+                              (.box 128 118)
+                              (.box 128 120)
+                            )
+                            (.splitB
+                              (.box 126 118)
+                              (.box 126 120)
+                            )
+                          )
+                        )
+                        (.splitB
+                          (.box 124 115)
+                          (.splitA
+                            (.box 125 119)
+                            (.box 122 119)
+                          )
+                        )
+                      )
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.box 128 122)
+                                  (.box 10000 0)
+                                )
+                                (.splitB
+                                  (.box 128 122)
+                                  (.box 10000 0)
+                                )
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.box 10000 0)
+                                  (.box 10000 0)
+                                )
+                                (.splitB
+                                  (.box 10000 0)
+                                  (.box 10000 0)
+                                )
+                              )
+                            )
+                            (.splitB
+                              (.splitA
+                                (.box 127 122)
+                                (.box 126 122)
+                              )
+                              (.splitA
+                                (.box 127 124)
+                                (.box 126 124)
+                              )
+                            )
+                          )
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                )
+                                (.splitB
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                  (.splitA
+                                    (.splitB
+                                      (.box 128 126)
+                                      (.box 128 127)
+                                    )
+                                    (.box 10000 0)
+                                  )
+                                )
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.splitA
+                                        (.splitB
+                                          (.box 10000 0)
+                                          (.box 10001 0)
+                                        )
+                                        (.splitB
+                                          (.box 10000 0)
+                                          (.box 10001 0)
+                                        )
+                                      )
+                                      (.box 10001 0)
+                                    )
+                                    (.splitB
+                                      (.splitA
+                                        (.box 10000 0)
+                                        (.box 10000 0)
+                                      )
+                                      (.box 10001 0)
+                                    )
+                                  )
+                                  (.box 10001 0)
+                                )
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.box 128 127)
+                                      (.box 10001 0)
+                                    )
+                                    (.box 10000 0)
+                                  )
+                                  (.splitA
+                                    (.box 10001 0)
+                                    (.box 10000 0)
+                                  )
+                                )
+                              )
+                            )
+                            (.splitB
+                              (.splitA
+                                (.box 127 126)
+                                (.box 126 126)
+                              )
+                              (.splitA
+                                (.box 127 128)
+                                (.box 126 128)
+                              )
+                            )
+                          )
+                        )
+                        (.splitB
+                          (.splitA
+                            (.box 125 123)
+                            (.box 122 123)
+                          )
+                          (.splitA
+                            (.box 125 127)
+                            (.box 122 127)
+                          )
+                        )
+                      )
+                    )
+                    (.splitB
+                      (.splitA
+                        (.box 121 117)
+                        (.box 115 117)
+                      )
+                      (.box 120 125)
+                    )
+                  )
+                )
+                (.splitB
+                  (.box 110 105)
+                  (.box 110 121)
+                )
+              )
+            )
+            (.splitB
+              (.splitA
+                (.box 97 80)
+                (.box 73 81)
+              )
+              (.box 90 112)
+            )
+          )
+        )
+        (.splitB
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.box 185 0)
+                      (.box 185 289)
+                    )
+                    (.splitB
+                      (.box 169 0)
+                      (.box 169 289)
+                    )
+                  )
+                  (.box 177 225)
+                )
+                (.splitB
+                  (.box 153 321)
+                  (.box 145 225)
+                )
+              )
+              (.box 161 161)
+            )
+            (.splitB
+              (.box 129 257)
+              (.box 193 161)
+            )
+          )
+          (.splitA
+            (.box 65 97)
+            (.box 193 97)
+          )
+        )
+      )
+    )
+    (.splitB
+      (.splitA
+        (.splitB
+          (.box 129 97)
+          (.box 0 129)
+        )
+        (.box 97 65)
+      )
+      (.splitA
+        (.splitB
+          (.box 0 129)
+          (.box 129 97)
+        )
+        (.box 97 65)
+      )
+    )
+  )
+
+theorem k144w27HighChart1_ok : checkChart k144w27High 1 k144w27HighChart1 = true := by decide +kernel
+
+def k144w27HighChart2 : FacetNumeric.RowTree :=
+  (.splitA
+    (.splitB
+      (.splitA
+        (.splitB
+          (.box 97 97)
+          (.box 97 193)
+        )
+        (.splitB
+          (.box 129 80)
+          (.splitA
+            (.splitB
+              (.box 161 161)
+              (.box 161 257)
+            )
+            (.splitB
+              (.box 193 129)
+              (.splitA
+                (.splitB
+                  (.box 225 225)
+                  (.box 225 321)
+                )
+                (.splitB
+                  (.box 257 193)
+                  (.splitA
+                    (.splitB
+                      (.box 289 289)
+                      (.box 257 385)
+                    )
+                    (.splitB
+                      (.box 321 257)
+                      (.splitA
+                        (.splitB
+                          (.box 353 353)
+                          (.box 337 385)
+                        )
+                        (.splitB
+                          (.box 385 353)
+                          (.box 416 386)
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (.splitA
+        (.splitB
+          (.splitA
+            (.splitB
+              (.box 113 193)
+              (.box 105 177)
+            )
+            (.splitB
+              (.box 81 225)
+              (.splitA
+                (.splitB
+                  (.box 89 145)
+                  (.box 89 185)
+                )
+                (.splitB
+                  (.box 73 145)
+                  (.splitA
+                    (.box 77 185)
+                    (.box 69 178)
+                  )
+                )
+              )
+            )
+          )
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.box 121 73)
+                  (.box 117 93)
+                )
+                (.splitB
+                  (.box 105 78)
+                  (.splitA
+                    (.splitB
+                      (.box 109 85)
+                      (.box 109 95)
+                    )
+                    (.splitB
+                      (.box 101 85)
+                      (.splitA
+                        (.box 103 93)
+                        (.box 99 93)
+                      )
+                    )
+                  )
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.box 125 101)
+                      (.box 123 111)
+                    )
+                    (.splitB
+                      (.box 115 103)
+                      (.splitA
+                        (.splitB
+                          (.box 119 107)
+                          (.box 119 112)
+                        )
+                        (.splitB
+                          (.box 115 107)
+                          (.splitA
+                            (.box 116 111)
+                            (.box 114 111)
+                          )
+                        )
+                      )
+                    )
+                  )
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.box 127 115)
+                          (.box 126 120)
+                        )
+                        (.splitB
+                          (.box 122 116)
+                          (.splitA
+                            (.splitB
+                              (.box 124 118)
+                              (.splitA
+                                (.box 125 120)
+                                (.box 123 120)
+                              )
+                            )
+                            (.splitB
+                              (.box 122 118)
+                              (.splitA
+                                (.splitB
+                                  (.box 123 120)
+                                  (.box 123 121)
+                                )
+                                (.splitB
+                                  (.box 122 120)
+                                  (.box 121 121)
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.box 128 122)
+                              (.splitA
+                                (.box 1 125)
+                                (.splitB
+                                  (.box 128 124)
+                                  (.box 127 125)
+                                )
+                              )
+                            )
+                            (.splitB
+                              (.splitA
+                                (.box 127 122)
+                                (.box 125 122)
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.box 127 124)
+                                  (.splitA
+                                    (.box 127 125)
+                                    (.box 126 125)
+                                  )
+                                )
+                                (.splitB
+                                  (.box 125 124)
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                )
+                              )
+                            )
+                          )
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.box 128 126)
+                                  (.splitA
+                                    (.box 1 127)
+                                    (.splitB
+                                      (.box 128 126)
+                                      (.box 128 127)
+                                    )
+                                  )
+                                )
+                                (.splitB
+                                  (.splitA
+                                    (.box 128 126)
+                                    (.splitB
+                                      (.box 127 125)
+                                      (.box 127 126)
+                                    )
+                                  )
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.splitA
+                                        (.box 128 127)
+                                        (.box 10000 0)
+                                      )
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.splitA
+                                        (.box 10000 0)
+                                        (.box 10000 0)
+                                      )
+                                    )
+                                  )
+                                )
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10001 0)
+                                    )
+                                    (.splitB
+                                      (.splitA
+                                        (.box 10000 0)
+                                        (.splitB
+                                          (.box 128 127)
+                                          (.box 10001 0)
+                                        )
+                                      )
+                                      (.box 10001 0)
+                                    )
+                                  )
+                                  (.box 10001 0)
+                                )
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.splitA
+                                        (.splitB
+                                          (.box 10000 0)
+                                          (.box 10001 0)
+                                        )
+                                        (.splitB
+                                          (.box 10000 0)
+                                          (.box 10001 0)
+                                        )
+                                      )
+                                      (.box 10001 0)
+                                    )
+                                    (.splitB
+                                      (.splitA
+                                        (.splitB
+                                          (.box 10000 0)
+                                          (.box 10001 0)
+                                        )
+                                        (.box 10000 0)
+                                      )
+                                      (.splitA
+                                        (.box 10001 0)
+                                        (.box 10000 0)
+                                      )
+                                    )
+                                  )
+                                  (.splitA
+                                    (.box 10001 0)
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                )
+                              )
+                            )
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.splitA
+                                        (.box 10000 0)
+                                        (.box 10000 0)
+                                      )
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                )
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                    (.box 10000 0)
+                                  )
+                                  (.splitA
+                                    (.splitB
+                                      (.box 126 126)
+                                      (.box 126 127)
+                                    )
+                                    (.box 10000 0)
+                                  )
+                                )
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.splitB
+                                      (.splitA
+                                        (.box 10000 0)
+                                        (.box 10000 0)
+                                      )
+                                      (.box 10000 0)
+                                    )
+                                    (.splitB
+                                      (.box 10000 0)
+                                      (.box 10000 0)
+                                    )
+                                  )
+                                  (.box 127 128)
+                                )
+                                (.splitB
+                                  (.box 126 127)
+                                  (.box 126 1)
+                                )
+                              )
+                            )
+                          )
+                        )
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.box 125 122)
+                                  (.box 124 123)
+                                )
+                                (.splitB
+                                  (.box 123 122)
+                                  (.box 10000 0)
+                                )
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.box 10000 0)
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                )
+                                (.splitB
+                                  (.box 10000 0)
+                                  (.box 124 124)
+                                )
+                              )
+                            )
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.box 10000 0)
+                                  (.box 10000 0)
+                                )
+                                (.box 10000 0)
+                              )
+                              (.splitA
+                                (.splitB
+                                  (.box 123 123)
+                                  (.box 123 125)
+                                )
+                                (.box 122 124)
+                              )
+                            )
+                          )
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.splitB
+                                  (.splitA
+                                    (.box 10000 0)
+                                    (.box 10000 0)
+                                  )
+                                  (.box 125 126)
+                                )
+                                (.box 124 126)
+                              )
+                              (.box 125 128)
+                            )
+                            (.box 123 126)
+                          )
+                        )
+                      )
+                    )
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.box 120 114)
+                              (.box 120 116)
+                            )
+                            (.splitB
+                              (.box 118 114)
+                              (.box 118 116)
+                            )
+                          )
+                          (.splitA
+                            (.splitB
+                              (.box 120 118)
+                              (.splitA
+                                (.box 121 120)
+                                (.box 120 120)
+                              )
+                            )
+                            (.splitB
+                              (.box 118 118)
+                              (.box 118 120)
+                            )
+                          )
+                        )
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.box 116 114)
+                              (.box 116 116)
+                            )
+                            (.box 114 115)
+                          )
+                          (.splitA
+                            (.splitB
+                              (.box 116 118)
+                              (.box 116 120)
+                            )
+                            (.box 114 119)
+                          )
+                        )
+                      )
+                      (.splitA
+                        (.splitB
+                          (.splitA
+                            (.splitB
+                              (.splitA
+                                (.box 121 122)
+                                (.box 120 122)
+                              )
+                              (.box 120 124)
+                            )
+                            (.box 118 122)
+                          )
+                          (.box 119 126)
+                        )
+                        (.box 115 123)
+                      )
+                    )
+                  )
+                )
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.box 111 102)
+                        (.splitB
+                          (.box 107 99)
+                          (.box 107 103)
+                        )
+                      )
+                      (.splitA
+                        (.splitB
+                          (.box 111 107)
+                          (.splitA
+                            (.box 112 111)
+                            (.box 110 111)
+                          )
+                        )
+                        (.splitB
+                          (.box 107 107)
+                          (.box 107 111)
+                        )
+                      )
+                    )
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.box 103 99)
+                          (.box 103 103)
+                        )
+                        (.box 99 101)
+                      )
+                      (.box 103 108)
+                    )
+                  )
+                  (.splitA
+                    (.splitB
+                      (.splitA
+                        (.splitB
+                          (.box 112 115)
+                          (.box 111 119)
+                        )
+                        (.box 107 115)
+                      )
+                      (.box 109 123)
+                    )
+                    (.box 101 117)
+                  )
+                )
+              )
+            )
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.box 93 76)
+                    (.splitB
+                      (.box 85 69)
+                      (.box 85 77)
+                    )
+                  )
+                  (.splitA
+                    (.splitB
+                      (.box 93 85)
+                      (.box 94 93)
+                    )
+                    (.splitB
+                      (.box 85 85)
+                      (.box 85 93)
+                    )
+                  )
+                )
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.box 77 69)
+                      (.box 77 77)
+                    )
+                    (.box 69 73)
+                  )
+                  (.box 77 86)
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.box 93 100)
+                      (.box 93 109)
+                    )
+                    (.box 85 101)
+                  )
+                  (.box 89 117)
+                )
+                (.box 73 105)
+              )
+            )
+          )
+        )
+        (.splitB
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.box 177 257)
+                  (.box 177 225)
+                )
+                (.splitB
+                  (.box 145 257)
+                  (.box 145 225)
+                )
+              )
+              (.splitA
+                (.splitB
+                  (.box 177 146)
+                  (.splitA
+                    (.box 185 177)
+                    (.box 169 177)
+                  )
+                )
+                (.splitB
+                  (.box 145 145)
+                  (.box 145 177)
+                )
+              )
+            )
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.box 241 257)
+                    (.splitB
+                      (.box 209 321)
+                      (.box 209 289)
+                    )
+                  )
+                  (.box 225 225)
+                )
+                (.splitB
+                  (.splitA
+                    (.splitB
+                      (.box 273 385)
+                      (.box 289 289)
+                    )
+                    (.splitB
+                      (.splitA
+                        (.box 337 385)
+                        (.box 417 385)
+                      )
+                      (.box 321 289)
+                    )
+                  )
+                  (.box 257 225)
+                )
+              )
+              (.splitA
+                (.box 129 146)
+                (.box 257 161)
+              )
+            )
+          )
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.box 185 73)
+                  (.box 177 89)
+                )
+                (.box 145 73)
+              )
+              (.box 161 105)
+            )
+            (.box 193 80)
+          )
+        )
+      )
+    )
+    (.splitB
+      (.splitA
+        (.splitB
+          (.splitA
+            (.box 193 81)
+            (.box 161 81)
+          )
+          (.splitA
+            (.splitB
+              (.box 193 145)
+              (.splitA
+                (.splitB
+                  (.box 257 193)
+                  (.splitA
+                    (.splitB
+                      (.box 321 257)
+                      (.box 0 321)
+                    )
+                    (.box 289 257)
+                  )
+                )
+                (.box 225 193)
+              )
+            )
+            (.splitB
+              (.box 161 161)
+              (.box 161 193)
+            )
+          )
+        )
+        (.splitB
+          (.box 81 97)
+          (.box 81 129)
+        )
+      )
+      (.splitA
+        (.splitB
+          (.splitA
+            (.splitB
+              (.splitA
+                (.splitB
+                  (.splitA
+                    (.box 0 321)
+                    (.box 289 257)
+                  )
+                  (.box 257 225)
+                )
+                (.box 225 193)
+              )
+              (.box 193 161)
+            )
+            (.box 161 193)
+          )
+          (.box 129 65)
+        )
+        (.box 97 129)
+      )
+    )
+  )
+
+theorem k144w27HighChart2_ok : checkChart k144w27High 2 k144w27HighChart2 = true := by decide +kernel
+
+end HlawkaSchatten.BelowExponent.FSlabCheck

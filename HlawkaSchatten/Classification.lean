@@ -3,11 +3,16 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.Final
-import HlawkaSchatten.TraceEndpoint
-import HlawkaSchatten.EndpointObstruction
+
+module
+
+public import HlawkaSchatten.Final
+public import HlawkaSchatten.TraceEndpoint
+public import HlawkaSchatten.EndpointObstruction
 
 /-! # Complete dimension-independent Schatten Hlawka classification -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 

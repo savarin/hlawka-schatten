@@ -3,8 +3,11 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.HilbertSchmidt
-import HlawkaSchatten.HermitianDilation
+
+module
+
+public import HlawkaSchatten.HilbertSchmidt
+public import HlawkaSchatten.HermitianDilation
 
 /-!
 # Variational minima for the Bregman--Mazur argument
@@ -15,6 +18,8 @@ when the two objectives are indexed by different but equivalent spheres.
 Second, the weighted squared-distance objective on a Hilbert unit sphere has
 the exact minimum used in the Schatten argument.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 
@@ -103,14 +108,14 @@ theorem weightedHilbertObjective_isGlobalMinimumValue
     [Nonempty ι] (a : ι → ℝ) (u : ι → H)
     (hu : ∀ i, ‖u i‖ = 1) :
     IsGlobalMinimumValue
-      (fun v : unitSphere H ↦ weightedHilbertObjective a u v.1)
+      (fun v : unitSphere H ↦ weightedHilbertObjective a u v.val)
       (2 * (∑ i, a i - ‖weightedHilbertSum (𝕜 := 𝕜) a u‖)) := by
   let w := weightedHilbertSum (𝕜 := 𝕜) a u
   constructor
   · intro v
-    change 2 * (∑ i, a i - ‖w‖) ≤ weightedHilbertObjective a u v.1
-    rw [weightedHilbertObjective_eq (𝕜 := 𝕜) a u v.1 hu v.property]
-    have hinner := re_inner_le_norm (𝕜 := 𝕜) w v.1
+    change 2 * (∑ i, a i - ‖w‖) ≤ weightedHilbertObjective a u v.val
+    rw [weightedHilbertObjective_eq (𝕜 := 𝕜) a u v.val hu v.property]
+    have hinner := re_inner_le_norm (𝕜 := 𝕜) w v.val
     rw [v.property, mul_one] at hinner
     linarith
   · by_cases hw : w = 0
@@ -186,14 +191,14 @@ noncomputable def rectangularMazurDistanceObjective
     (u : ι → schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p)
     (v : schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p) : ℝ :=
   ∑ i, a i * singularValuePowerSum 2
-    (rectangularMazurMap p (u i).1 - rectangularMazurMap p v.1)
+    (rectangularMazurMap p (u i).val - rectangularMazurMap p v.val)
 
 /-- Weighted barycenter of the rectangular Mazur images. -/
 noncomputable def rectangularMazurBarycenter
     (p : ℝ) (a : ι → ℝ)
     (u : ι → schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p) :
     E →ₗ[ℂ] F :=
-  ∑ i, (a i : ℂ) • rectangularMazurMap p (u i).1
+  ∑ i, (a i : ℂ) • rectangularMazurMap p (u i).val
 
 /-- Weighted rectangular Bregman objective, normalized by the two copies in
 the Hermitian dilation. -/
@@ -201,14 +206,14 @@ noncomputable def rectangularBregmanObjective
     (p : ℝ) (a : ι → ℝ)
     (u : ι → schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p)
     (v : schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p) : ℝ :=
-  ∑ i, a i * (dilatedBregmanTrace p (u i).1 v.1 / 2)
+  ∑ i, a i * (dilatedBregmanTrace p (u i).val v.val / 2)
 
 /-- Weighted sum of the original Schatten-`p` unit operators. -/
 noncomputable def rectangularWeightedSum
     {p : ℝ} (a : ι → ℝ)
     (u : ι → schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p) :
     E →ₗ[ℂ] F :=
-  ∑ i, (a i : ℂ) • (u i).1
+  ∑ i, (a i : ℂ) • (u i).val
 
 /-- On power-sphere inputs, the finite Bregman objective is the total weight
 minus one gradient pairing with the weighted operator sum. -/
@@ -217,15 +222,15 @@ theorem rectangularBregmanObjective_eq_sum_sub_pairing
     (u : ι → schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p)
     (v : schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p) :
     rectangularBregmanObjective p a u v =
-      (∑ i, a i) - dilatedGradientPairing p (rectangularWeightedSum a u) v.1 := by
+      (∑ i, a i) - dilatedGradientPairing p (rectangularWeightedSum a u) v.val := by
   unfold rectangularBregmanObjective rectangularWeightedSum
   have hterm : ∀ i,
-      dilatedBregmanTrace p (u i).1 v.1 / 2 =
-        1 - dilatedGradientPairing p (u i).1 v.1 := fun i =>
+      dilatedBregmanTrace p (u i).val v.val / 2 =
+        1 - dilatedGradientPairing p (u i).val v.val := fun i =>
     dilatedBregmanTrace_div_two_eq_one_sub_pairing hp _ _
       (u i).property v.property
   simp_rw [hterm]
-  rw [dilatedGradientPairing_sum p a (fun i => (u i).1) v.1]
+  rw [dilatedGradientPairing_sum p a (fun i => (u i).val) v.val]
   simp_rw [mul_sub, mul_one]
   rw [Finset.sum_sub_distrib]
 
@@ -243,7 +248,7 @@ theorem rectangularBregmanObjective_isGlobalMinimumValue
   · intro v
     rw [rectangularBregmanObjective_eq_sum_sub_pairing hp0 a u v]
     change (∑ i, a i) - schattenPNorm p W ≤
-      (∑ i, a i) - dilatedGradientPairing p W v.1
+      (∑ i, a i) - dilatedGradientPairing p W v.val
     by_cases hW : W = 0
     · rw [hW, dilatedGradientPairing_zero, schattenPNorm_zero p hp0.ne']
     · let r := schattenPNorm p W
@@ -255,19 +260,19 @@ theorem rectangularBregmanObjective_isGlobalMinimumValue
           inv_mul_cancel₀ hr.ne']
       have hpowerU₀ : singularValuePowerSum p U₀ = 1 :=
         (schattenPNorm_eq_one_iff hp0 U₀).mp hnormU₀
-      have hnonneg := dilatedBregmanTrace_nonneg hp U₀ v.1
+      have hnonneg := dilatedBregmanTrace_nonneg hp U₀ v.val
       have hformula := dilatedBregmanTrace_div_two_eq_one_sub_pairing
-        hp0 U₀ v.1 hpowerU₀ v.property
-      have hpairU₀ : dilatedGradientPairing p U₀ v.1 ≤ 1 := by
+        hp0 U₀ v.val hpowerU₀ v.property
+      have hpairU₀ : dilatedGradientPairing p U₀ v.val ≤ 1 := by
         linarith
       have hWU₀ : W = (r : ℂ) • U₀ := by
         dsimp only [U₀]
         rw [smul_smul]
         simp [hr.ne']
-      have hpairW : dilatedGradientPairing p W v.1 =
-          r * dilatedGradientPairing p U₀ v.1 := by
+      have hpairW : dilatedGradientPairing p W v.val =
+          r * dilatedGradientPairing p U₀ v.val := by
         rw [hWU₀, dilatedGradientPairing_real_smul]
-      have hle : dilatedGradientPairing p W v.1 ≤ r := by
+      have hle : dilatedGradientPairing p W v.val ≤ r := by
         rw [hpairW]
         nlinarith
       exact sub_le_sub_left hle _
@@ -275,7 +280,7 @@ theorem rectangularBregmanObjective_isGlobalMinimumValue
     · let i : ι := Classical.choice inferInstance
       refine ⟨u i, ?_⟩
       rw [rectangularBregmanObjective_eq_sum_sub_pairing hp0 a u (u i)]
-      change (∑ j, a j) - dilatedGradientPairing p W (u i).1 =
+      change (∑ j, a j) - dilatedGradientPairing p W (u i).val =
         (∑ j, a j) - schattenPNorm p W
       rw [hW, dilatedGradientPairing_zero, schattenPNorm_zero p hp0.ne']
     · let r := schattenPNorm p W
@@ -323,13 +328,13 @@ theorem rectangularBregmanObjective_two_sided
         M * rectangularMazurDistanceObjective p a u v := by
   have hterm : ∀ i,
       m * singularValuePowerSum 2
-          (rectangularMazurMap p (u i).1 - rectangularMazurMap p v.1) ≤
-          dilatedBregmanTrace p (u i).1 v.1 / 2 ∧
-        dilatedBregmanTrace p (u i).1 v.1 / 2 ≤
+          (rectangularMazurMap p (u i).val - rectangularMazurMap p v.val) ≤
+          dilatedBregmanTrace p (u i).val v.val / 2 ∧
+        dilatedBregmanTrace p (u i).val v.val / 2 ≤
           M * singularValuePowerSum 2
-            (rectangularMazurMap p (u i).1 - rectangularMazurMap p v.1) := by
+            (rectangularMazurMap p (u i).val - rectangularMazurMap p v.val) := by
     intro i
-    have h := hbound (u i).1 v.1
+    have h := hbound (u i).val v.val
     rw [dilatedMazurDistanceSq_eq_two_mul_singularValuePowerSum'] at h
     constructor <;> linarith
   constructor
@@ -339,22 +344,22 @@ theorem rectangularBregmanObjective_two_sided
     intro i _
     calc
       m * (a i * singularValuePowerSum 2
-          (rectangularMazurMap p (u i).1 - rectangularMazurMap p v.1)) =
+          (rectangularMazurMap p (u i).val - rectangularMazurMap p v.val)) =
           a i * (m * singularValuePowerSum 2
-            (rectangularMazurMap p (u i).1 - rectangularMazurMap p v.1)) := by ring
-      _ ≤ a i * (dilatedBregmanTrace p (u i).1 v.1 / 2) :=
+            (rectangularMazurMap p (u i).val - rectangularMazurMap p v.val)) := by ring
+      _ ≤ a i * (dilatedBregmanTrace p (u i).val v.val / 2) :=
         mul_le_mul_of_nonneg_left (hterm i).1 (ha i)
   · unfold rectangularMazurDistanceObjective rectangularBregmanObjective
     rw [Finset.mul_sum]
     apply Finset.sum_le_sum
     intro i _
     calc
-      a i * (dilatedBregmanTrace p (u i).1 v.1 / 2) ≤
+      a i * (dilatedBregmanTrace p (u i).val v.val / 2) ≤
           a i * (M * singularValuePowerSum 2
-            (rectangularMazurMap p (u i).1 - rectangularMazurMap p v.1)) :=
+            (rectangularMazurMap p (u i).val - rectangularMazurMap p v.val)) :=
         mul_le_mul_of_nonneg_left (hterm i).2 (ha i)
       _ = M * (a i * singularValuePowerSum 2
-          (rectangularMazurMap p (u i).1 - rectangularMazurMap p v.1)) := by ring
+          (rectangularMazurMap p (u i).val - rectangularMazurMap p v.val)) := by ring
 
 /-- The uniform spectral Bregman--Mazur constants compare the two actual
 rectangular finite-family objectives in every matrix dimension. -/
@@ -386,8 +391,8 @@ theorem rectangularMazurDistanceObjective_eq_weightedHilbertObjective
     (v : schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p) :
     rectangularMazurDistanceObjective p a u v =
       weightedHilbertObjective a
-        (fun i => (rectangularMazurHilbertSphereEquiv e hp (u i)).1)
-        (rectangularMazurHilbertSphereEquiv e hp v).1 := by
+        (fun i => (rectangularMazurHilbertSphereEquiv e hp (u i)).val)
+        (rectangularMazurHilbertSphereEquiv e hp v).val := by
   unfold rectangularMazurDistanceObjective weightedHilbertObjective
     rectangularMazurHilbertSphereEquiv
   apply Fintype.sum_congr
@@ -403,16 +408,16 @@ theorem weightedHilbertSum_rectangularMazur_eq
     (a : ι → ℝ)
     (u : ι → schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p) :
     weightedHilbertSum (𝕜 := ℂ) a
-        (fun i => (rectangularMazurHilbertSphereEquiv e hp (u i)).1) =
+        (fun i => (rectangularMazurHilbertSphereEquiv e hp (u i)).val) =
       hilbertSchmidtCoordinates e (rectangularMazurBarycenter p a u) := by
   unfold weightedHilbertSum rectangularMazurHilbertSphereEquiv
     rectangularMazurBarycenter
   change (∑ i, (a i : ℂ) • hilbertSchmidtCoordinates e
-    (rectangularMazurMap p (u i).1)) =
+    (rectangularMazurMap p (u i).val)) =
     hilbertSchmidtCoordinates e
-      (∑ i, (a i : ℂ) • rectangularMazurMap p (u i).1)
+      (∑ i, (a i : ℂ) • rectangularMazurMap p (u i).val)
   exact (map_sum (hilbertSchmidtLinearEquiv e)
-    (fun i => (a i : ℂ) • rectangularMazurMap p (u i).1) Finset.univ).symm
+    (fun i => (a i : ℂ) • rectangularMazurMap p (u i).val) Finset.univ).symm
 
 /-- Exact Hilbert-side variational representation on the actual rectangular
 Schatten-`p` sphere.  In particular, the minimizing variable is genuinely a
@@ -427,28 +432,28 @@ theorem rectangularMazurDistanceObjective_isGlobalMinimumValue
   let mazur : schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p ≃
       unitSphere (PiLp 2 (fun _ : κ => F)) :=
     rectangularMazurHilbertSphereEquiv (F := F) e hp
-  have hu : ∀ i, ‖(mazur (u i)).1‖ = 1 :=
+  have hu : ∀ i, ‖(mazur (u i)).val‖ = 1 :=
     fun i => (mazur (u i)).property
   have h := weightedHilbertObjective_isGlobalMinimumValue (𝕜 := ℂ)
-    a (fun i => (mazur (u i)).1) hu
+    a (fun i => (mazur (u i)).val) hu
   have hc := (isGlobalMinimumValue_comp_equiv mazur
     (fun v : unitSphere (PiLp 2 (fun _ : κ => F)) =>
-      weightedHilbertObjective a (fun i => (mazur (u i)).1) v.1)
+      weightedHilbertObjective a (fun i => (mazur (u i)).val) v.val)
     (2 * (∑ i, a i -
-      ‖weightedHilbertSum (𝕜 := ℂ) a (fun i => (mazur (u i)).1)‖))).mpr h
+      ‖weightedHilbertSum (𝕜 := ℂ) a (fun i => (mazur (u i)).val)‖))).mpr h
   change IsGlobalMinimumValue
     (fun v => weightedHilbertObjective a
-      (fun i => (mazur (u i)).1) (mazur v).1)
+      (fun i => (mazur (u i)).val) (mazur v).val)
     (2 * (∑ i, a i -
-      ‖weightedHilbertSum (𝕜 := ℂ) a (fun i => (mazur (u i)).1)‖)) at hc
+      ‖weightedHilbertSum (𝕜 := ℂ) a (fun i => (mazur (u i)).val)‖)) at hc
   rw [show (fun v => weightedHilbertObjective a
-      (fun i => (mazur (u i)).1) (mazur v).1) =
+      (fun i => (mazur (u i)).val) (mazur v).val) =
         rectangularMazurDistanceObjective p a u by
       funext v
       exact (rectangularMazurDistanceObjective_eq_weightedHilbertObjective
         e hp a u v).symm] at hc
   rw [show weightedHilbertSum (𝕜 := ℂ) a
-      (fun i => (mazur (u i)).1) =
+      (fun i => (mazur (u i)).val) =
         hilbertSchmidtCoordinates e (rectangularMazurBarycenter p a u) from
       weightedHilbertSum_rectangularMazur_eq e hp a u,
     ← schattenPNorm_two_eq_norm_hilbertSchmidtCoordinates e] at hc

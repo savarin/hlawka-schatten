@@ -3,10 +3,15 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.CurvatureEstimate
-import HlawkaSchatten.DiagonalConstruction.BoxCoordinates
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.CurvatureEstimate
+public import HlawkaSchatten.DiagonalConstruction.BoxCoordinates
 
 /-! # Nonnegative second variation on the entire cyclic box -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 

@@ -3,8 +3,11 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import Mathlib.Analysis.InnerProductSpace.Basic
-import HlawkaSchatten.GapComparison
+
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import HlawkaSchatten.GapComparison
 
 /-!
 # Hlawka's inequality in inner-product spaces
@@ -12,6 +15,8 @@ import HlawkaSchatten.GapComparison
 This proof uses the quadrilateral square identity rather than Gaussian
 integration.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 

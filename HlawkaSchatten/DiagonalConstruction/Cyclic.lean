@@ -3,9 +3,12 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.Basic
-import Mathlib.Topology.Order.Compact
-import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.Basic
+public import Mathlib.Topology.Order.Compact
+public import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 
 /-!
 # The cyclic comparison constant
@@ -14,6 +17,8 @@ The constant is defined from an explicit scalar formula on a fixed compact
 interval. Its denominator is positive, so continuity gives an attained
 maximum without presupposing the global Hlawka inequality.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 

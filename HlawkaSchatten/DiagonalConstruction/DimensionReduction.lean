@@ -3,9 +3,12 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.WeightedCoordinates
-import HlawkaSchatten.DiagonalConstruction.Sparsification
-import Mathlib.Data.Fin.VecNotation
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.WeightedCoordinates
+public import HlawkaSchatten.DiagonalConstruction.Sparsification
+public import Mathlib.Data.Fin.VecNotation
 
 /-!
 # Reduction of a failed bound to three real coordinates
@@ -14,6 +17,8 @@ Common coordinate weights preserve the three pair power sums. The positive
 part of the target inequality is concave in these weights, so the sparse
 minimizer lemma reduces the question to at most three nonzero coordinates.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 
@@ -66,12 +71,12 @@ private theorem bound_of_fin_three_active {p K : ℝ} (hp : 1 < p) (hK : 1 / 2 �
     exact ⟨fun _ ↦ zero_le_one, fun _ ↦ by simp [b]⟩
   obtain ⟨w, hw, hmin, hcard⟩ := exists_sparse_concave_minimizer A b hA hpos F hF hconc _ hseed
   let J := {i : ι // w i ≠ 0}
-  let R : (ι → ℝ) → J → ℝ := fun v j ↦ reweight p w v j.1
+  let R : (ι → ℝ) → J → ℝ := fun v j ↦ reweight p w v j.val
   have hadd (u v : ι → ℝ) : R (u + v) = R u + R v := by
     ext j
-    exact congrFun (reweight_add p w u v) j.1
+    exact congrFun (reweight_add p w u v) j.val
   have hnorm (v : ι → ℝ) : lpNorm p (R v) = weightedNorm p v w := by
-    change lpNorm p (fun j : J ↦ reweight p w v j.1) = _
+    change lpNorm p (fun j : J ↦ reweight p w v j.val) = _
     rw [lpNorm_subtype hp0 (reweight p w v) (fun i ↦ w i ≠ 0)]
     · exact lpNorm_reweight hp0 w v hw.1
     · intro i hi
@@ -107,7 +112,7 @@ theorem real_bound_of_fin_three {p K : ℝ} (hp : 1 < p) (hK : 1 / 2 ≤ K)
   have hp0 : 0 < p := zero_lt_one.trans hp
   let P := fun i ↦ x i ≠ 0 ∨ y i ≠ 0 ∨ z i ≠ 0
   let J := {i : ι // P i}
-  let R : (ι → ℝ) → J → ℝ := fun v j ↦ v j.1
+  let R : (ι → ℝ) → J → ℝ := fun v j ↦ v j.val
   have hadd (u v : ι → ℝ) : R (u + v) = R u + R v := rfl
   have hnorm (v : ι → ℝ) (hv : ∀ i, x i = 0 → y i = 0 → z i = 0 → v i = 0) :
       lpNorm p (R v) = lpNorm p v := by
@@ -115,7 +120,7 @@ theorem real_bound_of_fin_three {p K : ℝ} (hp : 1 < p) (hK : 1 / 2 ≤ K)
     intro i hi
     have hzero : x i = 0 ∧ y i = 0 ∧ z i = 0 := by simpa [P] using hi
     exact hv i hzero.1 hzero.2.1 hzero.2.2
-  have h := bound_of_fin_three_active hp hK h3 (R x) (R y) (R z) (fun j ↦ j.2)
+  have h := bound_of_fin_three_active hp hK h3 (R x) (R y) (R z) (fun j ↦ j.property)
   simp only [tripleGap, pairGapSum, pairGap, ← hadd] at h
   rw [hnorm x (by intros; assumption), hnorm y (by intros; assumption),
     hnorm z (by intros; assumption),

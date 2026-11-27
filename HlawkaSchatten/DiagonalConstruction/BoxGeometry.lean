@@ -3,7 +3,10 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.Localization
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.Localization
 
 /-!
 # Quadratic geometry of the cyclic box
@@ -13,6 +16,8 @@ times the sum of squared singleton-norm residuals. This constant controls
 the trade-off between singleton and total-norm Hessians; its looseness is
 absorbed by the curvature margin, which has order 10¹¹ at p = 256.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 

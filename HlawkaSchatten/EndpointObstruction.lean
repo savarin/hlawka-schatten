@@ -3,9 +3,12 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import Mathlib.Data.Fin.VecNotation
-import Mathlib.Analysis.CStarAlgebra.Matrix
-import HlawkaSchatten.GapComparison
+
+module
+
+public import Mathlib.Data.Fin.VecNotation
+public import Mathlib.Analysis.CStarAlgebra.Matrix
+public import HlawkaSchatten.GapComparison
 
 /-!
 # The three-coordinate infinity-norm obstruction
@@ -15,6 +18,8 @@ pair deficits equal to zero but positive triple deficit, so no finite
 multiplicative constant can satisfy Hlawka at the operator norm. This is
 the t = 1 member of the cyclic family in `DiagonalConstruction.Cyclic`.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 

@@ -10,7 +10,9 @@ project:
     exists. For complex diagonal matrices and every real p >= 256, the
     sharp constant is an explicit maximum over a one-parameter cyclic
     family: it holds in every dimension and cannot be lowered in any
-    dimension at least three.
+    dimension at least three. A third result proves the ordinary Hlawka
+    inequality for all triples in every finite real coordinate space with
+    its p-norm, for every real p from 2 through log(3)/log(3/2), inclusive.
   authors:
     - "Ezzeri Esa"
   responsible_maintainers:
@@ -22,7 +24,7 @@ classification:
   msc2020: ["47A30", "47B10", "46B20"]
 
 sources:
-  - title: "Hlawka constants for Schatten norms: existence and sharp diagonal bound"
+  - title: "Hlawka constants for Schatten norms and real coordinate spaces"
     authors:
       - "Ezzeri Esa"
     type: "original-proof"
@@ -31,15 +33,19 @@ sources:
     relationship: "other"
     author_endorsement: "participated"
     note: >-
-      This formalization proves two results. (1) A finite
+      The formalization proves three results. (1) A finite
       dimension-independent Hlawka constant exists for every interior
-      Schatten exponent; Lean proof constructed with GPT 5.6 Sol.
-      (2) The sharp constant for complex diagonal Schatten norms at
-      every real p >= 256; Lean proof constructed with GPT 6 Astra.
+      Schatten exponent. GPT 5.6 Sol constructed the Lean proof.
+      (2) For complex diagonal Schatten norms of size at least three
+      and p >= 256 the sharp constant is an explicit cyclic maximum.
+      GPT 6 Astra constructed the Lean proof. (3) Constant one works in real coordinate
+      spaces of every finite dimension for 2 <= p <= log(3)/log(3/2).
+      Agents using Codex and Claude Code developed and checked the proof.
       A search of arXiv:2407.03278, arXiv:1201.5232 and its forward
-      citations through September 2026 found no prior proof of either
-      result. The proofs have not been examined in depth by human
-      experts; novelty of the ideas has not been established.
+      citations through September 2026 found no prior proof of the first
+      two results. The November 21, 2026 search found no resolution of
+      Lee's Conjecture 4.9. The proofs have not been examined in depth
+      by human experts. Novelty of the ideas has not been established.
   - title: "Problems and conjectures in matrix and operator inequalities"
     authors:
       - "Koenraad M. R. Audenaert"
@@ -83,18 +89,106 @@ sources:
       diagonal proof's weighted scalar convexity step proves the same
       inequality by an independent ordered-chord argument.
 
+  - title: "Sharp diagonal Hlawka constants: lower the cutoff to 2"
+    type: "other"
+    id: "https://prove2.me/missions/Sharp_diagonal_Hlawka_constants%3A_lower_the_cutoff_to_2"
+    location: "Leaf (A), theorem 9e0c08c7-583b-41b0-b8a3-57fa9532b2c1"
+    relationship: "other"
+    note: >-
+      The mission supplies the exact real-coordinate statement. The five
+      norm and deficit definitions follow the HlawkaSchatten source library
+      at commit 79aa498bfcf7b22bd91d771fb32ec278e2d4704b.
+  - title: "The sharp diagonal Hlawka constant for every real exponent p >= 4"
+    type: "other"
+    id: "https://prove2.me/theorems/0ee0074e-f0be-4d07-89a9-f8012acf0199"
+    location: "HlawkaSchatten.DiagonalCutoff4.cutoff4, Prove2Me cutoff-4 mission"
+    relationship: "background"
+    note: >-
+      The external Lean theorem gives the sharp constant for complex
+      coordinates in every finite dimension for p >= 4. It covers the
+      upper endpoint of the real three-dimensional question. Its proof
+      is maintained outside this repository.
+  - title: "Constructions and reductions on the Hornich–Hlawka inequality and its generalizations"
+    authors: ["Seokbin Lee"]
+    type: "paper"
+    id: "arXiv:2610.23785v1"
+    location: "Proposition 3.8, Theorem 4.6, Conjecture 4.9, and Theorem 4.10"
+    relationship: "background"
+    note: >-
+      Proposition 3.8 gives the obstruction above the threshold. Theorem
+      4.6 gives the stable-law transfer in dimension three. Conjecture 4.9
+      asks about the endpoint in that dimension. Theorem 4.10 supplies
+      the dual four-ball criterion. The Lean proof treats every finite dimension.
+  - title: "Diagonal Minkowski classes, zonoid equivalence, and stable laws"
+    authors: ["Ilya Molchanov", "Felix Nagel"]
+    type: "paper"
+    id: "arXiv:1806.08036"
+    location: "Lemma 4.9 and Theorem 4.12"
+    relationship: "background"
+    note: >-
+      Stable random variables yield a nesting theorem for classes of
+      convex bodies defined by diagonal images of norm balls. This is
+      background for the averaging step in the exponent transfer.
+  - title: "A survey of the Hornich-Hlawka inequality"
+    authors: ["Dan-Ştefan Marinescu", "Constantin P. Niculescu"]
+    type: "paper"
+    id: "arXiv:2407.03278"
+    location: "Problem 1"
+    relationship: "background"
+    author_endorsement: "not-contacted"
+    note: >-
+      Asks for a proof that real l_p in dimension three fails Hlawka's
+      inequality for every p > 2, including p = infinity. The third result answers the question
+      in the negative for 2 < p <= log(3)/log(3/2).
+  - title: "Metric inequalities and the zonoid problem"
+    authors: ["H. S. Witsenhausen"]
+    type: "paper"
+    id: "doi:10.1090/S0002-9939-1973-0390916-0"
+    location: "Corollary 1.2, p. 518, and the proof of Proposition 2, p. 519"
+    relationship: "background"
+    note: >-
+      The signed triple credited to D. M. and M. F. Smiley fails
+      Hlawka's inequality in real l_p in dimension three for
+      p > log(3)/log(3/2). The paper also gives the classical range
+      1 <= p <= 2.
+  - title: "On Certain Intersection Properties of Convex Sets"
+    authors: ["V. L. Klee, Jr."]
+    type: "paper"
+    id: "doi:10.4153/CJM-1951-031-2"
+    location: "Canadian Journal of Mathematics 3 (1951), 272, (2.1)"
+    relationship: "background"
+    note: >-
+      The compact convex intersection lemma is formalized as
+      klee_intersection in HlawkaSchatten/BelowExponent/Intersection.lean.
+  - title: "A simplex reduction and certificates for the critical Hlawka exponent"
+    type: "other"
+    location: "HlawkaSchatten/BelowExponent/RouteT.lean, HlawkaSchatten/BelowExponent/RegionalCertificates.lean and BLUEPRINT.md"
+    relationship: "other"
+    note: >-
+      The covering reduction and the bulk certificate were produced with Claude
+      Fable 5.2 (Anthropic) in a Claude Code session, 21 November 2026. The code mapping
+      in BLUEPRINT.md connects these contributions to their Lean modules.
+      The team checked the inputs, completed the facet and boundary regions,
+      and formalized the proof. Lean verifies the certificates.
+
 status:
   scope: >-
-    The formalization proves two results about Hlawka constants for
-    Schatten p-norms of finite-dimensional complex operators. Existence:
+    The first two results concern finite-dimensional complex operators and
+    diagonal matrices. Existence:
     for every real p > 1 a finite constant works for linear maps between
     all finite-dimensional complex inner product spaces, and no constant
     exists at p = 1 (complex 2 by 2 operators) or p = infinity (complex
     3 by 3 matrices). Construction: for complex diagonal matrices and every
     real p >= 256, an explicit cyclic maximum is a Hlawka constant in every
     finite dimension and the smallest one in each dimension at least three.
-    The sharp constant for general operators and the diagonal constant
-    below p = 256 are not determined.
+    The sharp constant for general operators remains open. The third
+    theorem treats real coordinate spaces in all natural dimensions on
+    the closed interval 2 <= p <= log(3)/log(3/2). The mission also asks
+    whether K_p bounds every triple in real dimension three from that
+    threshold through 4. The lower endpoint follows from the third result
+    and K_p >= 1. The external Prove2Me theorem
+    HlawkaSchatten.DiagonalCutoff4.cutoff4 covers p = 4, leaving
+    log(3)/log(3/2) < p < 4 open.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -119,6 +213,11 @@ status:
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       comparator_config: "comparator-construction-diagonal.json"
+    - declaration: "HlawkaSchatten.LpThreshold.hlawka_holds_below_exponent"
+      file: "ConstructionDiagonalBelowExponentSolution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator-construction-diagonal-below-exponent.json"
 
 automation:
   methods:
@@ -141,6 +240,13 @@ automation:
         The agent was given the scalar/diagonal tail proof and its dependency,
         cutoff, and failure-analysis notes, and asked to follow the existing
         repository's Challenge/Solution and Comparator conventions.
+    - method: "agent"
+      models: ["GPT 6.2 Astra (OpenAI)", "GPT 6.2 Sol (OpenAI)", "Claude Opus 5.5 (Anthropic)", "Claude Fable 5.2 (Anthropic)"]
+      framework: "Codex and Claude Code"
+      tool_setup: >-
+        The agents developed and cross-checked a written proof, generated
+        exact certificates, proved their soundness in Lean and checked the
+        public theorem's type and axioms. The author directed the work.
   notes: >-
     Existence: the Lean proof was developed in small kernel-checked layers
     and audited at the publication boundary for dimensional uniformity and
@@ -149,7 +255,10 @@ automation:
     strategy, diagnosed repeated dead ends where agents stalled, and
     refined the approach through failure analysis at each stage. AI agents
     executed computational searches, produced candidate lemmas, and
-    formalized the final argument in Lean.
+    formalized the final argument in Lean. Below the critical exponent:
+    the author directed the research and verification. The agents developed
+    and reviewed the regional arguments and their assembly, generated exact
+    certificates, and checked the public boundary.
 
 fidelity:
   divergences: >-
@@ -170,6 +279,12 @@ fidelity:
     residual constant 300, and looser Hessian coefficients. The exponent
     cutoff 256 is unchanged; it is set by the localization estimate, not
     by the curvature margin.
+    The below-exponent result uses the finite power-sum norm on real
+    coordinates from the published mission. The Lean proof uses adaptive
+    subdivisions in several regions and verifies their coverage and bounds
+    in the kernel. The independent Challenge gives all five definitions
+    inline and imports only Mathlib. The complete written proof of the
+    third result is separate from this repository.
 
 review:
   status: "agent-reviewed"
@@ -177,14 +292,23 @@ review:
     - "Ezzeri Esa"
     - "GPT 5.6 Sol (OpenAI)"
     - "Claude Fable 5.1 (Anthropic)"
+    - "GPT 6.2 Astra (OpenAI)"
+    - "GPT 6.2 Sol (OpenAI)"
   notes: >-
     The existence proof source was independently audited before formalization.
     The diagonal proof was reviewed against the BLUEPRINT.
     Both Challenges were checked against their proof sources.
-    Locally validated: full Lake build, both boundary/axiom audits,
+    The earlier results were locally validated with the full Lake build, both boundary/axiom audits,
     both Comparator baselines (upstream 8d84e67, macOS development
     Landrun shim, default Lean kernel), and both negative controls.
     Protected Landrun/NanoDa validation deferred to Palomar submission.
+    For the third result the agents reviewed the written regional proofs,
+    the joins and the published statement. On November 26, 2026, a clean
+    local build with Lean 4.37.0-rc1, the boundary and axiom audit and the
+    byte-for-byte regeneration of the certificates passed. The stock Lean
+    and NanoDa checks of this version and a run within the verification
+    budget are still to be recorded.
+    The two historical registry entries concern their respective commits.
 
 alignment:
   namespace: "PalomarHlawkaSchatten"
@@ -213,6 +337,15 @@ alignment:
       module: "ConstructionDiagonalSolution"
       status: "proved"
       note: "A cyclic parameter in [1/2, 2] attains the maximum."
+    - source: "Cutoff-to-two mission, leaf (A)"
+      lean: "HlawkaSchatten.LpThreshold.hlawka_holds_below_exponent"
+      module: "ConstructionDiagonalBelowExponentSolution"
+      status: "proved"
+      note: >-
+        The real exponent interval is closed at both ends. The quantifiers
+        include every natural dimension and every triple of real vectors.
+        The declaration keeps the mission's namespace,
+        HlawkaSchatten.LpThreshold, and adds _exponent to its name.
 
 acknowledgements: >-
   Mathlib contributors; leanprover/comparator and NanoDa maintainers.

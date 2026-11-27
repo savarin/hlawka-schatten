@@ -1,0 +1,131 @@
+{
+  "bundled_inputs": {
+    "generators/g2-adaptive-tip.json": "a76bc0afb11cbe9b6793834e35de8387473db9d1bb788c50da4cbe04d0dd6546",
+    "generators/g2-adaptive-upper-tree.jsonl": "8b42d8d7f51dc9001bed150b5f376295e633396fffda8f3b4d8f1a6d404f3acc",
+    "generators/vertex-corner-curvature-margins.tsv": "7a782e09a9b5b10e4f174e8bf8012fe6a758b7fb62e40b6b5c3b6138387162eb",
+    "generators/vertex-curvature-candidates.tsv": "7ee0a2b2b3d931d5e38141660ac5f94b5bc6f9af9056cbfa711ed0023dad70fe",
+    "generators/vertex-curvature-cut-plan.tsv": "8b141a6e2aa017fccab6c1671704da1b48d703ed31a39f26a531552774e68ab4",
+    "generators/vertex-curvature-cut-shared-margins.tsv": "8b8e2d3a27c15c9b0f0429195bdd2ee2d9aa7e209f69b0f298dbec4e51228156",
+    "generators/vertex-curvature-vcm-refinements.tsv": "8d71d4aaa75a27ad1190575351a35c1f2df8f4aca28210f90da52f1239ff186f"
+  },
+  "families": {
+    "bulk-tables": {
+      "external_inputs": {
+        "lean-pilot/Pilot/R002_Tree.lean": "f7673e1d5d0591c59f3551f0aed16178665d7782b4d26cc1e10b164997137fa3",
+        "lean-pilot/Pilot/Tab_fine.lean": "98916fa25f4674b3558c560c9b9f49057c5fc5b46f9ba2cd6fca00e2ab0b0a6d"
+      },
+      "files": 2,
+      "output_manifest_sha256": "89b3e95716c0799af9b6405f2c4fc23202f3aa4110c3841145447fd68573b90d",
+      "outputs": "outputs/bulk-tables.sha256",
+      "source_inputs": {}
+    },
+    "e2": {
+      "external_inputs": {
+        "lean-pilot/Pilot/R002_Cell009.lean": "e5da148e6d7e60c203ff0ea63352ec609559ee9e2fcbd1e14391f576429f54bf",
+        "lean-pilot/Pilot/R002_Cell023.lean": "e79c6836c3fbb58956794c5e386cc0f59be68a1572f10b0e939e75aad3362ab1",
+        "lean-pilot/Pilot/R002_Cell100.lean": "b484cdc87e643a02ad9b4241655f32144b171d843a6ca4b05589f71c4e89baa9",
+        "lean-pilot/Pilot/R002_Cell165.lean": "3393f175330be231a42322cd4301beff8e17a77ea65c164f9b623de687775903",
+        "lean-pilot/Pilot/R002_Cell166.lean": "1ec9e1377b7c4dcdc06d0e7f8ad1f9120b5ca255f595e2b3d94d54f55301cf6e",
+        "lean-pilot/data/work__c1-tangent-cover__certs__cert_v2_rc0.002_eta0.002.txt.gz": "dd2ab2cf4ea21eb8c25e2b1ae58c56bb4dcb0c6af1aace4e1efd460eb0a7ef3f"
+      },
+      "files": 167,
+      "output_manifest_sha256": "5122c478c2d29d92f93e436eca91274755f422dcbce65f8ddd0dbb268c4ba7ab",
+      "outputs": "outputs/e2.sha256",
+      "source_inputs": {
+        "HlawkaSchatten/BelowExponent/Tangent/TreeData.lean": "770c39bfd5e26cded66ff00d51cf856dbcfad1887e638b44447a0f72715c75da"
+      }
+    },
+    "facet-g2": {
+      "external_inputs": {},
+      "files": 80,
+      "output_manifest_sha256": "09628b4fd42129e4cca13cffdc35fd72d19bdc10bdbb8940ddad8473dc1b99ab",
+      "outputs": "outputs/facet-g2.sha256",
+      "source_inputs": {
+        "HlawkaSchatten/BelowExponent/Tangent/FineData.lean": "ed4458ee24318e3af5dae4f0e532aa487797efeea438ec3b48dc1d0f41958009"
+      }
+    },
+    "facet-interior": {
+      "external_inputs": {
+        "glue/pilot/facet_big.txt": "ab2b8e937a2dadfedee3ef547288fb04d15adf940d0ba9add00e12dcb5833ac5",
+        "glue/pilot/facet_s1.txt": "31df943da14596f9d916f4d9ec76aed5f09f0c5e89ef8981af2d1fe9d5a5d62f",
+        "glue/pilot/facet_s2.txt": "f7369053166b20ad0902e1925f9f0093ccb36b87a6069697cf04fe413dcd615d"
+      },
+      "files": 235,
+      "output_manifest_sha256": "ea4dea41963f7c47e152940e628b288fc064d5142aa2f6ece855833029e32229",
+      "outputs": "outputs/facet-interior.sha256",
+      "source_inputs": {
+        "HlawkaSchatten/BelowExponent/Tangent/FineData.lean": "ed4458ee24318e3af5dae4f0e532aa487797efeea438ec3b48dc1d0f41958009"
+      }
+    },
+    "fslab": {
+      "external_inputs": {},
+      "files": 165,
+      "output_manifest_sha256": "764d06d094f4e76f9ecb96b17c57ee026ca627bf3425cf4ace77e6c12a456697",
+      "outputs": "outputs/fslab.sha256",
+      "source_inputs": {
+        "HlawkaSchatten/BelowExponent/Tangent/FineData.lean": "ed4458ee24318e3af5dae4f0e532aa487797efeea438ec3b48dc1d0f41958009"
+      }
+    },
+    "vertex": {
+      "external_inputs": {
+        "vertex-side/cells_K.txt": "ad4d00f062d4906e09267909225ae8a282eaca532b3fd4dc0f1cecab91957add",
+        "vertex-side/cells_K_D.txt": "b66189a2bc04e38480724396cbe5079ba21364bfd54336868b33bbc5965b0751",
+        "vertex-side/cells_K_E.txt": "94698b99410f3fcffd18d7129bfd9703d34faef4c5206a238afea04a49acfdb0",
+        "vertex/cells_K.txt": "8177f41d45d5fa2b81c66ef8f165aba95944e0c5b9ce7793584b79c8ad15c79a",
+        "vertex/cells_K_S1.txt": "9ac5379d612f38969e071f05f5d39410477cd3b5b33211b5431f18bf25f16ca6"
+      },
+      "files": 252,
+      "output_manifest_sha256": "bb39ee2c6e5f647be4065ad9f2271488a03840b86c43a8a464038a860f2e0074",
+      "outputs": "outputs/vertex.sha256",
+      "source_inputs": {
+        "HlawkaSchatten/BelowExponent/Vertex/CornerGridData.lean": "257fcf208832a0912efa32d30a97b12860d8c24d5d61dc73b6e0ae487dbf3fd0"
+      }
+    }
+  },
+  "fslab_manifest_sha256": "d8a2ebbcc745417c67b8a5cfc6c88c2a2075582d48c2fc43ff850f3c48b786bf",
+  "g2_retained_optimizer": {
+    "exact_helpers": "generators/g2-adaptive-rational.py",
+    "exact_helpers_sha256": "3def8ab27773df344084924cadc74d93a4e8dbe9ae92980d351c756d3a4c47e3",
+    "numpy_and_scipy": "Needed only when searching for new floating-point witnesses",
+    "sha256": "dd49e74655f87471cd7eb98e8c3ab9e68f68f302b2ce206b22d5acf7ef7b04ec",
+    "source": "generators/g2-adaptive-probe.py"
+  },
+  "lean_pin": "4.36.0 / 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9",
+  "mathlib_pin": "fc4f59e577feb1a4956671bc04ac18aaaf8cd842",
+  "phase2_comments_patch_sha256": "2dec90c23dbbe782fb34ab848d7f1c8b28f021c02e9494d3f03caecd50caf8aa",
+  "source_base_commit": "84a09b7b0094043b07900457b7a49cc423de5c78",
+  "upstream_generators": [
+    {
+      "archive": "route-T",
+      "locator": "glue/gen_facet.py",
+      "role": "archived F0-F2 floating-point search",
+      "sha256": "6a4e8f0cc529983033467505cfeea79a0ff2ce55002449b217004ab73591478a"
+    },
+    {
+      "archive": "route-T-bundle-20261121",
+      "locator": "work__c1-tangent-cover__tgen.py",
+      "role": "Later archived revision of the R002 certificate search",
+      "sha256": "551dfad10a5e3d867d59aed03480cd001303675239dc073202b81a1c8ab5aee3"
+    },
+    {
+      "archive": "route-T",
+      "locator": "lean-pilot/gen/tcgen.py",
+      "role": "archived fine tables and R002 geometry emitter",
+      "sha256": "a3305349021a14dadd6be22c62bce22444e41fcd996d235c77598ed4150de7bc"
+    },
+    {
+      "archive": "2026-11-21T21:10:07Z",
+      "locator": "tgen.py",
+      "role": "Exact R002 search revision used in the original run",
+      "sha256": "5f08ba1435ca0a3c58b34e25fa0b64925e960dafc571ae3a2b7e4eea80bb1749"
+    },
+    {
+      "archive": "route-T-bundle-20261121",
+      "locator": "tcheck.py",
+      "role": "Independent rational replay of the R002 witness",
+      "sha256": "56128c57ff05b8ac3c425a7727275d6122157bbb74cadceb6afbc16415e52f3b"
+    }
+  ],
+  "vertex_index_sha256": "be70f070791b07ee37082f8c98e08a7d09c13c2df91537a4ab470aa70b7d1f4d",
+  "witness_archive_sha256": "ebe426ff57c7aee1faf6c31d998afa4c0e0a3ea2e1a7fa94a7584d1c0fcbfff3"
+}

@@ -3,7 +3,10 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.GapComparison
+
+module
+
+public import HlawkaSchatten.GapComparison
 
 /-!
 # The scalar Hlawka inequality
@@ -12,6 +15,8 @@ The absolute value on the real line satisfies Hlawka with constant one.
 This scalar fact is not on the final proof path but records the pointwise
 inequality underlying the Hilbert-space Hlawka theorem.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 

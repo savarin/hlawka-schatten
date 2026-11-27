@@ -3,11 +3,14 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import Mathlib.Analysis.Convex.Function
-import Mathlib.Data.Real.Basic
-import Mathlib.Tactic.FieldSimp
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.LinearCombination
+
+module
+
+public import Mathlib.Analysis.Convex.Function
+public import Mathlib.Basic.Real.Basic
+public import Mathlib.Tactic.FieldSimp
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.LinearCombination
 
 /-!
 # A weighted three-point convexity inequality
@@ -16,6 +19,8 @@ The scalar input to the sharp construction is a weighted Hlawka inequality
 for any convex function on the real line. The proof uses chords and orders
 the three points; it needs no integral representation of convex functions.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 

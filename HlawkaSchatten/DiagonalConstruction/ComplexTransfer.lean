@@ -3,9 +3,12 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.BoxConvexity
-import HlawkaSchatten.DiagonalConstruction.CircleProjection
-import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.BoxConvexity
+public import HlawkaSchatten.DiagonalConstruction.CircleProjection
+public import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 
 /-!
 # Transfer to complex coordinates
@@ -15,6 +18,8 @@ Continuity preserves this statement on their closure. The circle average
 belongs to that closure and reproduces all seven complex norms with one
 common positive factor.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 

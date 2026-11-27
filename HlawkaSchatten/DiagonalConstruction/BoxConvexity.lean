@@ -3,12 +3,17 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.BoxHessian
-import HlawkaSchatten.DiagonalConstruction.OrbitAveraging
-import Mathlib.Analysis.Convex.Deriv
-import Mathlib.Tactic.Module
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.BoxHessian
+public import HlawkaSchatten.DiagonalConstruction.OrbitAveraging
+public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Tactic.Module
 
 /-! # Convexity of the sharp deficit on the cyclic box -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 

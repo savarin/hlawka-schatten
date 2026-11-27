@@ -3,8 +3,11 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.ScalarEnvelope
-import Mathlib.Analysis.Complex.ExponentialBounds
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.ScalarEnvelope
+public import Mathlib.Analysis.Complex.ExponentialBounds
 
 /-!
 # Explicit uniform estimates above the cutoff
@@ -12,6 +15,8 @@ import Mathlib.Analysis.Complex.ExponentialBounds
 Rational logarithm bounds separate the cyclic witness and scalar envelope
 at the common intermediate value `939 * p / 2000`.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 

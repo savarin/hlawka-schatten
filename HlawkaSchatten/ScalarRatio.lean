@@ -3,9 +3,13 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import Mathlib.Analysis.Calculus.LHopital
-import Mathlib.Topology.Compactification.OnePoint.Basic
-import HlawkaSchatten.ScalarBregman
+
+module
+
+public import Mathlib.Analysis.Calculus.LHopital
+public import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
+public import Mathlib.Topology.Compactification.OnePoint.Basic
+public import HlawkaSchatten.ScalarBregman
 
 /-!
 # The scalar Bregman--Mazur ratio
@@ -14,6 +18,8 @@ This file starts the compact scalar-reduction layer of the Schatten Hlawka
 argument.  The raw quotient has a removable singularity at `t = 1`; the
 regularized version installs its second-order limiting value.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 

@@ -3,8 +3,11 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import Mathlib.Analysis.InnerProductSpace.SingularValues
-import Mathlib.Analysis.InnerProductSpace.Trace
+
+module
+
+public import Mathlib.Analysis.InnerProductSpace.SingularValues
+public import Mathlib.Analysis.InnerProductSpace.Trace
 
 /-!
 # Finite-dimensional Schatten quantities
@@ -13,6 +16,8 @@ This file gives the definition needed by the Hlawka boundary. Mathlib's
 singular-value sequence is finitely supported, so the power sum is finite
 without choosing bases or matrix dimensions.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 

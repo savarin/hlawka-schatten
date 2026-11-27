@@ -3,20 +3,22 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.Basic
-import Mathlib.Analysis.Complex.Circle
-import Mathlib.Analysis.Convex.Integral
-import Mathlib.MeasureTheory.Measure.Haar.Basic
-import Mathlib.MeasureTheory.Group.Integral
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.Basic
+public import Mathlib.Analysis.Convex.Integral
+public import Mathlib.MeasureTheory.Measure.Haar.Basic
+public import Mathlib.MeasureTheory.Group.Circle
+public import Mathlib.MeasureTheory.Group.Integral
 
 /-! # Real projections averaged over the unit circle -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 
 open MeasureTheory
-
-private noncomputable instance : MeasurableSpace Circle := borel Circle
-private instance : BorelSpace Circle := ⟨rfl⟩
 
 /-- The Haar probability measure on the unit circle. -/
 noncomputable abbrev circleMeasure : Measure Circle :=
@@ -32,14 +34,14 @@ noncomputable def circleMoment (p : ℝ) : ℝ := ∫ u : Circle, |(u : ℂ).re|
 /-- Continuity of `|Re(u·z)|^p` on the circle. -/
 theorem continuous_circle_projection_power {p : ℝ} (hp : 0 < p) (z : ℂ) :
     Continuous (fun u : Circle ↦ |((u : ℂ) * z).re| ^ p) := by
-  exact ((Complex.continuous_re.comp (continuous_subtype_val.mul continuous_const)).abs).rpow_const
+  exact ((Complex.continuous_re.comp (continuous_subtypeVal.mul continuous_const)).abs).rpow_const
     (fun _ ↦ Or.inr hp.le)
 
 /-- The circle moment is strictly positive for `p > 0`. -/
 theorem circleMoment_pos {p : ℝ} (hp : 0 < p) : 0 < circleMoment p := by
   have hc : Continuous (fun u : Circle ↦ |(u : ℂ).re| ^ p) := by
     simpa only [mul_one] using continuous_circle_projection_power hp 1
-  exact integral_pos_of_integrable_nonneg_nonzero hc
+  exact integral_pos_of_integrable_nonneg_ne_zero hc
     (hc.integrable_of_hasCompactSupport (HasCompactSupport.of_compactSpace _))
     (fun u ↦ Real.rpow_nonneg (abs_nonneg _) _) (x := (1 : Circle)) (by simp)
 

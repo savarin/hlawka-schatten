@@ -3,11 +3,16 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.SchattenNorm
-import HlawkaSchatten.HilbertSchmidt
-import Mathlib.Analysis.InnerProductSpace.NormDet
+
+module
+
+public import HlawkaSchatten.SchattenNorm
+public import HlawkaSchatten.HilbertSchmidt
+public import Mathlib.Analysis.InnerProductSpace.NormDet
 
 /-! # The Schatten-one endpoint -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 

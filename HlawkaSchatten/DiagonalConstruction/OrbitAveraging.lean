@@ -3,10 +3,15 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.Localization
-import HlawkaSchatten.DiagonalConstruction.DimensionReduction
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.Localization
+public import HlawkaSchatten.DiagonalConstruction.DimensionReduction
 
 /-! # Simultaneous permutation averaging on the cyclic box -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 
@@ -37,9 +42,12 @@ theorem conjugate_mem_entryBox (e : Equiv.Perm (Fin 3)) {X : Triple} (hX : X ∈
   intro j i
   simpa [conjugate, cyclicCenter, e.injective.eq_iff] using hX (e j) (e i)
 
-private def permutations : Fin 6 → Equiv.Perm (Fin 3) :=
+/-- The six permutations used to average the cyclic box. -/
+protected def permutations : Fin 6 → Equiv.Perm (Fin 3) :=
   ![Equiv.refl _, Equiv.swap 0 1, Equiv.swap 0 2, Equiv.swap 1 2,
     (Equiv.swap 0 1).trans (Equiv.swap 1 2), (Equiv.swap 1 2).trans (Equiv.swap 0 1)]
+
+open HlawkaSchatten.DiagonalConstruction (permutations)
 
 private theorem tripleDeficit_conjugate_six (p K : ℝ) (X : Triple) (k : Fin 6) :
     tripleDeficit p K (conjugate (permutations k) X) = tripleDeficit p K X := by

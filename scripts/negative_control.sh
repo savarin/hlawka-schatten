@@ -9,9 +9,6 @@ if (( $# > 1 )); then
   exit 2
 fi
 
-: "${COMPARATOR:?Set COMPARATOR to the comparator binary path}"
-: "${LEAN4EXPORT:?Set LEAN4EXPORT to a lean4export built for the toolchain in lean-toolchain.}"
-
 PALOMAR_CONFIG="${1:-comparator-existence.json}"
 read -r PALOMAR_MODULE PALOMAR_THEOREM < <(
   python3 - "$PALOMAR_CONFIG" <<'CONFIG_PY'
@@ -23,9 +20,12 @@ print(config["challenge_module"], config["theorem_names"][0])
 CONFIG_PY
 )
 case "$PALOMAR_MODULE" in
-  ExistenceChallenge|ConstructionDiagonalChallenge) ;;
+  ExistenceChallenge|ConstructionDiagonalChallenge|ConstructionDiagonalBelowExponentChallenge) ;;
   *) echo "Unsupported negative-control module: $PALOMAR_MODULE" >&2; exit 2 ;;
 esac
+if [[ "$PALOMAR_MODULE" == "ConstructionDiagonalBelowExponentChallenge" ]]; then
+  exec python3 scripts/verify_below_exponent.py --config "$PALOMAR_CONFIG"
+fi
 PALOMAR_CHALLENGE="$PALOMAR_MODULE.lean"
 PALOMAR_CONTROL_DIR=$(mktemp -d "${TMPDIR:-/tmp}/hlawka-neg-ctrl-XXXXXX")
 cp "$PALOMAR_CHALLENGE" "$PALOMAR_CONTROL_DIR/original.lean"

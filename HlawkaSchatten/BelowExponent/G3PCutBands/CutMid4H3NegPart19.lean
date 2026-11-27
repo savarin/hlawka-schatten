@@ -1,0 +1,56 @@
+/-
+Copyright (c) 2026 Ezzeri Esa. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Ezzeri Esa
+-/
+
+module
+
+public import HlawkaSchatten.BelowExponent.G3PCommonDen
+
+/-! Certificate data for the ordered G3 vertex corner: cut band piece `CutMid4H3NegPart19`. -/
+
+set_option autoImplicit true
+set_option relaxedAutoImplicit true
+set_option linter.mathlibStandardSet false
+
+@[expose] public section
+
+namespace HlawkaSchatten.BelowExponent.G3P
+
+def CutMid4H3NegPart19Box : Box := ((((((((((((⟨![27/68, 13/100, 0, -8], ![9/17, 3/20, 1, 8]⟩ : Box)).lowerChild 3 (3/4)).upperChild 3 (-1/4)).lowerChild 3 (1/4)).lowerChild 2 (1/2)).upperChild 2 (1/8)).upperChild 3 (0)).lowerChild 2 (5/16)).lowerChild 3 (1/8)).lowerChild 0 (63/136)).upperChild 1 (7/50)).upperChild 3 (1/16)
+
+set_option maxRecDepth 16000 in
+def CutMid4H3NegPart19Tree : CertTree :=
+  .cut 2 (7/32)
+    (.cut 2 (11/64)
+      (.cut 3 (3/32)
+        (.cut 3 (5/64)
+          (.row ⟨106974752991, 110576703735, (.direct 4833349683 8645335882), (.chord (.secant 1178206708535 93065595699 3472758785 99486393966) 10180665226 16864782083)⟩)
+          (.row ⟨106974752991, 110576703735, (.direct 6452795533 10542955392), (.chord (.secant 1269144954087 130583969153 13823495480 127156638409) 10180665226 16864782083)⟩))
+        (.row ⟨106974752991, 110576703735, (.direct 10180561190 14738442710), (.chord (.secant 1458389947628 218773774395 28590797940 157254950910) 10180665226 16864782083)⟩))
+      (.cut 3 (3/32)
+        (.cut 3 (5/64)
+          (.row ⟨106974752991, 110576703735, (.direct 4833349683 8645335882), (.chord (.secant 1000156715581 32291409942 2340284847 67883086672) 16864782083 24716235638)⟩)
+          (.row ⟨106974752991, 110576703735, (.direct 6452795533 10542955392), (.chord (.secant 1062248033335 51222413192 551281854 86763473495) 16864782083 24716235638)⟩))
+        (.row ⟨106974752991, 110576703735, (.direct 10180561190 14738442710), (.chord (.secant 1190518414647 97926480992 5958308705 107300617066) 16864782083 24716235638)⟩)))
+    (.cut 3 (3/32)
+      (.cut 2 (17/64)
+        (.cut 3 (5/64)
+          (.cut 0 (117/272)
+            (.row ⟨106974752991, 110576703735, (.direct 4833349683 8346698244), (.chord (.secant 895692033502 7964554483 5981868066 49901745090) 24716235638 33622326476)⟩)
+            (.row ⟨106974752991, 110576703735, (.direct 4833349683 8645335882), (.chord (.secant 881060752408 5553795253 8757451134 51957221524) 24716235638 33622326476)⟩))
+          (.row ⟨106974752991, 110576703735, (.direct 6452795533 10542955392), (.chord (.secant 950223554844 19295771852 3646060495 63780964445) 24716235638 33622326476)⟩))
+        (.cut 3 (5/64)
+          (.cut 0 (117/272)
+            (.row ⟨106974752991, 110576703735, (.direct 4833349683 8346698244), (.chord (.secant 836497473972 476086204 12251325273 38569768947) 33622326476 43500686443)⟩)
+            (.row ⟨106974752991, 110576703735, (.direct 4833349683 8645335882), (.chord (.secant 820930591938 75736063 15976330270 40158475935) 33622326476 43500686443)⟩))
+          (.row ⟨106974752991, 110576703735, (.direct 6452795533 10542955392), (.chord (.secant 880219909336 5424732539 10189852317 49297215106) 33622326476 43500686443)⟩)))
+      (.cut 2 (17/64)
+        (.row ⟨106974752991, 110576703735, (.direct 10180561190 14738442710), (.chord (.secant 1046627755603 46201985111 139126010 78878087360) 24716235638 33622326476)⟩)
+        (.row ⟨106974752991, 110576703735, (.direct 10180561190 14738442710), (.chord (.secant 957214482835 20978915402 4681380839 60965996259) 33622326476 43500686443)⟩)))
+
+set_option maxRecDepth 16000 in
+theorem CutMid4H3NegPart19_checked : CutMid4H3NegPart19Tree.commonOK CutMid4H3NegPart19Box false = true := by decide +kernel
+
+end HlawkaSchatten.BelowExponent.G3P

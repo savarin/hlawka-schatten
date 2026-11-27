@@ -3,8 +3,11 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.Variational
-import HlawkaSchatten.MazurGapComparison
+
+module
+
+public import HlawkaSchatten.Variational
+public import HlawkaSchatten.MazurGapComparison
 
 /-!
 # Dimension-independent Hlawka constants for Schatten norms
@@ -12,6 +15,8 @@ import HlawkaSchatten.MazurGapComparison
 This file removes the unit-sphere normalization from the variational
 comparison and performs the final Hilbert-space Hlawka transfer.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 

@@ -3,10 +3,15 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.ScalarBounds
-import HlawkaSchatten.DiagonalConstruction.CyclicWitness
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.ScalarBounds
+public import HlawkaSchatten.DiagonalConstruction.CyclicWitness
 
 /-! # Monotonicity of the scalar envelope -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 

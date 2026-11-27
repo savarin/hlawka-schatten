@@ -3,12 +3,16 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import Mathlib.Data.Sign.Basic
-import Mathlib.Analysis.Convex.Deriv
-import Mathlib.Analysis.Convex.SpecificFunctions.Basic
-import Mathlib.Analysis.InnerProductSpace.NormPow
-import Mathlib.Topology.Instances.Sign
-import HlawkaSchatten.Basic
+
+module
+
+public import Mathlib.Basic.Sign.Basic
+public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Analysis.Convex.SpecificFunctions.Basic
+public import Mathlib.Analysis.InnerProductSpace.NormPow
+public import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
+public import Mathlib.Topology.Instances.Sign
+public import HlawkaSchatten.Basic
 
 /-!
 # Scalar power Bregman data
@@ -17,6 +21,8 @@ The scalar power potential `|t|^p / p` and its Bregman divergence, Mazur
 image and gradient. The normalization is important: the derivative of
 `powerPotential` is the signed `(p - 1)`-power with no extra factor of `p`.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 

@@ -3,7 +3,10 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.HilbertHlawka
+
+module
+
+public import HlawkaSchatten.HilbertHlawka
 
 /-!
 # Gap comparison through a nonlinear Mazur map
@@ -13,6 +16,8 @@ The Mazur map is not additive, so the Hilbert model for a family
 `x + y + z`.  This file records that distinction in the interface used by
 the variational proof and carries out the final ordered-algebraic transfer.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 

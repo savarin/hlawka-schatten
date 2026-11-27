@@ -3,8 +3,11 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.SpectralLift
-import Mathlib.Analysis.InnerProductSpace.Trace
+
+module
+
+public import HlawkaSchatten.SpectralLift
+public import Mathlib.Analysis.InnerProductSpace.Trace
 
 /-!
 # Finite Hermitian spectral trace expansions
@@ -12,6 +15,8 @@ import Mathlib.Analysis.InnerProductSpace.Trace
 This file connects the overlap-weighted scalar comparison to traces of
 finite-dimensional symmetric complex-linear maps.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 

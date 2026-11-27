@@ -1,0 +1,9 @@
+{
+  "challenge_module": "ConstructionDiagonalBelowExponentChallenge",
+  "solution_module": "ConstructionDiagonalBelowExponentSolution",
+  "theorem_names": [
+    "HlawkaSchatten.LpThreshold.hlawka_holds_below_exponent"
+  ],
+  "definition_names": [],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"]
+}

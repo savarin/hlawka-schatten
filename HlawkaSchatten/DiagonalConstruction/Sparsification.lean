@@ -3,13 +3,16 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import Mathlib.Analysis.Convex.Function
-import Mathlib.Analysis.Normed.Module.FiniteDimension
-import Mathlib.LinearAlgebra.Dimension.Finite
-import Mathlib.Topology.Order.Compact
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.Ring
+
+module
+
+public import Mathlib.Analysis.Convex.Function
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.LinearAlgebra.Dimension.Finite
+public import Mathlib.Topology.Order.Compact
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.Ring
 
 /-!
 # Three constraints admit a sparse concave minimizer
@@ -20,6 +23,8 @@ the sum of squared weights among its minimizers. A supported kernel
 direction would produce two feasible perturbations whose average squared
 size is strictly larger. Thus at most three weights are positive.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 
@@ -81,21 +86,21 @@ theorem exists_sparse_concave_minimizer
   refine ⟨w, hw.1, hwmin w₀ hw₀, ?_⟩
   by_contra hcard
   let J := {i : ι // w i ≠ 0}
-  have hdep : ¬LinearIndependent ℝ (fun j : J ↦ A j.1) := by
+  have hdep : ¬LinearIndependent ℝ (fun j : J ↦ A j.val) := by
     intro hlin
     exact hcard (by simpa [J] using hlin.fintype_card_le_finrank)
   obtain ⟨g, hg, j₀, hj₀⟩ := Fintype.not_linearIndependent_iff.mp hdep
   have : Nonempty J := ⟨j₀⟩
-  have hwpos (j : J) : 0 < w j.1 :=
-    lt_of_le_of_ne (hw.1.1 j.1) (Ne.symm j.2)
+  have hwpos (j : J) : 0 < w j.val :=
+    lt_of_le_of_ne (hw.1.1 j.val) (Ne.symm j.property)
   obtain ⟨jmin, _, hjmin⟩ := Finset.univ.exists_min_image
-    (fun j : J ↦ w j.1 / (|g j| + 1)) Finset.univ_nonempty
-  let ε := w jmin.1 / (|g jmin| + 1)
+    (fun j : J ↦ w j.val / (|g j| + 1)) Finset.univ_nonempty
+  let ε := w jmin.val / (|g jmin| + 1)
   have hε : 0 < ε := div_pos (hwpos jmin) (by positivity)
-  have hεbound (j : J) : ε * |g j| ≤ w j.1 := by
+  have hεbound (j : J) : ε * |g j| ≤ w j.val := by
     have hh := (le_div_iff₀ (show 0 < |g j| + 1 by positivity)).mp
       (hjmin j (Finset.mem_univ j))
-    change ε * (|g j| + 1) ≤ w j.1 at hh
+    change ε * (|g j| + 1) ≤ w j.val at hh
     nlinarith
   let d : ι → ℝ := fun i ↦ if h : w i ≠ 0 then ε * g ⟨i, h⟩ else 0
   have hdbound (i : ι) : |d i| ≤ w i := by
@@ -105,21 +110,21 @@ theorem exists_sparse_concave_minimizer
   have hdcoeff (k : Fin 3) : ∑ i, d i * A i k = 0 := by
     have hgk := congrArg (fun v : Fin 3 → ℝ ↦ v k) hg
     simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Pi.zero_apply] at hgk
-    have hleft : (∑ j : J, d j.1 * A j.1 k) = ε * ∑ j : J, g j * A j.1 k := by
+    have hleft : (∑ j : J, d j.val * A j.val k) = ε * ∑ j : J, g j * A j.val k := by
       rw [Finset.mul_sum]
       apply Finset.sum_congr rfl
       intro j _
       dsimp only [d]
-      rw [dite_eq_left j.2]
+      rw [dite_eq_left j.property]
       ring
-    have hright : (∑ j : {i : ι // ¬w i ≠ 0}, d j.1 * A j.1 k) = 0 := by
+    have hright : (∑ j : {i : ι // ¬w i ≠ 0}, d j.val * A j.val k) = 0 := by
       apply Finset.sum_eq_zero
       intro j _
-      simp only [d, dite_eq_right j.2, zero_mul]
+      simp only [d, dite_eq_right j.property, zero_mul]
     rw [← Fintype.sum_subtype_add_sum_subtype (fun i ↦ w i ≠ 0),
       hleft, hright, hgk, mul_zero, add_zero]
-  have hdne : d j₀.1 ≠ 0 := by
-    simp only [d, dite_eq_left j₀.2]
+  have hdne : d j₀.val ≠ 0 := by
+    simp only [d, dite_eq_left j₀.property]
     exact mul_ne_zero hε.ne' hj₀
   let u : ι → ℝ := w + d
   let z : ι → ℝ := w - d
@@ -165,7 +170,7 @@ theorem exists_sparse_concave_minimizer
     simp only [u, z, Pi.add_apply, Pi.sub_apply]
     ring
   have hdpos : 0 < ∑ i, (d i) ^ 2 := Finset.sum_pos'
-    (fun i _ ↦ sq_nonneg (d i)) ⟨j₀.1, Finset.mem_univ _, sq_pos_of_ne_zero hdne⟩
+    (fun i _ ↦ sq_nonneg (d i)) ⟨j₀.val, Finset.mem_univ _, sq_pos_of_ne_zero hdne⟩
   linarith
 
 end HlawkaSchatten.DiagonalConstruction

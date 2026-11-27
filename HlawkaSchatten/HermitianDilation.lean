@@ -3,11 +3,14 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.HermitianSpectral
-import HlawkaSchatten.SchattenNorm
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-import Mathlib.Analysis.InnerProductSpace.ProdL2
-import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
+
+module
+
+public import HlawkaSchatten.HermitianSpectral
+public import HlawkaSchatten.SchattenNorm
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+public import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 
 /-!
 # Rectangular Hermitian dilation
@@ -15,6 +18,8 @@ import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 This file begins the passage from rectangular maps to the Hermitian spectral
 comparison by constructing the standard off-diagonal dilation.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 
@@ -26,17 +31,20 @@ variable {E F : Type*}
 
 /-- The off-diagonal Hermitian dilation `(x,y) ↦ (T†y, Tx)` of a rectangular
 complex-linear map. -/
-private noncomputable def productOffDiagonal (T : E →ₗ[ℂ] F) :
+protected noncomputable def productOffDiagonal (T : E →ₗ[ℂ] F) :
     E × F →ₗ[ℂ] E × F :=
   LinearMap.prod
     (T.adjoint.comp (LinearMap.snd ℂ E F))
     (T.comp (LinearMap.fst ℂ E F))
 
-private def productDiagonal (A : E →ₗ[ℂ] E) (B : F →ₗ[ℂ] F) :
+/-- The block-diagonal endomorphism on the plain product space. -/
+protected def productDiagonal (A : E →ₗ[ℂ] E) (B : F →ₗ[ℂ] F) :
     E × F →ₗ[ℂ] E × F :=
   LinearMap.prod
     (A.comp (LinearMap.fst ℂ E F))
     (B.comp (LinearMap.snd ℂ E F))
+
+open HlawkaSchatten (productOffDiagonal productDiagonal)
 
 /-- The off-diagonal dilation, transported to the Hilbert `L²` product. -/
 noncomputable def hermitianDilation (T : E →ₗ[ℂ] F) :
@@ -662,13 +670,15 @@ noncomputable def dilatedMazurMap (p : ℝ) (T : E →ₗ[ℂ] F) :
 
 /-- Extract the lower-left rectangular block of an endomorphism of the
 Hilbert `L²` product. -/
-private noncomputable def lowerLeftBlock
+protected noncomputable def lowerLeftBlock
     (A : WithLp 2 (E × F) →ₗ[ℂ] WithLp 2 (E × F)) : E →ₗ[ℂ] F :=
   (LinearMap.snd ℂ E F).comp
     ((WithLp.linearEquiv 2 ℂ (E × F)).toLinearMap.comp
       (A.comp
         ((WithLp.linearEquiv 2 ℂ (E × F)).symm.toLinearMap.comp
           (LinearMap.inl ℂ E F))))
+
+open HlawkaSchatten (lowerLeftBlock)
 
 omit [FiniteDimensional ℂ E] [FiniteDimensional ℂ F] in
 @[simp]
@@ -964,22 +974,22 @@ noncomputable def rectangularMazurPowerSphereEquiv
     {p : ℝ} (hp : 0 < p) :
     schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) p ≃
       schattenPowerSphere (𝕜 := ℂ) (E := E) (F := F) 2 where
-  toFun T := ⟨rectangularMazurMap p T.1, by
-    exact (singularValuePowerSum_two_rectangularMazurMap hp T.1).trans T.property⟩
-  invFun S := ⟨rectangularMazurMap (4 / p) S.1, by
+  toFun T := ⟨rectangularMazurMap p T.val, by
+    exact (singularValuePowerSum_two_rectangularMazurMap hp T.val).trans T.property⟩
+  invFun S := ⟨rectangularMazurMap (4 / p) S.val, by
     have hnorm := singularValuePowerSum_two_rectangularMazurMap hp
-      (rectangularMazurMap (4 / p) S.1)
+      (rectangularMazurMap (4 / p) S.val)
     have hcomp := rectangularMazurMap_four_div_comp
-      (p := 4 / p) (div_pos (by norm_num) hp) S.1
+      (p := 4 / p) (div_pos (by norm_num) hp) S.val
     have hquot : 4 / (4 / p) = p := by field_simp
     simp only [hquot] at hcomp
     rw [hcomp] at hnorm
     exact hnorm.symm.trans S.property⟩
-  left_inv T := Subtype.ext (rectangularMazurMap_four_div_comp hp T.1)
+  left_inv T := Subtype.ext (rectangularMazurMap_four_div_comp hp T.val)
   right_inv S := by
     apply Subtype.ext
     have h := rectangularMazurMap_four_div_comp
-      (p := 4 / p) (div_pos (by norm_num) hp) S.1
+      (p := 4 / p) (div_pos (by norm_num) hp) S.val
     simpa only [show 4 / (4 / p) = p by field_simp] using h
 
 /-- The exact Hilbert-exponent normalization survives rectangular dilation. -/

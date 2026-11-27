@@ -3,9 +3,14 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction
 
 /-! # The sharp cyclic Hlawka constant for diagonal Schatten norms (Solution) -/
+
+@[expose] public section
 
 namespace PalomarHlawkaSchatten.ConstructionDiagonal
 

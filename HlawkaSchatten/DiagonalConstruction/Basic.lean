@@ -3,9 +3,13 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import Mathlib.Analysis.Normed.Lp.PiLp
-import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
-import HlawkaSchatten.GapComparison
+
+module
+
+public import Mathlib.Analysis.Normed.Lp.PiLp
+public import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
+public import HlawkaSchatten.GapComparison
+public import HlawkaSchatten.DiagonalConstruction.CoordinateNorm
 
 /-!
 # Coordinate norms for the diagonal construction
@@ -14,13 +18,11 @@ The explicit finite power sum keeps coordinate arguments independent of
 the exponent-indexed `PiLp` type. Its norm laws are inherited from `PiLp`.
 -/
 
+@[expose] public section
+
 namespace HlawkaSchatten.DiagonalConstruction
 
 variable {ι E : Type*} [Fintype ι] [NormedAddCommGroup E]
-
-/-- The finite coordinate `p`-norm, with a real exponent. -/
-noncomputable def lpNorm (p : ℝ) (x : ι → E) : ℝ :=
-  (∑ i, ‖x i‖ ^ p) ^ (1 / p)
 
 /-- The coordinate `p`-norm is nonnegative. -/
 theorem lpNorm_nonneg (p : ℝ) (x : ι → E) : 0 ≤ lpNorm p x :=
@@ -179,11 +181,11 @@ theorem lpNorm_comp_equiv {κ : Type*} [Fintype κ]
 /-- The `p`-norm restricted to a subtype equals the full norm when unsupported entries vanish. -/
 theorem lpNorm_subtype {p : ℝ} (hp : 0 < p) (x : ι → E)
     (P : ι → Prop) [DecidablePred P] (hx : ∀ i, ¬P i → x i = 0) :
-    lpNorm p (fun i : Subtype P ↦ x i.1) = lpNorm p x := by
+    lpNorm p (fun i : Subtype P ↦ x i.val) = lpNorm p x := by
   unfold lpNorm
   congr 1
-  have hzero : (∑ i : {i : ι // ¬P i}, ‖x i.1‖ ^ p) = 0 := by
-    exact Finset.sum_eq_zero fun i _ ↦ by simp [hx i.1 i.2, hp.ne']
+  have hzero : (∑ i : {i : ι // ¬P i}, ‖x i.val‖ ^ p) = 0 := by
+    exact Finset.sum_eq_zero fun i _ ↦ by simp [hx i.val i.property, hp.ne']
   rw [← Fintype.sum_subtype_add_sum_subtype P (fun i ↦ ‖x i‖ ^ p), hzero, add_zero]
 
 /-- A Hlawka constant in dimension 3 lifts to any index type of cardinality at most 3. -/

@@ -3,11 +3,16 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.Basic
-import Mathlib.Analysis.Convex.SpecificFunctions.Pow
-import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.Basic
+public import Mathlib.Analysis.Convex.SpecificFunctions.Pow
+public import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 
 /-! # Concavity under common coordinate reweighting -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 

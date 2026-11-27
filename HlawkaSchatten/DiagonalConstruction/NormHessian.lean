@@ -3,11 +3,19 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.Basic
-import Mathlib.Analysis.InnerProductSpace.NormPow
-import Mathlib.Tactic.FieldSimp
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.Basic
+public import Mathlib.Analysis.Calculus.Deriv.Add
+public import Mathlib.Analysis.Calculus.Deriv.Mul
+public import Mathlib.Analysis.InnerProductSpace.NormPow
+public import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
+public import Mathlib.Tactic.FieldSimp
 
 /-! # Directional second derivatives of the finite real coordinate norm -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 

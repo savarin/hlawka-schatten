@@ -3,9 +3,12 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.SchattenNorm
-import HlawkaSchatten.HilbertHlawka
-import Mathlib.Analysis.InnerProductSpace.PiL2
+
+module
+
+public import HlawkaSchatten.SchattenNorm
+public import HlawkaSchatten.HilbertHlawka
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # The Schatten-2 quantity as a Hilbert norm
@@ -15,6 +18,8 @@ orthonormal basis.  At exponent two, this coordinate map is an isometry for
 the Schatten quantity defined from singular values.  Consequently the
 Schatten-2 quantity satisfies Hlawka's inequality with constant one.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 
@@ -94,17 +99,17 @@ noncomputable def schattenTwoPowerSphereEquivUnitSphere
     (e : OrthonormalBasis ι 𝕜 E) :
     schattenPowerSphere (𝕜 := 𝕜) (E := E) (F := F) 2 ≃
       unitSphere (PiLp 2 (fun _ : ι => F)) where
-  toFun T := ⟨hilbertSchmidtCoordinates e T.1, by
+  toFun T := ⟨hilbertSchmidtCoordinates e T.val, by
     apply (sq_eq_sq₀ (norm_nonneg _) zero_le_one).mp
     rw [← singularValuePowerSum_two_eq_norm_hilbertSchmidtCoordinates_sq e,
       T.property, one_pow]⟩
-  invFun x := ⟨(hilbertSchmidtLinearEquiv e).symm x.1, by
+  invFun x := ⟨(hilbertSchmidtLinearEquiv e).symm x.val, by
     rw [singularValuePowerSum_two_eq_norm_hilbertSchmidtCoordinates_sq e,
-      show hilbertSchmidtCoordinates e ((hilbertSchmidtLinearEquiv e).symm x.1) =
-          x.1 from (hilbertSchmidtLinearEquiv e).apply_symm_apply x.1,
+      show hilbertSchmidtCoordinates e ((hilbertSchmidtLinearEquiv e).symm x.val) =
+          x.val from (hilbertSchmidtLinearEquiv e).apply_symm_apply x.val,
       x.property, one_pow]⟩
-  left_inv T := Subtype.ext ((hilbertSchmidtLinearEquiv e).symm_apply_apply T.1)
-  right_inv x := Subtype.ext ((hilbertSchmidtLinearEquiv e).apply_symm_apply x.1)
+  left_inv T := Subtype.ext ((hilbertSchmidtLinearEquiv e).symm_apply_apply T.val)
+  right_inv x := Subtype.ext ((hilbertSchmidtLinearEquiv e).apply_symm_apply x.val)
 
 /-- The finite-dimensional Schatten-2 quantity has Hlawka constant one. -/
 theorem schattenPNorm_two_hasHlawkaConstant :

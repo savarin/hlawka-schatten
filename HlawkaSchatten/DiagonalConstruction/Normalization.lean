@@ -3,10 +3,15 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.Basic
-import Mathlib.Tactic.Abel
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.Basic
+public import Mathlib.Tactic.Abel
 
 /-! # Relabeling and normalization of a strict counterexample -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 

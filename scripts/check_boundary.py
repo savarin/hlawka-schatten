@@ -7,11 +7,11 @@ Comparator remains the authority for kernel-level type equality and Palomar
 remains the authority for the transitive import closure and protected kernels.
 """
 
+import argparse
 import json
 import pathlib
 import re
 import subprocess
-import sys
 import tempfile
 
 REQUIRED_KEYS = {
@@ -62,9 +62,13 @@ def joined_lines(output: str) -> list[str]:
 
 
 def main() -> None:
-    manifest_path = pathlib.Path(
-        sys.argv[1] if len(sys.argv) > 1 else "comparator-existence.json"
-    )
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("config", nargs="?", type=pathlib.Path,
+                        default=pathlib.Path("comparator-existence.json"))
+    parser.add_argument("--challenge-only", action="store_true",
+                        help="check metadata and build only the independent Challenge")
+    args = parser.parse_args()
+    manifest_path = args.config
     if not manifest_path.is_file():
         fail(f"{manifest_path} not found")
     manifest = json.loads(manifest_path.read_text())
@@ -76,6 +80,12 @@ def main() -> None:
         fail(f"Comparator config is missing keys: {sorted(missing)}")
     if unknown:
         fail(f"Comparator config has policy-unknown keys: {sorted(unknown)}")
+
+    axioms = manifest["permitted_axioms"]
+    if (not isinstance(axioms, list) or not all(isinstance(a, str) for a in axioms)
+            or len(set(axioms)) != len(axioms)
+            or set(axioms) - {"propext", "Quot.sound", "Classical.choice"}):
+        fail("permitted_axioms must list distinct permitted Lean axioms")
 
     theorems = manifest["theorem_names"]
     definitions = manifest.get("definition_names", [])
@@ -101,7 +111,11 @@ def main() -> None:
         print(f"WARNING: Challenge triggers human-audit size warning: "
               f"{line_count} lines, {byte_count} bytes")
 
-    imports = re.findall(r"^import\s+([^\s]+)", raw, re.MULTILINE)
+    import_lines = re.findall(
+        r"^[ \t]*(?:(?:public|private|meta)[ \t]+)*import[ \t]+(?:all[ \t]+)?([^\n]+)",
+        raw, re.MULTILINE,
+    )
+    imports = [name for line in import_lines for name in line.partition("--")[0].split()]
     disallowed = [name for name in imports if not allowed_import(name)]
     if disallowed:
         fail(f"Challenge has disallowed direct imports: {disallowed}")
@@ -113,7 +127,7 @@ def main() -> None:
     namespaces = re.findall(r"^namespace\s+(\S+)", raw, re.MULTILINE)
     for name in theorems:
         short = name
-        for ns in namespaces:
+        for ns in sorted(namespaces, key=len, reverse=True):
             if name.startswith(ns + "."):
                 short = name[len(ns) + 1:]
                 break
@@ -137,6 +151,11 @@ def main() -> None:
           "zero definition holes")
     print(f"[2/5] PASS: {challenge}: {line_count} lines, {byte_count} bytes; "
           "direct imports permitted")
+    if args.challenge_only:
+        run("lake", "build", manifest["challenge_module"])
+        print("PASS: the independent Challenge builds and the v0.4 metadata is present.")
+        return
+
     print("[3/5] Building Challenge and Solution ...")
     run("lake", "build", manifest["challenge_module"],
         manifest["solution_module"])

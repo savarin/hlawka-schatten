@@ -3,8 +3,11 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.Basic
-import HlawkaSchatten.HermitianDilation
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.Basic
+public import HlawkaSchatten.HermitianDilation
 
 /-!
 # Diagonal operators and coordinate power sums
@@ -13,6 +16,8 @@ This connects the coordinate proof to the singular-value Schatten norm
 used in the publication boundary. The Gram operator has the coordinate
 basis as an eigenbasis, with eigenvalues equal to squared entry norms.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 

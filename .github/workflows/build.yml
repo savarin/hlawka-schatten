@@ -9,15 +9,184 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+# The whole proof does not fit in one job on GitHub's standard runner (6 hours per job). Job `base`
+# builds the library, the statements and the smaller certificate groups; five `group` jobs build the
+# largest certificate groups side by side from its compiled files; job `final` merges them, builds
+# everything left (including the Solutions) and runs the boundary checks. The target lists only
+# decide where work happens: `final` builds every default target, so a stale list costs time only.
+# Builds run inside a memory fence (.github/ci/fenced.sh) so the runner stays responsive.
+
 jobs:
-  build:
+  base:
     runs-on: ubuntu-latest
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596 # v1
+      - name: Make room on the runner
+        run: bash .github/ci/prepare-runner.sh
+      - name: Install Lean and fetch the Mathlib build cache
+        uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596 # v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+          use-github-cache: false
+      - name: Build the library, the statements and stages 3 and 4a-4d
+        run: bash .github/ci/fenced.sh lake build $(cat .github/ci/base-targets.txt)
+      - name: Save the compiled files for the next jobs
+        uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: .lake/build
+          key: build-base-${{ github.run_id }}
+
+  group:
+    needs: base
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - name: side-cone-a
+            targets: >-
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block000
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block032
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block064
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block096
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block128
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block160
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block192
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block224
+          - name: side-cone-b
+            targets: >-
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block256
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block288
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block320
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block352
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block384
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block416
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block448
+              HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseData.Block480
+          - name: side-cut
+            targets: >-
+              HlawkaSchatten.BelowExponent.Vertex.SideCutCorners.PointsComplete
+              HlawkaSchatten.BelowExponent.Vertex.SideCutCorners.Assembly
+          - name: corner-top
+            targets: >-
+              HlawkaSchatten.BelowExponent.G3PCutBands.CutTopComplete
+          - name: corner-mid
+            targets: >-
+              HlawkaSchatten.BelowExponent.G3PCutBands.CutMidComplete
+              HlawkaSchatten.BelowExponent.G3PCertBands.LowComplete
+              HlawkaSchatten.BelowExponent.G3SBands.Complete
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Make room on the runner
+        run: bash .github/ci/prepare-runner.sh
+      - name: Install Lean and fetch the Mathlib build cache
+        uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596 # v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+          use-github-cache: false
+      - name: Restore the base job's compiled files
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: .lake/build
+          key: build-base-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - name: Build ${{ matrix.name }}
+        run: |
+          touch "$RUNNER_TEMP/marker"
+          bash .github/ci/fenced.sh lake build ${{ matrix.targets }}
+      - name: Pack only the files this job added
+        run: |
+          find .lake/build -type f -newer "$RUNNER_TEMP/marker" -print0 |
+            tar --null -cf "added-${{ matrix.name }}.tar" -T -
+          ls -lh "added-${{ matrix.name }}.tar"
+      - name: Save them for the final job
+        uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: added-${{ matrix.name }}.tar
+          key: build-${{ matrix.name }}-${{ github.run_id }}
+
+  final:
+    needs: group
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Make room on the runner
+        run: bash .github/ci/prepare-runner.sh
+      - name: Install Lean and fetch the Mathlib build cache
+        uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596 # v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+          use-github-cache: false
+      - name: Restore the base job's compiled files
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: .lake/build
+          key: build-base-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - name: Restore side-cone-a
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: added-side-cone-a.tar
+          key: build-side-cone-a-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - name: Restore side-cone-b
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: added-side-cone-b.tar
+          key: build-side-cone-b-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - name: Restore side-cut
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: added-side-cut.tar
+          key: build-side-cut-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - name: Restore corner-top
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: added-corner-top.tar
+          key: build-corner-top-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - name: Restore corner-mid
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: added-corner-mid.tar
+          key: build-corner-mid-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - name: Merge the five groups' files
+        run: |
+          for f in added-*.tar; do tar -xf "$f"; rm "$f"; done
+          du -sh .lake/build
+      - name: Build everything that is left, including the Solutions
+        run: bash .github/ci/fenced.sh lake build
       - name: Check existence boundary
-        run: python3 scripts/check_boundary.py comparator-existence.json
+        run: bash .github/ci/fenced.sh python3 scripts/check_boundary.py comparator-existence.json
       - name: Check diagonal construction boundary
-        run: python3 scripts/check_boundary.py comparator-construction-diagonal.json
+        run: bash .github/ci/fenced.sh python3 scripts/check_boundary.py comparator-construction-diagonal.json
+      - name: Check below-exponent boundary
+        run: bash .github/ci/fenced.sh python3 scripts/check_boundary.py comparator-construction-diagonal-below-exponent.json

@@ -3,8 +3,11 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import Mathlib.Analysis.InnerProductSpace.SingularValues
-import Mathlib.Analysis.CStarAlgebra.Matrix
+
+module
+
+public import Mathlib.Analysis.InnerProductSpace.SingularValues
+public import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!
 # Dimension-independent Hlawka constants for Schatten norms (Challenge)
@@ -21,6 +24,8 @@ zero-padded. At `p = ∞` the Schatten norm is the largest singular value,
 represented by Mathlib's spectral L2 operator norm via
 `Matrix.instNormedAddCommGroupMatrix`.
 -/
+
+@[expose] public section
 
 namespace PalomarHlawkaSchatten
 

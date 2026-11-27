@@ -3,8 +3,11 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.ScalarRatio
-import Mathlib.Analysis.InnerProductSpace.PiL2
+
+module
+
+public import HlawkaSchatten.ScalarRatio
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Nonnegative weighted lift of the scalar comparison
@@ -13,6 +16,8 @@ The Hermitian spectral argument writes both divergences as finite sums with
 weights `Tr(Pᵢ Qⱼ) ≥ 0`.  This file isolates the ordered-algebraic step which
 lifts the pointwise scalar bounds through those sums.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten
 

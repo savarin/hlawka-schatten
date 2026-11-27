@@ -3,8 +3,11 @@ Copyright (c) 2026 Ezzeri Esa. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ezzeri Esa
 -/
-import HlawkaSchatten.DiagonalConstruction.Cyclic
-import Mathlib.Data.Fin.VecNotation
+
+module
+
+public import HlawkaSchatten.DiagonalConstruction.Cyclic
+public import Mathlib.Data.Fin.VecNotation
 
 /-!
 # Cyclic witnesses and the necessary lower bound
@@ -13,6 +16,8 @@ The three cyclic vectors have equal norms and their ratio is the scalar
 formula defining the comparison constant. Zero padding preserves all seven
 norms, so the lower bound holds in every dimension at least three.
 -/
+
+@[expose] public section
 
 namespace HlawkaSchatten.DiagonalConstruction
 
