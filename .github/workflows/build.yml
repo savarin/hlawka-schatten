@@ -1,9 +1,8 @@
 name: Build
 
+# Started by hand (Actions tab or `gh workflow run build.yml`): a full run takes about 13 runner-hours,
+# so it runs once per batch of changes rather than on every push.
 on:
-  push:
-    branches: [main]
-  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -154,34 +153,57 @@ jobs:
           path: added-side-cone-a.tar
           key: build-side-cone-a-${{ github.run_id }}
           fail-on-cache-miss: true
+      - name: Unpack side-cone-a and delete its archive
+        run: |
+          tar -xf added-side-cone-a.tar
+          rm added-side-cone-a.tar
+          df -h / | tail -1
       - name: Restore side-cone-b
         uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: added-side-cone-b.tar
           key: build-side-cone-b-${{ github.run_id }}
           fail-on-cache-miss: true
+      - name: Unpack side-cone-b and delete its archive
+        run: |
+          tar -xf added-side-cone-b.tar
+          rm added-side-cone-b.tar
+          df -h / | tail -1
       - name: Restore side-cut
         uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: added-side-cut.tar
           key: build-side-cut-${{ github.run_id }}
           fail-on-cache-miss: true
+      - name: Unpack side-cut and delete its archive
+        run: |
+          tar -xf added-side-cut.tar
+          rm added-side-cut.tar
+          df -h / | tail -1
       - name: Restore corner-top
         uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: added-corner-top.tar
           key: build-corner-top-${{ github.run_id }}
           fail-on-cache-miss: true
+      - name: Unpack corner-top and delete its archive
+        run: |
+          tar -xf added-corner-top.tar
+          rm added-corner-top.tar
+          df -h / | tail -1
       - name: Restore corner-mid
         uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: added-corner-mid.tar
           key: build-corner-mid-${{ github.run_id }}
           fail-on-cache-miss: true
-      - name: Merge the five groups' files
+      - name: Unpack corner-mid and delete its archive
         run: |
-          for f in added-*.tar; do tar -xf "$f"; rm "$f"; done
-          du -sh .lake/build
+          tar -xf added-corner-mid.tar
+          rm added-corner-mid.tar
+          df -h / | tail -1
+      - name: Size of the merged build
+        run: du -sh .lake/build
       - name: Build everything that is left, including the Solutions
         run: bash .github/ci/fenced.sh lake build
       - name: Check existence boundary

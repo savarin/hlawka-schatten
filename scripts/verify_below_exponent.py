@@ -28,7 +28,8 @@ def seed_names(prefix, config):
     source = prefix / "src/lean/lake/Lake/CLI/Check.lean"
     text = source.read_text().split("def primitiveTargets ", 1)[1].split("\ndef ", 1)[0]
     body = re.sub(r"--[^\n]*", "", text).split("return #[", 1)[1].split("]", 1)[0]
-    names = [name.strip() for name in body.split(",") if name.strip()]
+    names = [re.sub(r"^set_option\s+linter\.deprecated\s+false\s+in\s+", "", name.strip())
+             for name in body.split(",") if name.strip()]
     if not names or any(not re.fullmatch(r"``[\w.']+", name) for name in names):
         raise ValueError(f"Unrecognized primitive export roots in {source}")
     axioms = config["permitted_axioms"]
