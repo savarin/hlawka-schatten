@@ -1,5 +1,9 @@
-import HlawkaSchatten.BelowExponent.Vertex.SideCornerData.RootTable
-import HlawkaSchatten.BelowExponent.Vertex.SideOuterWidePrepare
+module
+
+public meta import HlawkaSchatten.BelowExponent.Vertex.SideCornerData.RootTable
+public meta import HlawkaSchatten.BelowExponent.Vertex.SideOuterWidePrepare
+
+public meta section
 
 open HlawkaSchatten.BelowExponent.Vertex
 

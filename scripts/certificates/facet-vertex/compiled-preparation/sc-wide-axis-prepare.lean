@@ -1,4 +1,8 @@
-import HlawkaSchatten.BelowExponent.Vertex.CornerSpanAxes
+module
+
+public meta import HlawkaSchatten.BelowExponent.Vertex.CornerSpanAxes
+
+public meta section
 
 open HlawkaSchatten.BelowExponent.Vertex
 

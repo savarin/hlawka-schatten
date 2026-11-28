@@ -1,12 +1,14 @@
-import HlawkaSchatten.BelowExponent.Vertex.CurvatureCheck
-import HlawkaSchatten.BelowExponent.Vertex.RootData.VcM000
-import HlawkaSchatten.BelowExponent.Vertex.RootData.ScS000
+module
+
+public meta import HlawkaSchatten.BelowExponent.Vertex.CurvatureCheck
+public meta import HlawkaSchatten.BelowExponent.Vertex.RootData.VcM000
+public meta import HlawkaSchatten.BelowExponent.Vertex.RootData.ScS000
 
 /-! Candidate search only. `CurvaturePilotData` rechecks the displayed numbers in the kernel. -/
 
 open HlawkaSchatten.BelowExponent.Vertex
 
-def printCurvatureCandidate (name : String) (c : ParameterCell) (roots : Fin 3 → RatBounds)
+meta def printCurvatureCandidate (name : String) (c : ParameterCell) (roots : Fin 3 → RatBounds)
     (na nb nη : ℕ) : IO Unit := do
   let rows := (c.grid na nb nη).map fun d => Vector.ofFn (axisCoefficientIntervals d roots)
   let indices := List.finRange 3

@@ -82,7 +82,7 @@ private def emit (family stem : String) (points : Array SideCornerEntry)
   let some p := points[index]? | throw (IO.userError s!"Missing SC point {index}")
   let some roots := rootTable[index]? | throw (IO.userError s!"Missing SC radicals at {index}")
   let point := OuterPointBounds.atPoint p.a p.b p.eta p.margin roots
-  let some trees := outerSearchQuadrants (outerWideRectOK point) scSkip |
+  let some trees := outerSearchQuadrants (outerWideRectOKInt point) scSkip |
     throw (IO.userError s!"Point {index} has an open fine rectangle")
   unless trees.length == 12 do
     throw (IO.userError s!"Expected twelve closed quadrant trees for point {index}")

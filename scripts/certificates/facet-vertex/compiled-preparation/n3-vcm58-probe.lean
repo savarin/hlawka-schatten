@@ -1,4 +1,8 @@
-import HlawkaSchatten.BelowExponent.Vertex.CurvatureData.VcM58.Config
+module
+
+public meta import HlawkaSchatten.BelowExponent.Vertex.CurvatureData.VcM58.Config
+
+public meta section
 
 open HlawkaSchatten.BelowExponent.Vertex
 

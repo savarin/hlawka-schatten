@@ -1,3 +1,5 @@
+module
+
 private def roundUp (v : ℚ) (scale : ℕ) : ℚ := (⌈v * scale⌉ : ℤ) / (scale : ℚ)
 private def roundDown (v : ℚ) (scale : ℕ) : ℚ := (⌊v * scale⌋ : ℤ) / (scale : ℚ)
 

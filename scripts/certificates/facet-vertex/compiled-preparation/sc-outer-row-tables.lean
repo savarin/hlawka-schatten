@@ -1,5 +1,9 @@
-import HlawkaSchatten.BelowExponent.Vertex.OuterRowCheck
-import HlawkaSchatten.BelowExponent.Vertex.CornerPowerTables
+module
+
+public meta import HlawkaSchatten.BelowExponent.Vertex.OuterRowCheck
+public meta import HlawkaSchatten.BelowExponent.Vertex.CornerPowerTables
+
+public meta section
 
 open HlawkaSchatten.BelowExponent.Vertex
 

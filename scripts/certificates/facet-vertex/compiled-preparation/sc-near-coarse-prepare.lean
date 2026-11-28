@@ -1,7 +1,11 @@
-import HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseTree
-import HlawkaSchatten.BelowExponent.Vertex.SideConeFastTree
-import HlawkaSchatten.BelowExponent.Vertex.SideConeParameterGrid
-import Std.Data.HashMap
+module
+
+public meta import HlawkaSchatten.BelowExponent.Vertex.SideConeCoarseTree
+public meta import HlawkaSchatten.BelowExponent.Vertex.SideConeFastTree
+public meta import HlawkaSchatten.BelowExponent.Vertex.SideConeParameterGrid
+public meta import Std.Data.HashMap
+
+public meta section
 
 /-! Prepare exact candidate witnesses. The generated sources replay every guard in the kernel. -/
 open HlawkaSchatten.BelowExponent.Vertex

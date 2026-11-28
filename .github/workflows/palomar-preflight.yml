@@ -1,0 +1,28 @@
+name: Palomar preflight
+
+# Palomar's mechanical preflight for the below-exponent result, started by hand.
+# It runs Palomar's own reusable workflow, pinned to one PalomarSubmission commit,
+# on GitHub's standard runner. Its report is advisory and is not a submission.
+
+on:
+  workflow_dispatch:
+    inputs:
+      request_id:
+        description: Exactly 12 lowercase letters and digits
+        required: true
+        default: belowexp0001
+
+permissions:
+  contents: read
+
+jobs:
+  palomar-preflight:
+    uses: PalomarRegistry/PalomarSubmission/.github/workflows/submission.yml@046554302064b2c83c2b924bea6db87fc5900c68
+    with:
+      repository: ${{ github.repository }}
+      commit: ${{ github.sha }}
+      pipeline_commit: 046554302064b2c83c2b924bea6db87fc5900c68
+      request_id: ${{ inputs.request_id }}
+      mode: full
+      execution_profile: palomar-standard-v1
+      options: '{"comparator_config_path":"comparator-construction-diagonal-below-exponent.json","authorization_relationship":"maintainer"}'
